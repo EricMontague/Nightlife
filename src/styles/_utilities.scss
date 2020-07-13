@@ -1,1 +1,20 @@
 @import "variables";
+
+.bg {
+  &-primary {
+    background: $primary-color;
+  }
+  &-dark {
+    background: $dark-color;
+  }
+}
+
+.title {
+  &-1 {
+    color: $light-color;
+  }
+
+  &-2 {
+    color: white;
+  }
+}
