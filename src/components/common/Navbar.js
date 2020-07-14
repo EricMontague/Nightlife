@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import UserInfo from "./UserInfo";
 import { useCurrentUser } from "../../context/UserProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -10,10 +11,17 @@ const Navbar = () => {
       return (
         <>
           <li>
-            <Link to="/create">Create</Link>
+            <Link to="/create">
+              <FontAwesomeIcon icon={["fas", "plus-circle"]} />
+              Create List
+            </Link>
           </li>
+          <UserInfo
+            user={currentUser}
+            avatarClasses="img-rounded avatar-small"
+          />
           <li>
-            <button>Logout</button>
+            <Link to="/logout">Logout</Link>
           </li>
         </>
       );
@@ -38,7 +46,7 @@ const Navbar = () => {
           <Link to="/">
             <FontAwesomeIcon icon={["fas", "glass-cheers"]} />{" "}
             <span>Nightlife</span>
-          </Link>
+          </Link>{" "}
         </div>
         <ul>{renderLinks()}</ul>
       </div>

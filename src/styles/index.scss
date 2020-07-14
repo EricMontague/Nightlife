@@ -6,12 +6,47 @@
 @import "mixins";
 
 .home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 1.5rem;
+}
+
+.card {
   text-align: center;
   width: 400px;
-  height: 100vh;
+  height: 70vh;
   //   padding: 6.5rem 2rem;
-  padding: 9rem 2rem;
+  padding: 2rem;
   margin: auto;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid (160, 160, 160, 0.1);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+
+  &-title {
+    font-size: 1.4rem;
+  }
+
+  &-header {
+    margin: 1rem 0 2rem 0;
+
+    p {
+      font-size: 1rem;
+      margin-top: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  &-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    // border: 1px solid #333;
+  }
 
   .logo {
     color: $primary-color;
@@ -20,7 +55,7 @@
     margin-bottom: 1rem;
   }
 
-  p:last-child {
+  footer {
     font-size: 0.9rem;
 
     a {
@@ -33,7 +68,7 @@
   }
 
   .btn {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -43,6 +78,8 @@
   width: 100%;
   color: #fff;
   background: $dark-color;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
 
   &-container {
     display: flex;
@@ -66,13 +103,16 @@
     }
   }
 
-  a,
-  button {
+  a {
     color: #fff;
     font-size: 1rem;
 
     &:hover {
       opacity: 0.9;
     }
+  }
+
+  svg {
+    margin-right: 0.2rem;
   }
 }

@@ -1,4 +1,4 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faGlassCheers } from "@fortawesome/free-solid-svg-icons";
+import { faGlassCheers, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faGlassCheers);
+library.add(faGlassCheers, faPlusCircle);

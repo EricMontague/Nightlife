@@ -4,14 +4,21 @@ import PropTypes from "prop-types";
 const UserContext = React.createContext(null);
 
 export const useCurrentUser = () => {
-  return useContext(UserContext);
+  const value = useContext(UserContext);
+  console.log(value);
+  return value;
 };
 
 class UserProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: null
+      currentUser: {
+        displayName: "Eric Montague",
+        email: "eric@gmail.com",
+        photoUrl:
+          "https://images.unsplash.com/photo-1472691613482-5da03d62a318?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
+      }
     };
   }
 
