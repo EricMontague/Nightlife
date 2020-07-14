@@ -4,3 +4,75 @@
 @import "App";
 @import "functions";
 @import "mixins";
+
+.home {
+  text-align: center;
+  width: 400px;
+  height: 100vh;
+  //   padding: 6.5rem 2rem;
+  padding: 9rem 2rem;
+  margin: auto;
+
+  .logo {
+    color: $primary-color;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 1rem;
+  }
+
+  p:last-child {
+    font-size: 0.9rem;
+
+    a {
+      color: darken($secondary-color, 10%);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .btn {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.navbar {
+  position: fixed;
+  height: 60px;
+  width: 100%;
+  color: #fff;
+  background: $dark-color;
+
+  &-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 100%;
+  }
+
+  &-brand svg,
+  &-brand span {
+    font-size: 1.5rem;
+  }
+
+  ul {
+    display: flex;
+    align-items: center;
+
+    li {
+      margin-left: 1.5rem;
+    }
+  }
+
+  a,
+  button {
+    color: #fff;
+    font-size: 1rem;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}

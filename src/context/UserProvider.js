@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 
 const UserContext = React.createContext(null);
+
+export const useCurrentUser = () => {
+  return useContext(UserContext);
+};
 
 class UserProvider extends React.Component {
   constructor(props) {
@@ -13,7 +17,7 @@ class UserProvider extends React.Component {
 
   render() {
     return (
-      <UserContext.Provider value={}>
+      <UserContext.Provider value={this.state.currentUser}>
         {this.props.children}
       </UserContext.Provider>
     );

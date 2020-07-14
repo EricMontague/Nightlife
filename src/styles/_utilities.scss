@@ -1,20 +1,148 @@
 @import "variables";
 
-.bg {
-  &-primary {
-    background: $primary-color;
-  }
+// container
+.container {
+  max-width: $website-width;
+  margin: auto;
+  padding: 0 2.4rem;
+  overflow: hidden;
+}
+
+// Buttons
+
+%btn-shared {
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  transition: all 0.1s ease-in-out;
+  font-size: 1rem;
+}
+
+.btn {
+  @extend %btn-shared;
+
   &-dark {
     background: $dark-color;
+    color: #fff;
+  }
+
+  &-light {
+    background: $light-color;
+    color: #000;
+  }
+
+  &-secondary {
+    background: $secondary-color;
+    color: #fff;
+
+    &:hover {
+      color: darken(#fff, 5%);
+      background: darken($secondary-color, 5%);
+    }
+  }
+
+  &-primary {
+    background: $primary-color;
+    color: #fff;
+
+    &:hover {
+      color: darken(#fff, 5%);
+      background: darken($primary-color, 5%);
+    }
+  }
+
+  &-block {
+    width: 100%;
   }
 }
 
-.title {
+// Padding & Margin
+.py {
   &-1 {
-    color: $light-color;
+    padding: 1rem 0;
   }
 
   &-2 {
-    color: white;
+    padding: 2rem 0;
+  }
+
+  &-3 {
+    padding: 3rem 0;
+  }
+
+  &-4 {
+    padding: 4rem 0;
+  }
+}
+
+.my {
+  &-1 {
+    margin: 1rem 0;
+  }
+
+  &-2 {
+    margin: 2rem 0;
+  }
+
+  &-3 {
+    margin: 3rem 0;
+  }
+
+  &-4 {
+    margin: 4rem 0;
+  }
+}
+
+// Text
+.lead {
+  font-size: 1rem;
+  margin-top: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: $primary-color;
+}
+
+// Backgrounds
+.bg {
+  &-light {
+    background: $light-color;
+    color: $dark-color;
+  }
+}
+
+// Images
+.img-rounded {
+  border-radius: 50%;
+}
+
+// Flexbox
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+
+  &-centered {
+    justify-content: center;
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 100%;
+  flex: 1;
+
+  &-centered {
+    justify-content: center;
   }
 }
