@@ -1,14 +1,14 @@
 import React from "react";
 import InputGroup from "../common/InputGroup";
-import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
+import { v4 as uuidv4 } from "uuid";
 
-class SignUpForm extends React.Component {
+class SignInForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fields: { firstName: "", lastName: "", email: "", password: "" },
-      errors: { firstName: "", lastName: "", email: "", password: "" }
+      fields: { email: "", password: "" },
+      errors: { email: "", password: "" }
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -22,7 +22,7 @@ class SignUpForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     if (this.isValid()) {
-      this.props.createUserWithEmailAndPassword({ ...this.state.fields });
+      this.props.signInWithEmailAndPassword({ ...this.state.fields });
       this.clear();
     }
   }
@@ -75,8 +75,6 @@ class SignUpForm extends React.Component {
 
   renderInputGroups() {
     const inputProps = [
-      { type: "text", inputName: "firstName", labeName: "First Name" },
-      { type: "text", inputName: "lasttName", labeName: "Last Name" },
       { type: "text", inputName: "email", labeName: "Email address" },
       { type: "password", inputName: "password", labeName: "password" }
     ];
@@ -101,31 +99,11 @@ class SignUpForm extends React.Component {
     return (
       <>
         <header className="auth-card-header">
-          <h3 className="auth-card-title">Sign Up</h3>
+          <h3 className="auth-card-title">Sign In</h3>
         </header>
         <form onSubmit={this.handleSubmit}>
           {this.renderInputGroups()}
           {/* <InputGroup
-            type="text"
-            inputName="firstName"
-            labelName="First Name"
-            handleChange={this.handleChange}
-            handleBlur={this.handleBlur}
-            value={this.state.fields["firstName"]}
-            error={this.state.errors["firstName"]}
-          />
-          
-          <InputGroup
-            type="text"
-            inputName="lastName"
-            labelName="Last Name"
-            handleChange={this.handleChange}
-            handleBlur={this.handleBlur}
-            value={this.state.fields["lastName"]}
-            error={this.state.errors["lastName"]}
-          />
-          
-          <InputGroup
             type="text"
             inputName="email"
             labelName="Email Address"
@@ -166,10 +144,10 @@ class SignUpForm extends React.Component {
   }
 }
 
-SignUpForm.propTypes = {
+SignInForm.propTypes = {
   validators: PropTypes.arrayOf(PropTypes.func.isRequired),
-  createUserWithEmailAndPassword: PropTypes.func.isRequired,
+  signInWithEmailAndPassword: PropTypes.func.isRequired,
   signInWithGoogle: PropTypes.func.isRequired
 };
 
-export default SignUpForm;
+export default SignInForm;
