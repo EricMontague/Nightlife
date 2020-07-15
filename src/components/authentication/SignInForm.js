@@ -1,7 +1,6 @@
 import React from "react";
 import InputGroup from "../common/InputGroup";
 import PropTypes from "prop-types";
-import { v4 as uuidv4 } from "uuid";
 
 class SignInForm extends React.Component {
   constructor(props) {
@@ -73,28 +72,6 @@ class SignInForm extends React.Component {
     return error;
   }
 
-  renderInputGroups() {
-    const inputProps = [
-      { type: "text", inputName: "email", labeName: "Email address" },
-      { type: "password", inputName: "password", labeName: "password" }
-    ];
-    let inputs = [];
-    inputProps.forEach(inputProp => {
-      inputs.append(
-        <InputGroup
-          type={inputProp.type}
-          inputName={inputProp.inputName}
-          labelName={inputProp.labelName}
-          handleChange={this.handleChange}
-          handleBlur={this.handleBlur}
-          value={this.state.fields[inputProp.inputName]}
-          error={this.state.errors[inputProp.inputName]}
-        />
-      );
-    });
-    return inputs;
-  }
-
   render() {
     return (
       <>
@@ -103,7 +80,7 @@ class SignInForm extends React.Component {
         </header>
         <form onSubmit={this.handleSubmit}>
           {this.renderInputGroups()}
-          {/* <InputGroup
+          <InputGroup
             type="text"
             inputName="email"
             labelName="Email Address"
@@ -112,7 +89,7 @@ class SignInForm extends React.Component {
             value={this.state.fields["email"]}
             error={this.state.errors["email"]}
           />
-          
+
           <InputGroup
             type="password"
             inputName="password"
@@ -122,7 +99,7 @@ class SignInForm extends React.Component {
             value={this.state.fields["password"]}
             error={this.state.errors["password"]}
           />
-           */}
+
           <button type="submit">Sign In</button>
         </form>
         <button

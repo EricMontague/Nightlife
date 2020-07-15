@@ -1,6 +1,5 @@
 import React from "react";
 import InputGroup from "../common/InputGroup";
-import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
 class SignUpForm extends React.Component {
@@ -73,30 +72,6 @@ class SignUpForm extends React.Component {
     return error;
   }
 
-  renderInputGroups() {
-    const inputProps = [
-      { type: "text", inputName: "firstName", labeName: "First Name" },
-      { type: "text", inputName: "lasttName", labeName: "Last Name" },
-      { type: "text", inputName: "email", labeName: "Email address" },
-      { type: "password", inputName: "password", labeName: "password" }
-    ];
-    let inputs = [];
-    inputProps.forEach(inputProp => {
-      inputs.append(
-        <InputGroup
-          type={inputProp.type}
-          inputName={inputProp.inputName}
-          labelName={inputProp.labelName}
-          handleChange={this.handleChange}
-          handleBlur={this.handleBlur}
-          value={this.state.fields[inputProp.inputName]}
-          error={this.state.errors[inputProp.inputName]}
-        />
-      );
-    });
-    return inputs;
-  }
-
   render() {
     return (
       <>
@@ -104,8 +79,7 @@ class SignUpForm extends React.Component {
           <h3 className="auth-card-title">Sign Up</h3>
         </header>
         <form onSubmit={this.handleSubmit}>
-          {this.renderInputGroups()}
-          {/* <InputGroup
+          <InputGroup
             type="text"
             inputName="firstName"
             labelName="First Name"
@@ -114,7 +88,7 @@ class SignUpForm extends React.Component {
             value={this.state.fields["firstName"]}
             error={this.state.errors["firstName"]}
           />
-          
+
           <InputGroup
             type="text"
             inputName="lastName"
@@ -124,7 +98,7 @@ class SignUpForm extends React.Component {
             value={this.state.fields["lastName"]}
             error={this.state.errors["lastName"]}
           />
-          
+
           <InputGroup
             type="text"
             inputName="email"
@@ -134,7 +108,7 @@ class SignUpForm extends React.Component {
             value={this.state.fields["email"]}
             error={this.state.errors["email"]}
           />
-          
+
           <InputGroup
             type="password"
             inputName="password"
@@ -144,7 +118,6 @@ class SignUpForm extends React.Component {
             value={this.state.fields["password"]}
             error={this.state.errors["password"]}
           />
-           */}
           <button type="submit">Sign In</button>
         </form>
         <button
