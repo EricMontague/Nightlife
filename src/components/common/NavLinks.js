@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import UserInfo from "./UserInfo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
 const NavLinks = currentUser => {
@@ -33,9 +34,8 @@ const NavLinks = currentUser => {
   }
 };
 
-
 NavLinks.propTypes = {
-  currentUser: PropTypes.objectOf(PropTypes.string.isRequired);
-}
+  currentUser: PropTypes.objectOf(PropTypes.string.isRequired)
+};
 
 export default NavLinks;

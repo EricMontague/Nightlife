@@ -5,7 +5,6 @@ const UserContext = React.createContext(null);
 
 export const useCurrentUser = () => {
   const value = useContext(UserContext);
-  console.log(value);
   return value;
 };
 

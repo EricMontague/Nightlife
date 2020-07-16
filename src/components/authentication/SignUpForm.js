@@ -1,5 +1,6 @@
 import React from "react";
 import InputGroup from "../common/InputGroup";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 class SignUpForm extends React.Component {
@@ -15,7 +16,6 @@ class SignUpForm extends React.Component {
     this.clear = this.clear.bind(this);
     this.isValid = this.isValid.bind(this);
     this.validate = this.validate.bind(this);
-    this.renderInputGroups = this.renderInputGroups.bind(this);
   }
 
   handleSubmit(event) {
@@ -118,7 +118,12 @@ class SignUpForm extends React.Component {
             value={this.state.fields["password"]}
             error={this.state.errors["password"]}
           />
-          <button type="submit">Sign In</button>
+          <button
+            type="submit"
+            className="btn btn-primary btn-shadow btn-block"
+          >
+            Sign In
+          </button>
         </form>
         <button
           type="button"

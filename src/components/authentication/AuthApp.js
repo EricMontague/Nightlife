@@ -1,36 +1,47 @@
 import React from "react";
-import AuthPage from "AuthPage";
-import AuthCard from "AuthCard";
+import AuthPage from "./AuthPage";
+import AuthCard from "./AuthCard";
 import Home from "./Home";
-import LoginForm from "./LoginForm";
+import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
+import {
+  required,
+  validateLength,
+  validateEmail
+} from "../../services/validators";
 import PropTypes from "prop-types";
 
 class AuthApp extends React.Component {
-  constructors(props) {
+  constructor(props) {
     super(props);
-    this.renderPage = this.renderPage.bind(this);
+    this.renderContet = this.renderContent.bind(this);
   }
 
   renderContent() {
+    const validateFieldLength = () => {
+      validateLength(1, 20);
+    };
+
+    const validators = [required, validateFieldLength, validateEmail];
     switch (this.props.match.path) {
-      case "/":
+      case "/signin":
         return (
           <>
-            <Home />
-          </>
-        );
-      case "/login":
-        return (
-          <>
-            <LoginForm />
+            <SignInForm validators={validators} />
           </>
         );
 
       case "/signup":
         return (
           <>
-            <SignUpForm />
+            <SignUpForm validators={validators} />
+          </>
+        );
+
+      default:
+        return (
+          <>
+            <Home />
           </>
         );
     }

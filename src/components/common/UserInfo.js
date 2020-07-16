@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 const UserInfo = props => {
   return (
-    <Link to={`user/${props.displayName}`}>
+    <Link to={`user/${props.user.displayName}`}>
       <div className="user-info">
         <Avatar user={props.user} avatarClasses={props.avatarClasses} />
         <div className="user-info-name">{props.user.displayName}</div>

@@ -4,6 +4,7 @@
 @import "App";
 @import "functions";
 @import "mixins";
+@import "functions";
 
 .auth-layout {
   display: flex;
@@ -16,8 +17,6 @@
 .auth-card {
   text-align: center;
   width: 400px;
-  height: 70vh;
-  //   padding: 6.5rem 2rem;
   padding: 2rem;
   margin: auto;
   background: #fff;
@@ -44,8 +43,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
-    // border: 1px solid #333;
   }
 
   .logo {
@@ -68,7 +65,11 @@
   }
 
   .btn {
-    margin-bottom: 1rem;
+    margin-bottom: convertPixelsToRem(10);
+  }
+
+  form {
+    width: 100%;
   }
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import NavLinks from "./NavLinks";
+import { Link } from "react-router-dom";
 import { useCurrentUser } from "../../context/UserProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -16,7 +17,7 @@ const Navbar = () => {
           </Link>{" "}
         </div>
         <ul>
-          <NavLinks {...{ currentUser }} />
+          <NavLinks {...currentUser} />
         </ul>
       </div>
     </nav>

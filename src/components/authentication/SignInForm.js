@@ -1,5 +1,6 @@
 import React from "react";
 import InputGroup from "../common/InputGroup";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 class SignInForm extends React.Component {
@@ -15,7 +16,6 @@ class SignInForm extends React.Component {
     this.clear = this.clear.bind(this);
     this.isValid = this.isValid.bind(this);
     this.validate = this.validate.bind(this);
-    this.renderInputGroups = this.renderInputGroups.bind(this);
   }
 
   handleSubmit(event) {
@@ -79,7 +79,6 @@ class SignInForm extends React.Component {
           <h3 className="auth-card-title">Sign In</h3>
         </header>
         <form onSubmit={this.handleSubmit}>
-          {this.renderInputGroups()}
           <InputGroup
             type="text"
             inputName="email"
@@ -100,7 +99,12 @@ class SignInForm extends React.Component {
             error={this.state.errors["password"]}
           />
 
-          <button type="submit">Sign In</button>
+          <button
+            type="submit"
+            className="btn btn-primary btn-shadow btn-block"
+          >
+            Sign In
+          </button>
         </form>
         <button
           type="button"

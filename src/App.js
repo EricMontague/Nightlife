@@ -13,7 +13,7 @@ const App = () => {
         <Switch>
           <Route
             exact
-            path={["/", "/login", "/signup"]}
+            path={["/", "/signin", "/signup"]}
             render={({ match }) => <AuthApp match={match} />}
           />
           <Route exact path="*" component={NotFound} />
