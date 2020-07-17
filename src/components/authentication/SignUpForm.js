@@ -1,6 +1,11 @@
 import React from "react";
 import InputGroup from "../common/InputGroup";
 import { Link } from "react-router-dom";
+import {
+  required,
+  validateLength,
+  validateEmail
+} from "../../services/validators";
 import PropTypes from "prop-types";
 
 class SignUpForm extends React.Component {
@@ -9,6 +14,12 @@ class SignUpForm extends React.Component {
     this.state = {
       fields: { firstName: "", lastName: "", email: "", password: "" },
       errors: { firstName: "", lastName: "", email: "", password: "" }
+    };
+    this.validators = {
+      firstName: [required, validateLength(8, 32)],
+      lastname: [required, validateLength(8, 32)],
+      email: [required, validateLength(1, 64), validateEmail],
+      password: [required, validateLength(8, 32)]
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -27,7 +38,7 @@ class SignUpForm extends React.Component {
   }
 
   handleChange(event) {
-    const error = this.validate(event.target.value);
+    const error = this.validate(event.target.name, event.target.value);
     this.setState({
       fields: Object.assign({}, this.state.fields, {
         [event.target.name]: event.target.value
@@ -59,9 +70,9 @@ class SignUpForm extends React.Component {
     return true;
   }
 
-  validate(value) {
+  validate(inputName, value) {
     let error = "";
-    const validators = this.props.validators;
+    const validators = this.validators[inputName];
     for (let index = 0; index < validators.length; index++) {
       const message = validators[index](value);
       if (message !== "") {
@@ -83,6 +94,7 @@ class SignUpForm extends React.Component {
             type="text"
             inputName="firstName"
             labelName="First Name"
+            autoFocus={true}
             handleChange={this.handleChange}
             handleBlur={this.handleBlur}
             value={this.state.fields["firstName"]}
@@ -93,6 +105,7 @@ class SignUpForm extends React.Component {
             type="text"
             inputName="lastName"
             labelName="Last Name"
+            autoFocus={false}
             handleChange={this.handleChange}
             handleBlur={this.handleBlur}
             value={this.state.fields["lastName"]}
@@ -103,6 +116,7 @@ class SignUpForm extends React.Component {
             type="text"
             inputName="email"
             labelName="Email Address"
+            autoFocus={false}
             handleChange={this.handleChange}
             handleBlur={this.handleBlur}
             value={this.state.fields["email"]}
@@ -113,6 +127,7 @@ class SignUpForm extends React.Component {
             type="password"
             inputName="password"
             labelName="Password"
+            autoFocus={false}
             handleChange={this.handleChange}
             handleBlur={this.handleBlur}
             value={this.state.fields["password"]}
@@ -122,7 +137,7 @@ class SignUpForm extends React.Component {
             type="submit"
             className="btn btn-primary btn-shadow btn-block"
           >
-            Sign In
+            Sign Up
           </button>
         </form>
         <button
@@ -133,10 +148,10 @@ class SignUpForm extends React.Component {
           Sign in with Google
         </button>
         <footer>
-          Don't have an account?
-          <Link to="/signup">
+          Already have an account?
+          <Link to="/signin">
             {" "}
-            <strong>Sign up here</strong>
+            <strong>Log in here.</strong>
           </Link>
         </footer>
       </>
@@ -145,7 +160,6 @@ class SignUpForm extends React.Component {
 }
 
 SignUpForm.propTypes = {
-  validators: PropTypes.arrayOf(PropTypes.func.isRequired),
   createUserWithEmailAndPassword: PropTypes.func.isRequired,
   signInWithGoogle: PropTypes.func.isRequired
 };

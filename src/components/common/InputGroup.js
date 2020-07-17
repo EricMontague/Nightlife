@@ -5,7 +5,7 @@ const InputGroup = props => {
   return (
     <div className="input-group">
       <input
-        autoFocus
+        autoFocus={props.autoFocus}
         type={props.type}
         id={props.inputName}
         name={props.inputName}

@@ -1,3 +1,4 @@
-@function convertPixelsToRem($size) {
-  @return #{$size / 16}rem;
+@function calculateRem($size) {
+  $remSize: $size / 16px;
+  @return #{$remSize}rem;
 }

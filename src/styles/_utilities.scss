@@ -185,15 +185,17 @@ button.btn {
 // Forms
 .input-group {
   position: relative;
-  margin-bottom: convertPixelsToRem(10);
+  margin-bottom: calculateRem(10px);
 
   label {
     position: absolute;
-    top: 30%;
+    top: 1rem;
     left: 1rem;
     color: #898989;
-    font-size: 16px;
-    transition: font-size, top 0.1s ease-in-out;
+    padding: 0 3px;
+    background: #fff;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
   }
 
   input[type="text"],
@@ -201,27 +203,50 @@ button.btn {
     border-radius: 0.4rem;
     border: 1px solid rgba(0, 0, 0, 0.45);
     width: 100%;
-    font-size: 1.1rem;
     padding: 1rem;
   }
 
-  input[type="text"]:active,
   input[type="text"]:focus,
-  input[type="password"]:active,
   input[type="password"]:focus {
     outline: none;
-    border: 1px solid $secondary-color;
+    border: 2px solid $secondary-color;
 
     + label {
       color: darken($secondary-color, 10%);
       font-size: 0.7rem;
-      transform: translateY(-5px);
+      transform: translateY(-23px);
     }
   }
 }
 
 .label-raised {
-  position: relative;
-  font-size: 0.6rem;
-  transform: translateY(-20px);
+  font-size: 0.7rem;
+  transform: translateY(-23px);
+}
+
+.animation-shake {
+  animation: shake 0.3s;
+  animation-iteration-count: 1;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(0.25rem);
+  }
+
+  50% {
+    transform: translateX(-0.25rem);
+  }
+
+  75% {
+    transform: translateX(0.25rem);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }

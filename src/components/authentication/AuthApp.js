@@ -4,11 +4,6 @@ import AuthCard from "./AuthCard";
 import Home from "./Home";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
-import {
-  required,
-  validateLength,
-  validateEmail
-} from "../../services/validators";
 import PropTypes from "prop-types";
 
 class AuthApp extends React.Component {
@@ -18,23 +13,18 @@ class AuthApp extends React.Component {
   }
 
   renderContent() {
-    const validateFieldLength = () => {
-      validateLength(1, 20);
-    };
-
-    const validators = [required, validateFieldLength, validateEmail];
     switch (this.props.match.path) {
       case "/signin":
         return (
           <>
-            <SignInForm validators={validators} />
+            <SignInForm />
           </>
         );
 
       case "/signup":
         return (
           <>
-            <SignUpForm validators={validators} />
+            <SignUpForm />
           </>
         );
 

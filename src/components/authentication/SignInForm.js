@@ -1,6 +1,11 @@
 import React from "react";
 import InputGroup from "../common/InputGroup";
 import { Link } from "react-router-dom";
+import {
+  required,
+  validateLength,
+  validateEmail
+} from "../../services/validators";
 import PropTypes from "prop-types";
 
 class SignInForm extends React.Component {
@@ -9,6 +14,10 @@ class SignInForm extends React.Component {
     this.state = {
       fields: { email: "", password: "" },
       errors: { email: "", password: "" }
+    };
+    this.validators = {
+      email: [required, validateLength(1, 64), validateEmail],
+      password: [required, validateLength(8, 32)]
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -27,7 +36,7 @@ class SignInForm extends React.Component {
   }
 
   handleChange(event) {
-    const error = this.validate(event.target.value);
+    const error = this.validate(event.target.name, event.target.value);
     this.setState({
       fields: Object.assign({}, this.state.fields, {
         [event.target.name]: event.target.value
@@ -59,9 +68,9 @@ class SignInForm extends React.Component {
     return true;
   }
 
-  validate(value) {
+  validate(inputName, value) {
     let error = "";
-    const validators = this.props.validators;
+    const validators = this.validators[inputName];
     for (let index = 0; index < validators.length; index++) {
       const message = validators[index](value);
       if (message !== "") {
@@ -83,22 +92,22 @@ class SignInForm extends React.Component {
             type="text"
             inputName="email"
             labelName="Email Address"
+            autoFocus={true}
             handleChange={this.handleChange}
             handleBlur={this.handleBlur}
             value={this.state.fields["email"]}
             error={this.state.errors["email"]}
           />
-
           <InputGroup
             type="password"
             inputName="password"
             labelName="Password"
+            autoFocus={false}
             handleChange={this.handleChange}
             handleBlur={this.handleBlur}
             value={this.state.fields["password"]}
             error={this.state.errors["password"]}
           />
-
           <button
             type="submit"
             className="btn btn-primary btn-shadow btn-block"
@@ -117,7 +126,7 @@ class SignInForm extends React.Component {
           Don't have an account?
           <Link to="/signup">
             {" "}
-            <strong>Sign up here</strong>
+            <strong>Sign up here.</strong>
           </Link>
         </footer>
       </>
@@ -126,7 +135,6 @@ class SignInForm extends React.Component {
 }
 
 SignInForm.propTypes = {
-  validators: PropTypes.arrayOf(PropTypes.func.isRequired),
   signInWithEmailAndPassword: PropTypes.func.isRequired,
   signInWithGoogle: PropTypes.func.isRequired
 };
