@@ -6,7 +6,13 @@ import PropTypes from "prop-types";
 const UserInfo = props => {
   return (
     <Link to={`user/${props.user.displayName}`}>
-      <div className="user-info">
+      <div
+        className={
+          "user-info" +
+          " " +
+          (props.userInfoClasses ? props.userInfoClasses : "")
+        }
+      >
         <Avatar user={props.user} avatarClasses={props.avatarClasses} />
         <div className="user-info-name">{props.user.displayName}</div>
       </div>

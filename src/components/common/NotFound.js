@@ -1,9 +1,12 @@
 import React from "react";
-
+import CenteredPageLayout from "./CenteredPageLayout";
 
 const NotFound = () => {
-    return <h1>NOT FOUND!</h1>;
-}
-
+  return (
+    <CenteredPageLayout>
+      <h1>NOT FOUND!</h1>
+    </CenteredPageLayout>
+  );
+};
 
 export default NotFound;

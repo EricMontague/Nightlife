@@ -4,8 +4,8 @@ import UserInfo from "./UserInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
-const NavLinks = currentUser => {
-  if (currentUser) {
+const NavLinks = props => {
+  if (props.currentUser) {
     return (
       <>
         <li>
@@ -14,7 +14,11 @@ const NavLinks = currentUser => {
             Create List
           </Link>
         </li>
-        <UserInfo user={currentUser} avatarClasses="img-rounded avatar-small" />
+        <UserInfo
+          user={props.currentUser}
+          userInfoClasses="ml-3"
+          avatarClasses="img-rounded avatar-small"
+        />
         <li>
           <Link to="/logout">Logout</Link>
         </li>
