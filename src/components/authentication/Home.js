@@ -6,29 +6,31 @@ import { signInWithGoogle } from "../../services/firebase";
 const Home = () => {
   return (
     <>
-      <header className="auth-card-header">
-        <FontAwesomeIcon icon={["fas", "glass-cheers"]} className="logo" />
-        <h3 className="auth-card-title">Welcome to Nightlife</h3>
-        <p>Plan your night out</p>
-      </header>
+      <div className="card-header text-center">
+        <FontAwesomeIcon
+          icon={["fas", "glass-cheers"]}
+          size="3x"
+          className="logo-primary mb-1"
+        />
+        <h3 className="card-title">Welcome to Nightlife</h3>
+        <p className="lead">Plan your night out</p>
+      </div>
 
-      <Link to="/signup" className="btn btn-primary btn-shadow btn-block">
+      <Link to="/signup" className="btn btn-primary btn-shadow btn-block mb-1">
         Continue with email
       </Link>
       <button
         type="button"
         onClick={() => signInWithGoogle()}
-        className="btn btn-secondary btn-shadow btn-block"
+        className="btn btn-secondary btn-shadow btn-block mb-1"
       >
         Continue with Google
       </button>
-      <footer>
-        Already a member?
-        <Link to="/signin">
-          {" "}
-          <strong>Sign In</strong>
-        </Link>
-      </footer>
+      <div className="card-footer flex justify-center">
+        <p>
+          Already a member? <Link to="/signin"> Sign In</Link>
+        </p>
+      </div>
     </>
   );
 };

@@ -84,8 +84,8 @@ class SignInForm extends React.Component {
   render() {
     return (
       <>
-        <header className="auth-card-header">
-          <h3 className="auth-card-title">Sign In</h3>
+        <header className="card-header">
+          <h3 className="card-title">Sign In</h3>
         </header>
         <form onSubmit={this.handleSubmit}>
           <InputGroup
@@ -110,7 +110,7 @@ class SignInForm extends React.Component {
           />
           <button
             type="submit"
-            className="btn btn-primary btn-shadow btn-block"
+            className="btn btn-primary btn-shadow btn-block mb-1"
           >
             Sign In
           </button>
@@ -118,17 +118,15 @@ class SignInForm extends React.Component {
         <button
           type="button"
           onClick={() => this.props.signInWithGoogle()}
-          className="btn btn-secondary btn-shadow btn-block"
+          className="btn btn-secondary btn-shadow btn-block mb-1"
         >
           Sign in with Google
         </button>
-        <footer>
-          Don't have an account?
-          <Link to="/signup">
-            {" "}
-            <strong>Sign up here.</strong>
-          </Link>
-        </footer>
+        <div className="card-footer flex justify-center">
+          <p>
+            Don't have an account? <Link to="/signup"> Sign up here.</Link>
+          </p>
+        </div>
       </>
     );
   }

@@ -1,6 +1,6 @@
 import React from "react";
-import AuthPage from "./AuthPage";
-import AuthCard from "./AuthCard";
+import CenteredPageLayout from "../common/CenteredPageLayout";
+import Card from "../common/Card";
 import Home from "./Home";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
@@ -39,9 +39,9 @@ class AuthApp extends React.Component {
 
   render() {
     return (
-      <AuthPage>
-        <AuthCard>{this.renderContent()}</AuthCard>
-      </AuthPage>
+      <CenteredPageLayout>
+        <Card classes="card-medium">{this.renderContent()}</Card>
+      </CenteredPageLayout>
     );
   }
 }
