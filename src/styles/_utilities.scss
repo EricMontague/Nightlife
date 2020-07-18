@@ -9,6 +9,34 @@
   overflow: hidden;
 }
 
+.centered-page-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+// Sizes
+.h {
+  &-100vh {
+    height: 100vh;
+  }
+
+  &-100 {
+    height: 100%;
+  }
+}
+
+.w {
+  &-100vw {
+    width: 100vw;
+  }
+
+  &-100 {
+    width: 100%;
+  }
+}
+
 // Buttons
 %btn-shared {
   display: inline-block;
@@ -18,6 +46,7 @@
   padding: 1rem 1.5rem;
   transition: all 0.1s ease-in-out;
   font-size: 1rem;
+  text-align: center;
 }
 
 .btn {
@@ -67,51 +96,86 @@ button.btn {
 }
 
 // Padding & Margin
-.py {
+.p-all {
   &-1 {
-    padding: 1rem 0;
+    padding: 0.5rem;
   }
 
   &-2 {
-    padding: 2rem 0;
+    padding: 1rem;
   }
 
   &-3 {
-    padding: 3rem 0;
+    padding: 1.5rem;
   }
 
   &-4 {
-    padding: 4rem 0;
+    padding: 2rem;
+  }
+}
+
+.py {
+  &-1 {
+    padding: 0.5rem 0;
+  }
+
+  &-2 {
+    padding: 1rem 0;
+  }
+
+  &-3 {
+    padding: 1.5rem 0;
+  }
+
+  &-4 {
+    padding: 2rem 0;
   }
 }
 
 .my {
   &-1 {
-    margin: 1rem 0;
+    margin: 0.5rem 0;
   }
 
   &-2 {
-    margin: 2rem 0;
+    margin: 1rem 0;
   }
 }
 
 .mb {
   &-1 {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   &-2 {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
 
   &-3 {
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
   }
+}
+
+.ml {
+  &-1 {
+    margin-left: 0.5rem;
+  }
+
+  &-2 {
+    margin-left: 1rem;
+  }
+
+  &-3 {
+    margin-left: 1.5rem;
+  }
+}
+
+.m-auto {
+  margin: auto;
 }
 
 // Text
 .lead {
-  font-size: 1rem;
   margin-top: 0.4rem;
   margin-bottom: 1.5rem;
 }
@@ -129,6 +193,19 @@ button.btn {
   &-light {
     background: $light-color;
     color: $dark-color;
+
+    a {
+      color: $dark-color;
+    }
+  }
+
+  &-dark {
+    background: $dark-color;
+    color: #fff;
+
+    a {
+      color: #fff;
+    }
   }
 }
 
@@ -136,11 +213,9 @@ button.btn {
 .user-info {
   display: flex;
   align-items: center;
-  margin-left: 1.2rem;
 
   &-name {
     margin-left: 0.5rem;
-    font-size: 1rem;
   }
 
   img {
@@ -158,14 +233,27 @@ button.btn {
   height: 45px;
 }
 
+.logo {
+  &-primary {
+    color: $primary-color;
+  }
+}
+
 // Flexbox
-.row {
+.flex {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  width: 100%;
+}
 
-  &-centered {
+.justify-center {
+  justify-content: center;
+}
+
+.flex-row {
+  display: flex;
+  flex-wrap: wrap;
+
+  &-center {
     justify-content: center;
   }
 }
@@ -183,39 +271,45 @@ button.btn {
 }
 
 // Forms
-.input-group {
-  position: relative;
-  margin-bottom: calculateRem(10px);
+form {
+  .input-group {
+    position: relative;
+    margin-bottom: 0.625rem;
 
-  label {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    color: #898989;
-    padding: 0 3px;
-    background: #fff;
-    pointer-events: none;
-    transition: all 0.2s ease-in-out;
-  }
-
-  input[type="text"],
-  input[type="password"] {
-    border-radius: 0.4rem;
-    border: 1px solid rgba(0, 0, 0, 0.45);
-    width: 100%;
-    padding: 1rem;
-  }
-
-  input[type="text"]:focus,
-  input[type="password"]:focus {
-    outline: none;
-    border: 2px solid $secondary-color;
-
-    + label {
-      color: darken($secondary-color, 10%);
-      font-size: 0.7rem;
-      transform: translateY(-23px);
+    label {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      color: #898989;
+      padding: 0 3px;
+      background: #fff;
+      pointer-events: none;
+      transition: all 0.2s ease-in-out;
     }
+
+    input[type="text"],
+    input[type="password"] {
+      border-radius: 0.4rem;
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      width: 100%;
+      padding: 1rem;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border: 2px solid $secondary-color;
+
+      + label {
+        color: darken($secondary-color, 10%);
+        font-size: 0.7rem;
+        transform: translateY(-23px);
+      }
+    }
+  }
+
+  .input-group:last-of-type {
+    margin-bottom: 3rem;
   }
 }
 
@@ -224,6 +318,7 @@ button.btn {
   transform: translateY(-23px);
 }
 
+// Animations
 .animation-shake {
   animation: shake 0.3s;
   animation-iteration-count: 1;
@@ -249,4 +344,118 @@ button.btn {
   100% {
     transform: translateX(0);
   }
+}
+
+// Cards
+
+.card {
+  padding: 2rem;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid (160, 160, 160, 0.1);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+
+  &-title {
+    font-size: 1.4rem;
+  }
+
+  &-header {
+    margin: 0.8rem 0 2rem 0;
+  }
+
+  &-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &.card-medium {
+    width: 25rem;
+  }
+
+  &-footer {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+
+    a {
+      color: darken($secondary-color, 10%);
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  form {
+    width: 100%;
+  }
+}
+
+// Menus
+
+.dropdown {
+  &-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    &:before {
+      position: absolute;
+      content: "";
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: $dark-color;
+      opacity: 0.5;
+      z-index: 9998;
+    }
+  }
+
+  &-menu {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 1.5rem;
+    z-index: 9999;
+
+    li {
+      border-bottom: 1px solid #898989;
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    a {
+      display: inline-block;
+      padding: 1rem 0;
+    }
+
+    .close {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      right: 1rem;
+      color: #fff;
+      font-size: 2rem;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+}
+
+.menu-slim {
+  width: 13.5rem;
+}
+
+.nav-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
 }

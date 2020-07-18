@@ -5,79 +5,14 @@
 @import "functions";
 @import "mixins";
 @import "functions";
-
-.auth-layout {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  padding: 1.5rem;
-}
-
-.auth-card {
-  text-align: center;
-  width: 400px;
-  padding: 2rem;
-  margin: auto;
-  background: #fff;
-  border-radius: 5px;
-  border: 1px solid (160, 160, 160, 0.1);
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-
-  &-title {
-    font-size: 1.4rem;
-  }
-
-  &-header {
-    margin: 1rem 0 2rem 0;
-
-    p {
-      font-size: 1rem;
-      margin-top: 0.4rem;
-      margin-bottom: 1.5rem;
-    }
-  }
-
-  &-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .logo {
-    color: $primary-color;
-    width: 50px;
-    height: 50px;
-    margin-bottom: 1rem;
-  }
-
-  footer {
-    font-size: 0.9rem;
-
-    a {
-      color: darken($secondary-color, 10%);
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  .btn {
-    margin-bottom: calculateRem(10px);
-  }
-
-  form {
-    width: 100%;
-  }
-}
+@import "media_queries";
 
 .navbar {
   position: sticky;
   top: 0;
   height: 60px;
-  width: 100%;
+  left: 0;
+  right: 0;
   color: #fff;
   background: $dark-color;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
@@ -87,7 +22,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 2rem;
+    padding: 0 2.5rem;
     height: 100%;
   }
 
@@ -96,7 +31,7 @@
     font-size: 1.5rem;
   }
 
-  ul {
+  .main-menu {
     display: flex;
     align-items: center;
 
