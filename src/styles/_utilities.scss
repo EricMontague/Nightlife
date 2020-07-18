@@ -416,10 +416,14 @@ form {
   }
 
   &-menu {
-    position: relative;
+    position: fixed;
+    top: 0;
+    right: 0;
     display: flex;
     flex-direction: column;
     padding: 2.5rem 1.5rem;
+    transform: translateX(13.5rem);
+    opacity: 0;
     z-index: 9999;
 
     li {
@@ -450,12 +454,30 @@ form {
   }
 }
 
-.menu-slim {
-  width: 13.5rem;
+.slide {
+  &-in {
+    animation: 0.4s ease 0.3s 1 forwards menu-slide-in;
+  }
+
+  &-out {
+    animation: 0.4s ease 0.3s 1 forwards menu-slide-out;
+  }
 }
 
-.nav-menu {
-  position: fixed;
-  top: 0;
-  right: 0;
+@keyframes menu-slide-in {
+  to {
+    transform: translateX(0rem);
+    opacity: 1;
+  }
+}
+
+@keyframes menu-slide-out {
+  from {
+    transform: translateX(0rem);
+  }
+
+  to {
+    transform: translateX(13.5rem);
+    opacity: 0;
+  }
 }
