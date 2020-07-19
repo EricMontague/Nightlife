@@ -4,6 +4,7 @@ import Card from "../common/Card";
 import Home from "./Home";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
+import { signInWithGoogle } from "../../services/firebase";
 import PropTypes from "prop-types";
 
 class AuthApp extends React.Component {
@@ -17,14 +18,14 @@ class AuthApp extends React.Component {
       case "/signin":
         return (
           <>
-            <SignInForm />
+            <SignInForm signInWithGoogle={signInWithGoogle} />
           </>
         );
 
       case "/signup":
         return (
           <>
-            <SignUpForm />
+            <SignUpForm signInWithGoogle={signInWithGoogle} />
           </>
         );
 

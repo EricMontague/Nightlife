@@ -5,38 +5,58 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const DropdownMenu = props => {
-  if (props.isOpen) {
+  if (!props.isDesktop) {
     return (
-      <div className="dropdown-overlay">
-        <ul className="dropdown-menu bg-dark slide-in h-100vh">
-          <div
-            className="close"
-            onClick={event => {
-              event.target.parentElement.classList.add("slide-out");
-            }}
+      <>
+        <FontAwesomeIcon
+          icon={["fas", "bars"]}
+          size="lg"
+          className="menu-btn"
+          onClick={event => {
+            props.toggleMenu(true);
+          }}
+        />
+        <div
+          className={"dropdown-overlay" + " " + (props.isVisible ? "show" : "")}
+        >
+          <ul
+            className={
+              "dropdown-menu bg-dark h-100vh" +
+              " " +
+              (props.isVisible ? "slide-in" : "")
+            }
           >
-            &times;
-          </div>
-          <li>
-            <UserInfo
-              user={props.currentUser}
-              avatarClasses="img-rounded avatar-small"
-            />
-          </li>
-          <li>
-            <Link to="/create">
-              <FontAwesomeIcon icon={["fas", "plus-circle"]} />
-              Create List
-            </Link>
-          </li>
-          <li>
-            <Link to="/logout">
-              <FontAwesomeIcon icon={["fas", "sign-out-alt"]} />
-              Logout
-            </Link>
-          </li>
-        </ul>
-      </div>
+            <div
+              className="close"
+              onClick={event => {
+                props.toggleMenu(false);
+              }}
+            >
+              &times;
+            </div>
+            <li>
+              {props.currentUser && (
+                <UserInfo
+                  user={props.currentUser}
+                  avatarClasses="img-rounded avatar-small"
+                />
+              )}
+            </li>
+            <li>
+              <Link to="/create">
+                <FontAwesomeIcon icon={["fas", "plus-circle"]} />
+                Create List
+              </Link>
+            </li>
+            <li>
+              <Link to="/logout">
+                <FontAwesomeIcon icon={["fas", "sign-out-alt"]} />
+                Logout
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </>
     );
   } else {
     return null;
@@ -44,9 +64,9 @@ const DropdownMenu = props => {
 };
 
 DropdownMenu.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
+  currentUser: PropTypes.objectOf(PropTypes.string.isRequired),
   toggleMenu: PropTypes.func.isRequired,
-  currentUser: PropTypes.objectOf(PropTypes.string.isRequired)
+  isVisible: PropTypes.bool.isRequired
 };
 
 export default DropdownMenu;

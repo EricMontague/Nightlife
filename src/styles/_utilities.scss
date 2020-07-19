@@ -1,7 +1,7 @@
 @import "variables";
 @import "functions";
 
-// container
+// containers
 .container {
   max-width: $website-width;
   margin: auto;
@@ -249,73 +249,65 @@ button.btn {
   justify-content: center;
 }
 
-.flex-row {
-  display: flex;
-  flex-wrap: wrap;
-
-  &-center {
-    justify-content: center;
-  }
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-basis: 100%;
-  flex: 1;
-
-  &-centered {
-    justify-content: center;
-  }
-}
-
 // Forms
-form {
-  .input-group {
-    position: relative;
-    margin-bottom: 0.625rem;
 
-    label {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      color: #898989;
-      padding: 0 3px;
-      background: #fff;
-      pointer-events: none;
-      transition: all 0.2s ease-in-out;
-    }
+.input-group {
+  position: relative;
+  margin-bottom: 0.625rem;
 
-    input[type="text"],
-    input[type="password"] {
-      border-radius: 0.4rem;
-      border: 1px solid rgba(0, 0, 0, 0.5);
-      width: 100%;
-      padding: 1rem;
-    }
-
-    input[type="text"]:focus,
-    input[type="password"]:focus {
-      outline: none;
-      border: 2px solid $secondary-color;
-
-      + label {
-        color: darken($secondary-color, 10%);
-        font-size: 0.7rem;
-        transform: translateY(-23px);
-      }
-    }
+  input[type="text"].input-without-error,
+  input[type="password"].input-without-error {
+    outline: none;
+    border: 2px solid $secondary-color;
   }
 
-  .input-group:last-of-type {
+  input[type="text"].input-with-error,
+  input[type="password"].input-with-error {
+    border: 2px solid darken($primary-color, 5%);
+  }
+
+  .label-with-error {
+    color: darken($primary-color, 5%);
+  }
+
+  .label-without-error {
+    color: darken($secondary-color, 5%);
+  }
+
+  .label-selected {
+    font-size: 0.7rem;
+    transform: translateY(-23px);
+  }
+
+  label {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: #898989;
+    padding: 0 3px;
+    background: #fff;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    border-radius: 0.4rem;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .error-message {
+    display: block;
+    text-align: left;
+    margin-top: 0.3rem;
+    color: darken($primary-color, 5%);
+  }
+
+  &:last-of-type {
     margin-bottom: 3rem;
   }
-}
-
-.label-raised {
-  font-size: 0.7rem;
-  transform: translateY(-23px);
 }
 
 // Animations
@@ -397,6 +389,7 @@ form {
 .dropdown {
   &-overlay {
     position: fixed;
+    display: none;
     top: 0;
     left: 0;
     right: 0;
@@ -422,7 +415,8 @@ form {
     display: flex;
     flex-direction: column;
     padding: 2.5rem 1.5rem;
-    transform: translateX(13.5rem);
+    transform: translateX(100%);
+    transition: transform, opacity 4s ease 3s;
     opacity: 0;
     z-index: 9999;
 
@@ -437,6 +431,14 @@ form {
     a {
       display: inline-block;
       padding: 1rem 0;
+    }
+
+    &.slide-in {
+      animation: 0.4s ease 0.3s 1 forwards menu-slide-in;
+    }
+
+    &.slide-out {
+      animation: 0.4s ease 0.3s 1 forwards menu-slide-out;
     }
 
     .close {
@@ -454,15 +456,15 @@ form {
   }
 }
 
-.slide {
-  &-in {
-    animation: 0.4s ease 0.3s 1 forwards menu-slide-in;
-  }
+// .slide {
+//   &-in {
+//     animation: 0.4s ease 0.3s 1 forwards menu-slide-in;
+//   }
 
-  &-out {
-    animation: 0.4s ease 0.3s 1 forwards menu-slide-out;
-  }
-}
+//   &-out {
+//     animation: 0.4s ease 0.3s 1 forwards menu-slide-out;
+//   }
+// }
 
 @keyframes menu-slide-in {
   to {
@@ -472,12 +474,13 @@ form {
 }
 
 @keyframes menu-slide-out {
-  from {
-    transform: translateX(0rem);
-  }
-
   to {
-    transform: translateX(13.5rem);
+    transform: translateX(100%);
     opacity: 0;
   }
+}
+
+// Visibilitity
+.show {
+  display: block;
 }

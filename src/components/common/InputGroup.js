@@ -11,9 +11,16 @@ const InputGroup = props => {
         name={props.inputName}
         onChange={props.handleChange}
         onBlur={props.handleBlur}
+        onFocus={props.handleFocus}
         value={props.value}
+        className={props.error ? "input-with-error" : ""}
       />
-      <label htmlFor={props.inputName}>{props.labelName}</label>
+      <label
+        htmlFor={props.inputName}
+        className={props.error ? "label-with-error" : ""}
+      >
+        {props.labelName}
+      </label>
       <small className="error-message">{props.error ? props.error : ""}</small>
     </div>
   );

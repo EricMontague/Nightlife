@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
+import PropTypes from "prop-types";
 
 const DeviceContext = React.createContext();
 
-export const useDeviceState = () => {
+export const useDeviceContext = () => {
   return useContext(DeviceContext);
 };
 
@@ -24,6 +25,10 @@ const DeviceProvider = props => {
       {props.children}
     </DeviceContext.Provider>
   );
+};
+
+DeviceProvider.propTypes = {
+  children: PropTypes.element.isRequired
 };
 
 export default DeviceProvider;

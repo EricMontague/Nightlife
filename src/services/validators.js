@@ -6,8 +6,8 @@ export const required = value => {
   return message;
 };
 
-export const validateLength = (min, max, value) => {
-  const validate = (min, max, value) => {
+export const validateLength = (min, max) => {
+  const validate = value => {
     let message = "";
     if (value.length < min || value.length > max) {
       message = `Length of input must be in between ${min} and ${max} characters`;
@@ -20,7 +20,7 @@ export const validateLength = (min, max, value) => {
 // very simple email regex. Not meant to be exhaustive
 export const validateEmail = value => {
   let message = "";
-  let regex = /^[A-Za-z0-9_.]+@[A-Za-z0-9_.]+\.[a-zA-Z]{2, 5}$/;
+  const regex = /^([a-zA-z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/;
   if (!regex.test(value)) {
     message = "Please provide a valid email address";
   }

@@ -24,25 +24,24 @@ class SignInForm extends React.Component {
     this.handleBlur = this.handleBlur.bind(this);
     this.clear = this.clear.bind(this);
     this.isValid = this.isValid.bind(this);
-    this.validate = this.validate.bind(this);
+    this.validateOnSubmit = this.validateOnSubmit.bind(this);
   }
 
   handleSubmit(event) {
     event.preventDefault();
+    this.validateOnSubmit();
     if (this.isValid()) {
+      console.log("Valid submission");
       this.props.signInWithEmailAndPassword({ ...this.state.fields });
       this.clear();
     }
   }
 
   handleChange(event) {
-    const error = this.validate(event.target.name, event.target.value);
+    console.log(event.target);
     this.setState({
       fields: Object.assign({}, this.state.fields, {
         [event.target.name]: event.target.value
-      }),
-      errors: Object.assign({}, this.state.errors, {
-        [event.target.name]: error
       })
     });
   }
@@ -68,17 +67,20 @@ class SignInForm extends React.Component {
     return true;
   }
 
-  validate(inputName, value) {
-    let error = "";
-    const validators = this.validators[inputName];
-    for (let index = 0; index < validators.length; index++) {
-      const message = validators[index](value);
-      if (message !== "") {
-        error = message;
-        break;
+  validateOnSubmit() {
+    const errors = {};
+    for (const field in this.state.fields) {
+      const validators = this.validators[field];
+      const value = this.state.fields[field];
+      for (let index = 0; index < validators.length; index++) {
+        const message = validators[index](value);
+        if (message !== "") {
+          errors[[field]] = message;
+          break;
+        }
       }
     }
-    return error;
+    this.setState({ errors });
   }
 
   render() {

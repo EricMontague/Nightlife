@@ -5,7 +5,7 @@ const Avatar = props => {
   return (
     <img
       className={props.avatarClasses}
-      src={props.user.photoUrl}
+      src={props.user.photoURL}
       alt={props.user.displayName}
     />
   );
