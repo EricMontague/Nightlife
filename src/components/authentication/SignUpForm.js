@@ -36,10 +36,9 @@ class SignUpForm extends React.Component {
     this.validateOnSubmit().then(() => {
       if (!this.state.hasError) {
         console.log("Valid submission");
-        this.props.createUserWithEmailAndPassword(
-          this.state.fields["email"],
-          this.state.fields["password"]
-        );
+        this.props.createUserWithEmailAndPasswordHandler({
+          ...this.state.fields
+        });
         this.clear();
       }
     });
@@ -48,7 +47,7 @@ class SignUpForm extends React.Component {
   handleChange(event) {
     this.setState({
       fields: Object.assign({}, this.state.fields, {
-        [event.target.name]: event.target.value
+        [event.target.name]: event.target.value.trim()
       })
     });
   }
@@ -187,7 +186,7 @@ class SignUpForm extends React.Component {
         </form>
         <button
           type="button"
-          onClick={() => this.props.signInWithGoogle()}
+          onClick={() => this.props.signInWithGoogleOAuth()}
           className="btn btn-secondary btn-shadow btn-block mb-1"
         >
           Sign in with Google
@@ -203,8 +202,8 @@ class SignUpForm extends React.Component {
 }
 
 SignUpForm.propTypes = {
-  createUserWithEmailAndPassword: PropTypes.func.isRequired,
-  signInWithGoogle: PropTypes.func.isRequired
+  createUserWithEmailAndPasswordHandler: PropTypes.func.isRequired,
+  signInWithGoogleOAuth: PropTypes.func.isRequired
 };
 
 export default SignUpForm;
