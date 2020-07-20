@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import UserInfo from "./UserInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { signOutUser } from "../../services/firebase";
 import PropTypes from "prop-types";
 
 const NavLinks = props => {
@@ -9,18 +10,32 @@ const NavLinks = props => {
     return (
       <>
         <li>
+          <UserInfo
+            user={props.currentUser}
+            avatarClasses="img-rounded avatar-small"
+          />
+        </li>
+        <li>
           <Link to="/create">
             <FontAwesomeIcon icon={["fas", "plus-circle"]} />
             Create List
           </Link>
         </li>
-        <UserInfo
-          user={props.currentUser}
-          userInfoClasses="ml-3"
-          avatarClasses="img-rounded avatar-small"
-        />
+
         <li>
-          <Link to="/logout">Logout</Link>
+          <a
+            href="/logout"
+            onClick={event => {
+              event.preventDefault();
+              signOutUser()
+                .then(() => {
+                  console.log("Sign out successful!");
+                })
+                .catch(error => console.log(`Error on sign out: ${error}`));
+            }}
+          >
+            Logout
+          </a>
         </li>
       </>
     );
