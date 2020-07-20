@@ -2,34 +2,46 @@ import React, { useContext } from "react";
 import { auth } from "../services/firebase";
 import PropTypes from "prop-types";
 
-const UserContext = React.createContext(null);
+export const UserContext = React.createContext(null);
 
-export const useCurrentUser = () => {
-  const value = useContext(UserContext);
-  return value;
+export const useUserContext = () => {
+  return useContext(UserContext);
 };
 
 class UserProvider extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { currentUser: null };
+    this.state = { currentUser: null, isLoggedIn: false };
   }
 
   componentDidMount() {
     auth.onAuthStateChanged(user => {
-      this.setState({
-        currentUser: {
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL
-        }
-      });
+      if (user) {
+        this.setState({
+          currentUser: {
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL
+          },
+          isLoggedIn: true
+        });
+      } else {
+        this.setState({
+          currentUser: null,
+          isLoggedIn: false
+        });
+      }
     });
   }
 
   render() {
     return (
-      <UserContext.Provider value={this.state.currentUser}>
+      <UserContext.Provider
+        value={{
+          currentUser: this.state.currentUser,
+          isLoggedIn: this.state.isLoggedIn
+        }}
+      >
         {this.props.children}
       </UserContext.Provider>
     );
