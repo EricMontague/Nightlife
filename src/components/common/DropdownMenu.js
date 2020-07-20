@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserInfo from "./UserInfo";
 import { Link } from "react-router-dom";
+import NavLinks from "./NavLinks";
 import PropTypes from "prop-types";
 
 const DropdownMenu = props => {
@@ -34,15 +35,16 @@ const DropdownMenu = props => {
             >
               &times;
             </div>
-            <li>
-              {props.currentUser && (
+            <NavLinks currentUser={props.currentUser} />
+
+            {/* {props.currentUser && (
+              <li>
                 <UserInfo
                   user={props.currentUser}
                   avatarClasses="img-rounded avatar-small"
                 />
-              )}
-            </li>
-            <li>
+              </li>
+              <li>
               <Link to="/create">
                 <FontAwesomeIcon icon={["fas", "plus-circle"]} />
                 Create List
@@ -54,6 +56,7 @@ const DropdownMenu = props => {
                 Logout
               </Link>
             </li>
+            )} */}
           </ul>
         </div>
       </>
