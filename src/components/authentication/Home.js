@@ -1,37 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { signInWithGoogle } from "../../services/firebase";
+import Card from "../common/Card";
+import CenteredPageLayout from "../common/CenteredPageLayout";
+import HomeContent from "./HomeContent";
+
 
 const Home = () => {
   return (
-    <>
-      <div className="card-header text-center">
-        <FontAwesomeIcon
-          icon={["fas", "glass-cheers"]}
-          size="3x"
-          className="logo-primary mb-1"
-        />
-        <h3 className="card-title">Welcome to Nightlife</h3>
-        <p className="lead">Plan your night out</p>
-      </div>
-
-      <Link to="/signup" className="btn btn-primary btn-shadow btn-block mb-1">
-        Continue with email
-      </Link>
-      <button
-        type="button"
-        onClick={() => signInWithGoogle()}
-        className="btn btn-secondary btn-shadow btn-block mb-1"
-      >
-        Continue with Google
-      </button>
-      <div className="card-footer flex justify-center">
-        <p>
-          Already a member? <Link to="/signin"> Sign In</Link>
-        </p>
-      </div>
-    </>
+    <CenteredPageLayout>
+      <Card classes="card-medium">
+        <HomeContent />
+      </Card>
+    </CenteredPageLayout>
   );
 };
 
