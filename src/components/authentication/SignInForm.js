@@ -13,7 +13,8 @@ class SignInForm extends React.Component {
     super(props);
     this.state = {
       fields: { email: "", password: "" },
-      errors: { email: "", password: "" }
+      errors: { email: "", password: "" },
+      hasError: false
     };
     this.validators = {
       email: [required, validateLength(1, 64), validateEmail],
@@ -22,65 +23,97 @@ class SignInForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
     this.clear = this.clear.bind(this);
-    this.isValid = this.isValid.bind(this);
     this.validateOnSubmit = this.validateOnSubmit.bind(this);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.validateOnSubmit();
-    if (this.isValid()) {
-      console.log("Valid submission");
-      this.props.signInWithEmailAndPassword({ ...this.state.fields });
-      this.clear();
-    }
+    this.validateOnSubmit().then(() => {
+      if (!this.state.hasError) {
+        console.log("Valid submission");
+        this.props.signInWithEmailAndPassword(
+          this.state.fields["email"],
+          this.state.fields["password"]
+        );
+        this.clear();
+      }
+    });
   }
 
   handleChange(event) {
-    console.log(event.target);
     this.setState({
       fields: Object.assign({}, this.state.fields, {
-        [event.target.name]: event.target.value
+        [event.target.name]: event.target.value.trim()
       })
     });
   }
 
   handleBlur(event) {
-    if (event.target.value !== "") {
-      event.target.nextElementSibling.classList.add("label-raised");
+    const inputName = event.target.name;
+    if (this.state.errors[inputName]) {
+      if (event.target.value) {
+        event.target.classList.add("input-with-error");
+        event.target.nextElementSibling.classList.add(
+          "label-with-error",
+          "label-selected"
+        );
+      } else {
+        event.target.nextElementSibling.classList.remove("label-selected");
+      }
     } else {
-      event.target.nextElementSibling.classList.remove("label-raised");
+      // No error
+      if (event.target.value) {
+        event.target.classList.remove("input-without-error");
+        event.target.nextElementSibling.classList.remove("label-without-error");
+      } else {
+        event.target.classList.remove("input-without-error");
+        event.target.nextElementSibling.classList.remove(
+          "label-without-error",
+          "label-selected"
+        );
+      }
     }
+  }
+
+  handleFocus(event) {
+    const inputName = event.target.name;
+    if (this.state.errors[inputName]) {
+      console.log("With error");
+      event.target.classList.add("input-with-error");
+      event.target.nextElementSibling.classList.add("label-with-error");
+    } else {
+      event.target.classList.add("input-without-error");
+      event.target.nextElementSibling.classList.add("label-without-error");
+    }
+    event.target.nextElementSibling.classList.add("label-selected");
   }
 
   clear() {
-    this.setState({ fields: {}, errors: {} });
+    this.setState({
+      fields: { firstName: "", lastName: "", email: "", password: "" },
+      errors: { firstName: "", lastName: "", email: "", password: "" },
+      hasError: false
+    });
   }
 
-  isValid() {
-    for (const error in this.state.errors) {
-      if (error !== "") {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  validateOnSubmit() {
+  async validateOnSubmit() {
     const errors = {};
+    let hasError = false;
     for (const field in this.state.fields) {
       const validators = this.validators[field];
       const value = this.state.fields[field];
       for (let index = 0; index < validators.length; index++) {
         const message = validators[index](value);
+        errors[[field]] = message;
         if (message !== "") {
-          errors[[field]] = message;
+          hasError = true;
           break;
         }
       }
     }
-    this.setState({ errors });
+    this.setState({ errors, hasError });
   }
 
   render() {
@@ -97,6 +130,7 @@ class SignInForm extends React.Component {
             autoFocus={true}
             handleChange={this.handleChange}
             handleBlur={this.handleBlur}
+            handleFocus={this.handleFocus}
             value={this.state.fields["email"]}
             error={this.state.errors["email"]}
           />
@@ -107,6 +141,7 @@ class SignInForm extends React.Component {
             autoFocus={false}
             handleChange={this.handleChange}
             handleBlur={this.handleBlur}
+            handleFocus={this.handleFocus}
             value={this.state.fields["password"]}
             error={this.state.errors["password"]}
           />
@@ -119,7 +154,7 @@ class SignInForm extends React.Component {
         </form>
         <button
           type="button"
-          onClick={() => this.props.signInWithGoogle()}
+          onClick={() => this.props.signInWithGoogleOAuth()}
           className="btn btn-secondary btn-shadow btn-block mb-1"
         >
           Sign in with Google
@@ -136,7 +171,7 @@ class SignInForm extends React.Component {
 
 SignInForm.propTypes = {
   signInWithEmailAndPassword: PropTypes.func.isRequired,
-  signInWithGoogle: PropTypes.func.isRequired
+  signInWithGoogleOAuth: PropTypes.func.isRequired
 };
 
 export default SignInForm;

@@ -27,7 +27,6 @@ class SignUpForm extends React.Component {
     this.handleBlur = this.handleBlur.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
     this.clear = this.clear.bind(this);
-    this.isValid = this.isValid.bind(this);
     this.validateOnSubmit = this.validateOnSubmit.bind(this);
   }
 
@@ -35,7 +34,6 @@ class SignUpForm extends React.Component {
     event.preventDefault();
     this.validateOnSubmit().then(() => {
       if (!this.state.hasError) {
-        console.log("Valid submission");
         this.props.createUserWithEmailAndPasswordHandler({
           ...this.state.fields
         });
@@ -93,16 +91,11 @@ class SignUpForm extends React.Component {
   }
 
   clear() {
-    this.setState({ fields: {}, errors: {} });
-  }
-
-  isValid() {
-    for (const inputName in this.state.errors) {
-      if (this.state.errors[inputName] !== "") {
-        return false;
-      }
-    }
-    return true;
+    this.setState({
+      fields: { firstName: "", lastName: "", email: "", password: "" },
+      errors: { firstName: "", lastName: "", email: "", password: "" },
+      hasError: false
+    });
   }
 
   async validateOnSubmit() {
@@ -189,7 +182,7 @@ class SignUpForm extends React.Component {
           onClick={() => this.props.signInWithGoogleOAuth()}
           className="btn btn-secondary btn-shadow btn-block mb-1"
         >
-          Sign in with Google
+          Sign up with Google
         </button>
         <div className="card-footer flex justify-center">
           <p>

@@ -26,33 +26,41 @@ class AuthApp extends React.Component {
     try {
       const result = await signInWithGoogle();
       console.log("Sign in successful!");
+      this.props.history.push("/");
     } catch (error) {
-      console.log(`Sign in Error: ${error}`);
+      console.log(`Sign in Error: ${error.message}`);
     }
   }
 
   async registerUser(user) {
     try {
-      const { newUser } = await createUserWithEmailAndPassword(
+      // Create user account through firebase
+      const results = await createUserWithEmailAndPassword(
         user.email,
         user.password
       );
       storeUserDocument({
+        id: results.user.uid,
         email: user.email,
         password: user.password,
         displayName: user.firstName + " " + user.lastName
       });
-      console.log(`New User registered: ${newUsers}`);
+      console.log(`New user registered: ${user.firstName} ${user.lastName}`);
+      this.props.history.push("/");
     } catch (error) {
-      console.log(error);
+      console.log(
+        `An error occured while registering the user: ${error.message}`
+      );
     }
   }
 
   async loginUser(email, password) {
     try {
-      const result = await signInWithEmailAndPassword(email, password);
+      signInWithEmailAndPassword(email, password);
+      console.log("User login successful!");
+      this.props.history.push("/");
     } catch (error) {
-      console.log(error);
+      console.log(`Error on login: ${error.message}`);
     }
   }
 
@@ -63,6 +71,9 @@ class AuthApp extends React.Component {
         <>
           <SignInForm
             signInWithGoogleOAuth={() => this.signInWithGoogleOAuth()}
+            signInWithEmailAndPassword={(email, password) =>
+              this.loginUser(email, password)
+            }
           />
         </>
       );
@@ -71,8 +82,8 @@ class AuthApp extends React.Component {
         <>
           <SignUpForm
             signInWithGoogleOAuth={() => this.signInWithGoogleOAuth()}
-            createUserWithEmailAndPasswordHandler={(email, password) =>
-              this.registerUser(email, password)
+            createUserWithEmailAndPasswordHandler={user =>
+              this.registerUser(user)
             }
           />
         </>
