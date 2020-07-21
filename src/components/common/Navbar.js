@@ -8,7 +8,7 @@ import useDropdownState from "../../hooks/useDropdownState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Navbar = () => {
-  const { currentUser } = useUserContext();
+  const { isLoggedIn, currentUser } = useUserContext();
   const isDesktop = useDeviceContext();
   const [isVisible, toggleMenu] = useDropdownState(false);
   return (
@@ -22,12 +22,13 @@ const Navbar = () => {
         </div>
         {isDesktop && (
           <ul className="main-menu">
-            <NavLinks currentUser={currentUser} />
+            <NavLinks currentUser={currentUser} isLoggedIn={isLoggedIn} />
           </ul>
         )}
 
         <DropdownMenu
           currentUser={currentUser}
+          isLoggedIn={isLoggedIn}
           isVisible={isVisible}
           isDesktop={isDesktop}
           toggleMenu={toggleMenu}
