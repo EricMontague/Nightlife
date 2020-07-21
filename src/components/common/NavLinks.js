@@ -6,14 +6,16 @@ import { signOutUser } from "../../services/firebase";
 import PropTypes from "prop-types";
 
 const NavLinks = props => {
-  if (props.currentUser) {
+  if (props.isLoggedIn) {
     return (
       <>
         <li>
-          <UserInfo
-            user={props.currentUser}
-            avatarClasses="img-rounded avatar-small"
-          />
+          <Link to={`users/${props.currentUser.displayName.replace(" ", "")}`}>
+            <UserInfo
+              user={props.currentUser}
+              avatarClasses="img-rounded avatar-small"
+            />
+          </Link>
         </li>
         <li>
           <Link to="/create">
@@ -54,7 +56,8 @@ const NavLinks = props => {
 };
 
 NavLinks.propTypes = {
-  currentUser: PropTypes.objectOf(PropTypes.string.isRequired)
+  currentUser: PropTypes.objectOf(PropTypes.string.isRequired),
+  isLoggedIn: PropTypes.bool.isRequired
 };
 
 export default NavLinks;
