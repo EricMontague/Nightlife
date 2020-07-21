@@ -35,7 +35,10 @@ const DropdownMenu = props => {
             >
               &times;
             </div>
-            <NavLinks currentUser={props.currentUser} />
+            <NavLinks
+              currentUser={props.currentUser}
+              isLoggedIn={props.isLoggedIn}
+            />
 
             {/* {props.currentUser && (
               <li>
@@ -68,6 +71,7 @@ const DropdownMenu = props => {
 
 DropdownMenu.propTypes = {
   currentUser: PropTypes.objectOf(PropTypes.string.isRequired),
+  isLoggedIn: PropTypes.bool.isRequired,
   toggleMenu: PropTypes.func.isRequired,
   isVisible: PropTypes.bool.isRequired
 };
