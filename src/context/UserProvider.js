@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { auth } from "../services/firebase";
+import { auth, getUserDocument } from "../services/firebase";
 import PropTypes from "prop-types";
 
 export const UserContext = React.createContext(null);
@@ -12,29 +12,51 @@ class UserProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = { currentUser: null, isLoggedIn: false };
+    this.loadUser = this.loadUser.bind(this);
   }
 
   componentDidMount() {
-    auth.onAuthStateChanged(user => {
-      if (user) {
+    this.authListener = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth.displayName) {
         this.setState({
           currentUser: {
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL
+            displayName: userAuth.displayName,
+            email: userAuth.email,
+            photoURL: userAuth.photoURL
           },
           isLoggedIn: true
         });
+      } else if (userAuth && !userAuth.displayName) {
+        console.log(userAuth);
+        this.retries = 5;
+        this.intervalId = setInterval(this.loadUser, 1000, userAuth.uid);
       } else {
-        this.setState({
-          currentUser: null,
-          isLoggedIn: false
-        });
+        this.setState({ currentUser: null, isLoggedIn: false });
       }
     });
   }
 
+  componentWillUnmount() {
+    this.authListener();
+  }
+
+  async loadUser(userId) {
+    console.log(`Attempting to load user. Retries left: ${this.retries}`);
+    if (this.retries == 1) {
+      clearInterval(this.intervalId);
+    }
+    try {
+      const currentUser = await getUserDocument(userId);
+      this.setState({ currentUser, isLoggedIn: true });
+      clearInterval(this.intervalId);
+    } catch (error) {
+      console.log(`Error logging the user in: ${error.message}`);
+      this.retries -= 1;
+    }
+  }
+
   render() {
+    console.log(`User Provider state: isLoggedIn - ${this.state.isLoggedIn}`);
     return (
       <UserContext.Provider
         value={{
