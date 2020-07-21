@@ -1,16 +1,8 @@
-@import "variables";
-@import "base";
-@import "utilities";
-@import "App";
-@import "functions";
-@import "mixins";
-@import "functions";
-
 @media screen and (max-width: 768px) {
   .navbar {
     &-brand svg,
     &-brand span {
-      font-size: 1rem;
+      font-size: 1.2rem;
     }
   }
   .navbar .main-menu li,
