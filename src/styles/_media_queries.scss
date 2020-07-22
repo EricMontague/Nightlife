@@ -10,13 +10,6 @@
     display: none;
   }
 
-  .menu-icon {
-    cursor: pointer;
-
-    &:hover {
-      opacity: 0.9;
-    }
-  }
   .dropdown-menu {
     width: 20rem;
   }
@@ -25,5 +18,15 @@
 @media screen and (max-width: 500px) {
   .dropdown-menu {
     width: 13.5rem;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .btn {
+    line-height: 1.4;
+  }
+
+  .dropdown-menu {
+    width: 10rem;
   }
 }
