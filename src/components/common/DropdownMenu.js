@@ -1,79 +1,44 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import UserInfo from "./UserInfo";
-import { Link } from "react-router-dom";
 import NavLinks from "./NavLinks";
 import PropTypes from "prop-types";
 
 const DropdownMenu = props => {
-  if (!props.isDesktop) {
-    return (
-      <>
-        <FontAwesomeIcon
-          icon={["fas", "bars"]}
-          size="lg"
-          className="menu-btn"
-          onClick={event => {
-            props.toggleMenu(true);
-          }}
-        />
-        <div
-          className={"dropdown-overlay" + " " + (props.isVisible ? "show" : "")}
-        >
-          <ul
-            className={
-              "dropdown-menu bg-dark h-100vh" +
-              " " +
-              (props.isVisible ? "slide-in" : "")
-            }
-          >
-            <div
-              className="close"
-              onClick={event => {
-                props.toggleMenu(false);
-              }}
-            >
-              &times;
-            </div>
-            <NavLinks
-              currentUser={props.currentUser}
-              isLoggedIn={props.isLoggedIn}
-            />
-
-            {/* {props.currentUser && (
-              <li>
-                <UserInfo
-                  user={props.currentUser}
-                  avatarClasses="img-rounded avatar-small"
-                />
-              </li>
-              <li>
-              <Link to="/create">
-                <FontAwesomeIcon icon={["fas", "plus-circle"]} />
-                Create List
-              </Link>
-            </li>
-            <li>
-              <Link to="/logout">
-                <FontAwesomeIcon icon={["fas", "sign-out-alt"]} />
-                Logout
-              </Link>
-            </li>
-            )} */}
-          </ul>
-        </div>
-      </>
-    );
+  if (props.isOpen) {
+    document.body.classList.add("no-scroll-y");
   } else {
-    return null;
+    document.body.classList.remove("no-scroll-y");
   }
+  return (
+    <div className={"faded-overlay" + " " + (props.isOpen ? "show" : "hide")}>
+      <ul
+        className={
+          "dropdown-menu bg-dark h-100vh" +
+          " " +
+          (props.isOpen ? "slide-in" : "")
+        }
+      >
+        <div
+          className="close"
+          onClick={event => {
+            props.toggleMenu(false);
+          }}
+        >
+          &times;
+        </div>
+        <NavLinks
+          currentUser={props.currentUser}
+          isLoggedIn={props.isLoggedIn}
+        />
+      </ul>
+    </div>
+  );
 };
 
 DropdownMenu.propTypes = {
   currentUser: PropTypes.objectOf(PropTypes.string.isRequired),
   isLoggedIn: PropTypes.bool.isRequired,
   toggleMenu: PropTypes.func.isRequired,
-  isVisible: PropTypes.bool.isRequired
+  isOpen: PropTypes.bool.isRequired
 };
 
 export default DropdownMenu;
