@@ -64,10 +64,12 @@ class SignUpForm extends React.Component {
       }
     } else {
       // No error
+      console.log("No Error found");
       if (event.target.value) {
         event.target.classList.remove("input-without-error");
         event.target.nextElementSibling.classList.remove("label-without-error");
       } else {
+        console.log("Remove");
         event.target.classList.remove("input-without-error");
         event.target.nextElementSibling.classList.remove(
           "label-without-error",
@@ -80,7 +82,6 @@ class SignUpForm extends React.Component {
   handleFocus(event) {
     const inputName = event.target.name;
     if (this.state.errors[inputName]) {
-      console.log("With error");
       event.target.classList.add("input-with-error");
       event.target.nextElementSibling.classList.add("label-with-error");
     } else {
@@ -119,9 +120,9 @@ class SignUpForm extends React.Component {
   render() {
     return (
       <>
-        <header className="card-header">
+        <div className="card-header">
           <h3 className="card-title">Sign Up</h3>
-        </header>
+        </div>
         <form onSubmit={this.handleSubmit}>
           <InputGroup
             type="text"

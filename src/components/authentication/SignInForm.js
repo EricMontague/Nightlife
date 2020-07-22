@@ -119,9 +119,9 @@ class SignInForm extends React.Component {
   render() {
     return (
       <>
-        <header className="card-header">
+        <div className="card-header">
           <h3 className="card-title">Sign In</h3>
-        </header>
+        </div>
         <form onSubmit={this.handleSubmit}>
           <InputGroup
             type="text"
