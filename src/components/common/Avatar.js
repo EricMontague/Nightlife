@@ -3,10 +3,14 @@ import PropTypes from "prop-types";
 import defaultUserPhoto from "../../assets/default_avatar.png";
 
 const Avatar = props => {
+  let photoURL = "";
+  if (!props.user.photoURL || props.user.photoURL.includes("google")) {
+    photoURL = defaultUserPhoto;
+  }
   return (
     <img
       className={props.avatarClasses}
-      src={props.user.photoURL ? props.user.photoURL : defaultUserPhoto}
+      src={photoURL}
       alt={props.user.displayName}
     />
   );
