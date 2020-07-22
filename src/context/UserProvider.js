@@ -17,7 +17,11 @@ class UserProvider extends React.Component {
 
   componentDidMount() {
     this.authListener = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth.displayName) {
+      // user logging out
+      if (!userAuth) {
+        this.setState({ currentUser: null, isLoggedIn: false });
+      } else if (userAuth.displayName) {
+        // user signs in with google
         this.setState({
           currentUser: {
             displayName: userAuth.displayName,
@@ -27,11 +31,10 @@ class UserProvider extends React.Component {
           isLoggedIn: true
         });
       } else if (userAuth && !userAuth.displayName) {
+        // user signs in with email and password
         console.log(userAuth);
         this.retries = 5;
         this.intervalId = setInterval(this.loadUser, 1000, userAuth.uid);
-      } else {
-        this.setState({ currentUser: null, isLoggedIn: false });
       }
     });
   }
@@ -42,7 +45,7 @@ class UserProvider extends React.Component {
 
   async loadUser(userId) {
     console.log(`Attempting to load user. Retries left: ${this.retries}`);
-    if (this.retries == 1) {
+    if (this.retries === 1) {
       clearInterval(this.intervalId);
     }
     try {
