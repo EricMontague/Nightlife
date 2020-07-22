@@ -10,31 +10,42 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Navbar = () => {
   const { isLoggedIn, currentUser } = useUserContext();
   const isDesktop = useDeviceContext();
-  const [isVisible, toggleMenu] = useDropdownState(false);
+  const [isOpen, toggleMenu] = useDropdownState(false);
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <div className="navbar-brand">
-          <Link to="/">
-            <FontAwesomeIcon icon={["fas", "glass-cheers"]} />{" "}
-            <span>Nightlife</span>
-          </Link>{" "}
+    <>
+      <nav className="navbar">
+        <div className="navbar-container">
+          <div className="navbar-brand">
+            <Link to="/">
+              <FontAwesomeIcon icon={["fas", "glass-cheers"]} />{" "}
+              <span>Nightlife</span>
+            </Link>{" "}
+          </div>
+          {isDesktop && (
+            <ul className="main-menu">
+              <NavLinks currentUser={currentUser} isLoggedIn={isLoggedIn} />
+            </ul>
+          )}
+          {!isDesktop && (
+            <FontAwesomeIcon
+              icon={["fas", "bars"]}
+              size="lg"
+              className="menu-btn"
+              onClick={() => {
+                toggleMenu(true);
+              }}
+            />
+          )}
         </div>
-        {isDesktop && (
-          <ul className="main-menu">
-            <NavLinks currentUser={currentUser} isLoggedIn={isLoggedIn} />
-          </ul>
-        )}
-
-        <DropdownMenu
-          currentUser={currentUser}
-          isLoggedIn={isLoggedIn}
-          isVisible={isVisible}
-          isDesktop={isDesktop}
-          toggleMenu={toggleMenu}
-        />
-      </div>
-    </nav>
+      </nav>
+      <DropdownMenu
+        currentUser={currentUser}
+        isLoggedIn={isLoggedIn}
+        isOpen={isOpen}
+        isDesktop={isDesktop}
+        toggleMenu={toggleMenu}
+      />
+    </>
   );
 };
 
