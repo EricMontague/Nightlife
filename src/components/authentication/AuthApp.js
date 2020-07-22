@@ -24,7 +24,7 @@ class AuthApp extends React.Component {
 
   async signInWithGoogleOAuth() {
     try {
-      const result = await signInWithGoogle();
+      await signInWithGoogle();
       console.log("Sign in successful!");
       this.props.history.push("/");
     } catch (error) {
@@ -114,6 +114,22 @@ AuthApp.propTypes = {
     isExact: PropTypes.bool.isRequired,
     path: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired
+  }),
+  history: PropTypes.shape({
+    length: PropTypes.number.isRequired,
+    action: PropTypes.string.isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+      search: PropTypes.string.isRequired,
+      hash: PropTypes.string.isRequired,
+      state: PropTypes.objectOf(PropTypes.string.isRequired)
+    }),
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+    go: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
+    goForward: PropTypes.func.isRequired,
+    block: PropTypes.func.isRequired
   })
 };
 
