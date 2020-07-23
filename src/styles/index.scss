@@ -21,6 +21,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    max-width: $website-width;
+    margin: auto;
     padding: 0 2.5rem;
     height: 100%;
   }
@@ -166,6 +168,12 @@ button.btn {
   }
 }
 
+.pb {
+  &-1 {
+    padding-bottom: 0.5rem;
+  }
+}
+
 .py {
   &-1 {
     padding: 0.5rem 0;
@@ -232,15 +240,29 @@ button.btn {
   margin-bottom: 1.5rem;
 }
 
-.text-center {
-  text-align: center;
-}
+.text {
+  &-center {
+    text-align: center;
+  }
 
-.text-primary {
-  color: $primary-color;
+  &-primary {
+    color: $primary-color;
+  }
+
+  &-secondary {
+    color: $secondary-color;
+  }
+
+  &-medium {
+    color: $medium-color;
+  }
 }
 
 .font-size {
+  &-sm {
+    font-size: 0.8rem;
+  }
+
   &-md {
     font-size: 2rem;
   }
@@ -324,6 +346,10 @@ button.btn {
 
 .justify-center {
   justify-content: center;
+}
+
+.align-center {
+  align-items: center;
 }
 
 // Forms
@@ -463,50 +489,68 @@ button.btn {
 }
 
 // Panels
-.panel {
-  display: grid;
-  grid-template-columns: 3fr 6fr 3fr;
-  column-gap: 1rem;
+.plan-card {
+  display: flex;
+  cursor: pointer;
   background: #fff;
-  margin: 1.5rem 0;
+  margin: 1.7rem 0;
   border: 1px solid (160, 160, 160, 0.1);
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.14),
+      0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 4px 7px 5px rgba(0, 0, 0, 0.1);
+  }
 
   &-title {
     font-size: 1.5rem;
     line-height: 1.7;
+    text-overflow: ellipsis;
   }
 
   &-body {
+    display: flex;
+    flex-direction: column;
+    flex: 4;
     padding: 1rem;
-    word-wrap: break-word;
   }
 
-  .ellipsis-v {
-    position: relative;
-    cursor: pointer;
-    height: 30px;
-    width: 30px;
+  &-image-wrapper {
+    flex: 1;
+  }
 
-    &:before {
-      position: absolute;
-      content: "";
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 50%;
-      border: 1px solid green;
-      transition: background 0.2s ease;
-    }
+  img {
+    max-width: 100%;
+    height: auto;
   }
 
   .icon-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
+    flex: 1;
+
+    .ellipsis-v {
+      position: relative;
+      cursor: pointer;
+      padding: 1rem;
+      height: 60px;
+      width: 60px;
+      color: #333;
+      border-radius: 50%;
+      background: #fff;
+      transition: background 0.4s ease;
+
+      &:hover {
+        background: darken($light-color, 2%);
+      }
+
+      &:active {
+        background: darken($light-color, 10%);
+      }
+    }
   }
 }
 
