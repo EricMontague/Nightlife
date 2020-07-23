@@ -14,24 +14,27 @@ class ProfileApp extends React.Component {
         {
           id: uuidv4(),
           title: "Plan Title One",
-          description: "I love making plans",
-          datetime: new Date().toLocaleString(),
+          description:
+            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes, seconds, and milliseconds.",
+          datetime: new Date(),
           image: cityImage,
           placeIds: [uuidv4(), uuidv4(), uuidv4()]
         },
         {
           id: uuidv4(),
           title: "Plan Title Two",
-          description: "Beers on me!",
-          datetime: new Date().toLocaleString(),
+          description:
+            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes, seconds, and milliseconds.",
+          datetime: new Date(),
           image: cityImage,
           placeIds: [uuidv4(), uuidv4(), uuidv4()]
         },
         {
           id: uuidv4(),
           title: "Plan Title Three",
-          description: "Let's get white girl wasted!",
-          datetime: new Date().toLocaleString(),
+          description:
+            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes, seconds, and milliseconds.",
+          datetime: new Date(),
           image: cityImage,
           placeIds: [uuidv4(), uuidv4(), uuidv4()]
         }
