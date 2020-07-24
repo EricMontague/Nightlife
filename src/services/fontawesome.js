@@ -6,7 +6,7 @@ import {
   faSignOutAlt,
   faTrashAlt,
   faEdit,
-  faEllipsisV
+  faListUl
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -16,5 +16,5 @@ library.add(
   faSignOutAlt,
   faTrashAlt,
   faEdit,
-  faEllipsisV
+  faListUl
 );
