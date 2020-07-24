@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
 const Plan = props => {
-  console.log(props.plan.datetime);
   return (
     <div className="plan-card" onClick={() => console.log("Show itinerary")}>
       <div className="plan-card-image-wrapper">
@@ -17,16 +16,12 @@ const Plan = props => {
             {formatDateTime(props.plan.datetime)}
           </p>
         </div>
-        <div className="plan-card-content py-1">
-          <p>{props.plan.description}</p>
+        <p className="py-1">{props.plan.description}</p>
+        <div className="icons">
+          <FontAwesomeIcon icon={["fa", "edit"]} />
+          <FontAwesomeIcon icon={["fa", "trash-alt"]} />
+          <FontAwesomeIcon icon={["fa", "list-ul"]} />
         </div>
-      </div>
-      <div className="icon-container">
-        <FontAwesomeIcon
-          className="ellipsis-v"
-          icon={["fa", "ellipsis-v"]}
-          onClick={() => console.log("Show dropdown")}
-        />
       </div>
     </div>
   );
