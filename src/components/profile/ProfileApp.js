@@ -15,7 +15,7 @@ class ProfileApp extends React.Component {
           id: uuidv4(),
           title: "Plan Title One",
           description:
-            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes, seconds, and milliseconds.",
+            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes.",
           datetime: new Date(),
           image: cityImage,
           placeIds: [uuidv4(), uuidv4(), uuidv4()]
@@ -24,7 +24,7 @@ class ProfileApp extends React.Component {
           id: uuidv4(),
           title: "Plan Title Two",
           description:
-            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes, seconds, and milliseconds.",
+            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes.",
           datetime: new Date(),
           image: cityImage,
           placeIds: [uuidv4(), uuidv4(), uuidv4()]
@@ -33,7 +33,7 @@ class ProfileApp extends React.Component {
           id: uuidv4(),
           title: "Plan Title Three",
           description:
-            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes, seconds, and milliseconds.",
+            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes.",
           datetime: new Date(),
           image: cityImage,
           placeIds: [uuidv4(), uuidv4(), uuidv4()]
