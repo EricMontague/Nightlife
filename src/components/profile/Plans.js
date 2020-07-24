@@ -16,7 +16,7 @@ const Plans = props => {
     );
   } else {
     return (
-      <div>
+      <div className="plan-cards-container">
         {props.plans.map(plan => {
           return (
             <Plan
