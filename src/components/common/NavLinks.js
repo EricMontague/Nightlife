@@ -10,7 +10,7 @@ const NavLinks = props => {
     return (
       <>
         <li>
-          <Link to={`users/${props.currentUser.displayName.replace(" ", "")}`}>
+          <Link to={`/users/${props.currentUser.displayName.replace(" ", "")}`}>
             <UserInfo
               user={props.currentUser}
               avatarClasses="img-rounded avatar-sm"
