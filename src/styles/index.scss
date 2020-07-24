@@ -488,12 +488,20 @@ button.btn {
   }
 }
 
-// Panels
+// Plans
+
+.plan-cards-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .plan-card {
   display: flex;
+  flex-wrap: wrap;
   cursor: pointer;
   background: #fff;
   margin: 1.7rem 0;
+  padding: 0.5rem;
   border: 1px solid (160, 160, 160, 0.1);
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
@@ -506,49 +514,54 @@ button.btn {
 
   &-title {
     font-size: 1.5rem;
-    line-height: 1.7;
+    margin-bottom: 0.5rem;
     text-overflow: ellipsis;
   }
 
   &-body {
     display: flex;
     flex-direction: column;
-    flex: 4;
-    padding: 1rem;
+    flex: 1 1 70%;
+    padding: 0 1rem;
   }
 
   &-image-wrapper {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex: 1 1 30%;
   }
 
   img {
-    max-width: 100%;
-    height: auto;
+    object-fit: cover;
+    height: 100%;
   }
 
-  .icon-container {
+  .icons {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding-bottom: 0.5rem;
+    height: 100%;
 
-    .ellipsis-v {
-      position: relative;
+    svg {
       cursor: pointer;
-      padding: 1rem;
-      height: 60px;
-      width: 60px;
-      color: #333;
-      border-radius: 50%;
-      background: #fff;
-      transition: background 0.4s ease;
+      margin-right: 0.5rem;
 
-      &:hover {
-        background: darken($light-color, 2%);
+      &:first-child {
+        color: $secondary-color;
       }
 
-      &:active {
-        background: darken($light-color, 10%);
+      &:nth-child(2) {
+        color: $primary-color;
+      }
+
+      &:last-child {
+        color: darken($secondary-color, 50%);
+      }
+
+      &:hover {
+        opacity: 0.9;
       }
     }
   }

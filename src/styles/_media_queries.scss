@@ -1,3 +1,9 @@
+@media screen and (max-width: 1024px) {
+  .dropdown-menu {
+    width: 25rem;
+  }
+}
+
 @media screen and (max-width: 768px) {
   .navbar {
     &-brand svg,
@@ -13,11 +19,32 @@
   .dropdown-menu {
     width: 20rem;
   }
+
+  .plan-card {
+    &-image-wrapper {
+      flex: 1 1 40%;
+    }
+
+    &-body {
+      flex: 1 1 60%;
+    }
+  }
 }
 
 @media screen and (max-width: 500px) {
   .dropdown-menu {
     width: 13.5rem;
+  }
+
+  .plan-card {
+    &-image-wrapper {
+      flex: auto;
+      margin-bottom: 1rem;
+    }
+
+    &-body {
+      flex: auto;
+    }
   }
 }
 
