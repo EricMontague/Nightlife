@@ -3,6 +3,7 @@ import { UserContext } from "../../context/UserProvider";
 import { Redirect } from "react-router-dom";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
+import PlanDetailsModal from "./PlanDetailsModal";
 import cityImage from "../../assets/city_life.jpg";
 import { v4 as uuidv4 } from "uuid";
 
@@ -10,6 +11,8 @@ class ProfileApp extends React.Component {
   constructor() {
     super();
     this.state = {
+      isModalVisible: false,
+      selectedPlan: null,
       plans: [
         {
           id: uuidv4(),
@@ -41,7 +44,7 @@ class ProfileApp extends React.Component {
       ]
     };
     this.deletePlan = this.deletePlan.bind(this);
-    this.editPlan = this.editPlan.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   static contextType = UserContext;
@@ -54,11 +57,11 @@ class ProfileApp extends React.Component {
     });
   }
 
-  editPlan(planId, updatedPlan) {
+  toggleModal(plan) {
+    document.body.classList.toggle("no-scroll-y");
     this.setState({
-      plans: this.state.plans.map(plan => {
-        return plan.id === updatedPlan.id ? { ...plan, updatedPlan } : plan;
-      })
+      isModalVisible: !this.state.isModalVisible,
+      selectedPlan: this.state.selectedPlan ? null : plan
     });
   }
 
@@ -75,10 +78,11 @@ class ProfileApp extends React.Component {
           <ProfileContent
             plans={this.state.plans}
             handleDeleteClick={planId => this.deletePlan(planId)}
-            handleEditClick={(planId, updatedPlan) =>
-              this.editPlan(planId, updatedPlan)
-            }
+            toggleModal={plan => this.toggleModal(plan)}
           />
+          {this.state.isModalVisible && (
+            <PlanDetailsModal plan={this.state.selectedPlan} />
+          )}
         </div>
       );
     }
