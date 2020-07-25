@@ -9,7 +9,7 @@ const ProfileContent = props => {
       <Plans
         plans={props.plans}
         handleDeleteClick={props.handleDeleteClick}
-        handleEditClick={props.handleEditClick}
+        toggleModal={props.toggleModal}
       />
     </div>
   );
@@ -27,7 +27,7 @@ ProfileContent.propTypes = {
     })
   ),
   handleDeleteClick: PropTypes.func.isRequired,
-  handleEditClick: PropTypes.func.isRequired
+  toggleModal: PropTypes.func.isRequired
 };
 
 export default ProfileContent;

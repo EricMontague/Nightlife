@@ -23,7 +23,7 @@ const Plans = props => {
               key={plan.id}
               plan={plan}
               handleDeleteClick={props.handleDeleteClick}
-              handleEditClick={props.handleEditClick}
+              toggleModal={props.toggleModal}
             />
           );
         })}
@@ -44,7 +44,7 @@ Plans.propTypes = {
     })
   ),
   handleDeleteClick: PropTypes.func.isRequired,
-  handleEditClick: PropTypes.func.isRequired
+  toggleModal: PropTypes.func.isRequired
 };
 
 export default Plans;
