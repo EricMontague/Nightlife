@@ -7,7 +7,7 @@ const Plan = props => {
   return (
     <div className="plan-card" onClick={() => console.log("Show itinerary")}>
       <div className="plan-card-image-wrapper">
-        <img src={props.plan.image} alt="Plan" />
+        <img src={props.plan.image} alt={props.plan.title} />
       </div>
       <div className="plan-card-body">
         <h3 className="plan-card-title">{props.plan.title}</h3>
@@ -19,8 +19,14 @@ const Plan = props => {
         <p className="py-1">{props.plan.description}</p>
         <div className="icons">
           <FontAwesomeIcon icon={["fa", "edit"]} />
-          <FontAwesomeIcon icon={["fa", "trash-alt"]} />
-          <FontAwesomeIcon icon={["fa", "list-ul"]} />
+          <FontAwesomeIcon
+            icon={["fa", "trash-alt"]}
+            onClick={props.handleDeleteClick}
+          />
+          <FontAwesomeIcon
+            icon={["fa", "list-ul"]}
+            onClick={() => props.toggleModal(props.plan)}
+          />
         </div>
       </div>
     </div>
@@ -39,5 +45,5 @@ Plan.propTypes = {
     placeIds: PropTypes.arrayOf(PropTypes.string.isRequired)
   }),
   handleDeleteClick: PropTypes.func.isRequired,
-  handleEditClick: PropTypes.func.isRequired
+  toggleModal: PropTypes.func.isRequired
 };
