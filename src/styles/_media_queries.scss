@@ -18,6 +18,10 @@
 
   .dropdown-menu {
     width: 20rem;
+
+    svg {
+      margin-right: 0.2rem;
+    }
   }
 
   .plan-card {
@@ -44,6 +48,12 @@
 
     &-body {
       flex: auto;
+    }
+  }
+
+  .font-size {
+    &-md {
+      font-size: 1.7rem;
     }
   }
 }
