@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 const Plan = props => {
   return (
-    <div className="plan-card" onClick={() => console.log("Show itinerary")}>
+    <div className="plan-card">
       <div className="plan-card-image-wrapper">
         <img src={props.plan.image} alt={props.plan.title} />
       </div>
@@ -21,11 +21,11 @@ const Plan = props => {
           <FontAwesomeIcon icon={["fa", "edit"]} />
           <FontAwesomeIcon
             icon={["fa", "trash-alt"]}
-            onClick={props.handleDeleteClick}
+            onClick={() => props.toggleDeletePlanModal(props.plan)}
           />
           <FontAwesomeIcon
             icon={["fa", "list-ul"]}
-            onClick={() => props.toggleModal(props.plan)}
+            onClick={() => props.togglePlanDetailsModal(props.plan)}
           />
         </div>
       </div>
@@ -44,6 +44,6 @@ Plan.propTypes = {
     image: PropTypes.string.isRequired,
     placeIds: PropTypes.arrayOf(PropTypes.string.isRequired)
   }),
-  handleDeleteClick: PropTypes.func.isRequired,
-  toggleModal: PropTypes.func.isRequired
+  toggleDeletePlanModal: PropTypes.func.isRequired,
+  togglePlanDetailsModal: PropTypes.func.isRequired
 };

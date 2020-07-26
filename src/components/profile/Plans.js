@@ -22,8 +22,8 @@ const Plans = props => {
             <Plan
               key={plan.id}
               plan={plan}
-              handleDeleteClick={props.handleDeleteClick}
-              toggleModal={props.toggleModal}
+              toggleDeletePlanModal={props.toggleDeletePlanModal}
+              togglePlanDetailsModal={props.togglePlanDetailsModal}
             />
           );
         })}
@@ -43,8 +43,8 @@ Plans.propTypes = {
       placeIds: PropTypes.arrayOf(PropTypes.string.isRequired)
     })
   ),
-  handleDeleteClick: PropTypes.func.isRequired,
-  toggleModal: PropTypes.func.isRequired
+  toggleDeletePlanModal: PropTypes.func.isRequired,
+  togglePlanDetailsModal: PropTypes.func.isRequired
 };
 
 export default Plans;
