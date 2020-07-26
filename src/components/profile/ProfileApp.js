@@ -5,8 +5,7 @@ import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
 import PlanDetailsModal from "./PlanDetailsModal";
 import DeletePlanModal from "./DeletePlanModal";
-import cityImage from "../../assets/city_life.jpg";
-import { v4 as uuidv4 } from "uuid";
+import { fakePlans } from "./fakeData";
 
 class ProfileApp extends React.Component {
   constructor() {
@@ -15,35 +14,7 @@ class ProfileApp extends React.Component {
       isPlanDetailsModalVisible: false,
       isDeletePlanModalVisible: false,
       selectedPlan: null,
-      plans: [
-        {
-          id: uuidv4(),
-          title: "Plan Title One",
-          description:
-            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes.",
-          datetime: new Date(),
-          image: cityImage,
-          placeIds: [uuidv4(), uuidv4(), uuidv4()]
-        },
-        {
-          id: uuidv4(),
-          title: "Plan Title Two",
-          description:
-            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes.",
-          datetime: new Date(),
-          image: cityImage,
-          placeIds: [uuidv4(), uuidv4(), uuidv4()]
-        },
-        {
-          id: uuidv4(),
-          title: "Plan Title Three",
-          description:
-            "Try reading numbers from left to right. As you go left to right, you insert values in decreasing magnitude: year, month, day, hours, minutes.",
-          datetime: new Date(),
-          image: cityImage,
-          placeIds: [uuidv4(), uuidv4(), uuidv4()]
-        }
-      ]
+      plans: fakePlans
     };
     this.deletePlan = this.deletePlan.bind(this);
     this.togglePlanDetailsModal = this.togglePlanDetailsModal.bind(this);
