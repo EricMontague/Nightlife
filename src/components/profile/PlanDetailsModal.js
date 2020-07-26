@@ -6,7 +6,7 @@ const PlanDetailsModal = props => {
   return (
     <div className="modal">
       <div className="modal-container-centered">
-        <div className="modal-content">
+        <div className="modal-content modal-content-md animation-slide-down">
           <div className="modal-header">
             <div className="modal-image">
               <img src={props.plan.image} alt={props.plan.title} />
@@ -22,7 +22,18 @@ const PlanDetailsModal = props => {
             <p className="py-1">{props.plan.description}</p>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-light btn-shadow">
+            <button
+              type="button"
+              className="btn btn-light btn-shadow"
+              // Need to look into react-transition-group instead of this hack
+              onClick={event => {
+                event.target.parentElement.parentElement.classList.replace(
+                  "animation-slide-down",
+                  "animation-slide-up"
+                );
+                setTimeout(() => props.toggleModal(props.plan), 400);
+              }}
+            >
               Close
             </button>
             <button type="button" className="btn btn-secondary btn-shadow">
@@ -43,7 +54,8 @@ PlanDetailsModal.propTypes = {
     datetime: PropTypes.instanceOf(Date).isRequired,
     image: PropTypes.string.isRequired,
     placeIds: PropTypes.arrayOf(PropTypes.string.isRequired)
-  })
+  }),
+  toggleModal: PropTypes.func.isRequired
 };
 
 export default PlanDetailsModal;
