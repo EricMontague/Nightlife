@@ -101,6 +101,7 @@
   transition: all 0.1s ease-in-out;
   font-size: 1rem;
   text-align: center;
+  outline: none;
 }
 
 .btn {
@@ -114,11 +115,10 @@
   &-light {
     background: $light-color;
     color: #000;
-  }
 
-  &-medium {
-    background: $medium-color;
-    color: #000;
+    &:hover {
+      background: darken($light-color, 5%);
+    }
   }
 
   &-secondary {
@@ -350,11 +350,11 @@ button.btn {
 }
 
 .justify-center {
-  justify-content: center;
+  justify-content: center !important;
 }
 
 .align-center {
-  align-items: center;
+  align-items: center !important;
 }
 
 // Forms
@@ -416,34 +416,6 @@ button.btn {
 
   &:last-of-type {
     margin-bottom: 3rem;
-  }
-}
-
-// Animations
-.animation-shake {
-  animation: shake 0.3s;
-  animation-iteration-count: 1;
-}
-
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(0.25rem);
-  }
-
-  50% {
-    transform: translateX(-0.25rem);
-  }
-
-  75% {
-    transform: translateX(0.25rem);
-  }
-
-  100% {
-    transform: translateX(0);
   }
 }
 
@@ -703,6 +675,7 @@ button.btn {
   bottom: 0;
   left: 0;
   overflow: hidden;
+  outline: 0;
   z-index: 9997;
 
   &:before {
@@ -715,6 +688,10 @@ button.btn {
     background: $dark-color;
     opacity: 0.1;
     z-index: -1;
+  }
+
+  &.closed {
+    display: none;
   }
 
   &-container-centered {
@@ -730,10 +707,24 @@ button.btn {
     flex-direction: column;
     background: #fff;
     margin-top: 1.7rem;
-    width: 500px;
-    padding: 1rem;
     border-radius: 0.7rem;
+    padding: 1rem;
     box-shadow: 0 16px 64px -16px rgba(46, 55, 77, 0.24);
+
+    &-sm {
+      max-width: 325px;
+      padding: 1.3rem;
+    }
+
+    &-md {
+      max-width: 500px;
+      padding: 1rem;
+    }
+  }
+
+  &-header {
+    display: flex;
+    flex-direction: column;
   }
 
   &-title {
@@ -765,6 +756,72 @@ button.btn {
       padding: 0.8rem 1.5rem;
       margin-left: 0.7rem;
     }
+  }
+}
+
+// Animations
+.animation {
+  &-slide-down {
+    animation: slide-down 0.4s ease;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+  }
+
+  &-slide-up {
+    animation: slide-up 0.4s ease;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+  }
+
+  &-shake {
+    animation: shake 0.3s;
+    animation-iteration-count: 1;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-20%);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(0.25rem);
+  }
+
+  50% {
+    transform: translateX(-0.25rem);
+  }
+
+  75% {
+    transform: translateX(0.25rem);
+  }
+
+  100% {
+    transform: translateX(0);
   }
 }
 
