@@ -3,16 +3,29 @@ import Plans from "./Plans";
 import PropTypes from "prop-types";
 
 const ProfileContent = props => {
-  return (
-    <div className="container">
-      <h1 className="section-header">View Your Plans</h1>
-      <Plans
-        plans={props.plans}
-        toggleDeletePlanModal={props.toggleDeletePlanModal}
-        togglePlanDetailsModal={props.togglePlanDetailsModal}
-      />
-    </div>
-  );
+  if (props.plans.length == 0) {
+    return (
+      <div className="container text-center pb-3">
+        <h3 className="mb-2 font-size-md">
+          Looks like you still need to make some plans!
+        </h3>
+        <button type="button" className="btn btn-primary btn-shadow">
+          Create Plan
+        </button>
+      </div>
+    );
+  } else {
+    return (
+      <div className="container">
+        <h1 className="section-header">View Your Plans</h1>
+        <Plans
+          plans={props.plans}
+          toggleDeletePlanModal={props.toggleDeletePlanModal}
+          togglePlanDetailsModal={props.togglePlanDetailsModal}
+        />
+      </div>
+    );
+  }
 };
 
 ProfileContent.propTypes = {
