@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
 import PlanDetailsModal from "./PlanDetailsModal";
+import DeletePlanModal from "./DeletePlanModal";
 import cityImage from "../../assets/city_life.jpg";
 import { v4 as uuidv4 } from "uuid";
 
@@ -11,7 +12,8 @@ class ProfileApp extends React.Component {
   constructor() {
     super();
     this.state = {
-      isModalVisible: false,
+      isPlanDetailsModalVisible: false,
+      isDeletePlanModalVisible: false,
       selectedPlan: null,
       plans: [
         {
@@ -44,7 +46,8 @@ class ProfileApp extends React.Component {
       ]
     };
     this.deletePlan = this.deletePlan.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
+    this.togglePlanDetailsModal = this.togglePlanDetailsModal.bind(this);
+    this.toggleDeletePlanModal = this.toggleDeletePlanModal.bind(this);
   }
 
   static contextType = UserContext;
@@ -57,10 +60,18 @@ class ProfileApp extends React.Component {
     });
   }
 
-  toggleModal(plan) {
+  togglePlanDetailsModal(plan) {
     document.body.classList.toggle("no-scroll-y");
     this.setState({
-      isModalVisible: !this.state.isModalVisible,
+      isPlanDetailsModalVisible: !this.state.isPlanDetailsModalVisible,
+      selectedPlan: this.state.selectedPlan ? null : plan
+    });
+  }
+
+  toggleDeletePlanModal(plan) {
+    document.body.classList.toggle("no-scroll-y");
+    this.setState({
+      isDeletePlanModalVisible: !this.state.isDeletePlanModalVisible,
       selectedPlan: this.state.selectedPlan ? null : plan
     });
   }
@@ -77,11 +88,21 @@ class ProfileApp extends React.Component {
           />
           <ProfileContent
             plans={this.state.plans}
-            handleDeleteClick={planId => this.deletePlan(planId)}
-            toggleModal={plan => this.toggleModal(plan)}
+            toggleDeletePlanModal={plan => this.toggleDeletePlanModal(plan)}
+            togglePlanDetailsModal={plan => this.togglePlanDetailsModal(plan)}
           />
-          {this.state.isModalVisible && (
-            <PlanDetailsModal plan={this.state.selectedPlan} />
+          {this.state.isPlanDetailsModalVisible && (
+            <PlanDetailsModal
+              plan={this.state.selectedPlan}
+              toggleModal={plan => this.togglePlanDetailsModal(plan)}
+            />
+          )}
+          {this.state.isDeletePlanModalVisible && (
+            <DeletePlanModal
+              toggleModal={plan => this.toggleDeletePlanModal(plan)}
+              handleDeleteClick={planId => this.deletePlan(planId)}
+              plan={this.state.selectedPlan}
+            />
           )}
         </div>
       );
