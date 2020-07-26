@@ -32,9 +32,15 @@ const DeletePlanModal = props => {
             <button
               type="button"
               className="btn btn-primary btn-shadow"
-              onClick={() => {
-                props.toggleModal(props.plan);
-                props.handleDeleteClick(props.plan.id);
+              onClick={event => {
+                event.target.parentElement.parentElement.classList.replace(
+                  "animation-slide-down",
+                  "animation-slide-up"
+                );
+                setTimeout(() => {
+                  props.toggleModal(props.plan);
+                  props.handleDeleteClick(props.plan.id);
+                }, 400);
               }}
             >
               Delete
