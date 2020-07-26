@@ -23,7 +23,6 @@ const NavLinks = props => {
             Create List
           </Link>
         </li>
-
         <li>
           <a
             href="/logout"
