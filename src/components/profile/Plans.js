@@ -3,33 +3,20 @@ import Plan from "./Plan";
 import PropTypes from "prop-types";
 
 const Plans = props => {
-  if (props.plans.length == 0) {
-    return (
-      <div className="text-center">
-        <p className="mb-2 font-size-md">
-          Looks like you still need to make some plans!
-        </p>
-        <button type="button" className="btn btn-primary btn-shadow">
-          Create Plan
-        </button>
-      </div>
-    );
-  } else {
-    return (
-      <div className="plan-cards-container">
-        {props.plans.map(plan => {
-          return (
-            <Plan
-              key={plan.id}
-              plan={plan}
-              toggleDeletePlanModal={props.toggleDeletePlanModal}
-              togglePlanDetailsModal={props.togglePlanDetailsModal}
-            />
-          );
-        })}
-      </div>
-    );
-  }
+  return (
+    <div className="plan-cards-container">
+      {props.plans.map(plan => {
+        return (
+          <Plan
+            key={plan.id}
+            plan={plan}
+            toggleDeletePlanModal={props.toggleDeletePlanModal}
+            togglePlanDetailsModal={props.togglePlanDetailsModal}
+          />
+        );
+      })}
+    </div>
+  );
 };
 
 Plans.propTypes = {
