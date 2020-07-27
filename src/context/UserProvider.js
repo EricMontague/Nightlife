@@ -13,6 +13,8 @@ class UserProvider extends React.Component {
     super(props);
     this.state = { currentUser: null, isLoggedIn: false };
     this.loadUser = this.loadUser.bind(this);
+    this.updateUser = this.updateUser.bind(this);
+    this.savePlan = this.savePlan.bind(this);
   }
 
   componentDidMount() {
@@ -58,11 +60,16 @@ class UserProvider extends React.Component {
     }
   }
 
+  async updateUser() {}
+
+  async savePlan() {}
+
   render() {
     console.log(`User Provider state: isLoggedIn - ${this.state.isLoggedIn}`);
     return (
       <UserContext.Provider
         value={{
+          savePlan: plan => this.savePlan(plan),
           currentUser: this.state.currentUser,
           isLoggedIn: this.state.isLoggedIn
         }}
