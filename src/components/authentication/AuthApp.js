@@ -46,7 +46,7 @@ class AuthApp extends React.Component {
         displayName: user.firstName + " " + user.lastName
       });
       console.log(`New user registered: ${user.firstName} ${user.lastName}`);
-      this.props.history.push("/");
+      // this.props.history.push("/");
     } catch (error) {
       console.log(
         `An error occured while registering the user: ${error.message}`
@@ -58,7 +58,7 @@ class AuthApp extends React.Component {
     try {
       signInWithEmailAndPassword(email, password);
       console.log("User login successful!");
-      this.props.history.push("/");
+      // this.props.history.push("/");
     } catch (error) {
       console.log(`Error on login: ${error.message}`);
     }
@@ -66,28 +66,28 @@ class AuthApp extends React.Component {
 
   renderContent() {
     const path = this.props.match.path;
-    if (path === "/signin") {
-      return (
-        <>
+    switch (path) {
+      case "/signin":
+        return (
           <SignInForm
             signInWithGoogleOAuth={() => this.signInWithGoogleOAuth()}
             signInWithEmailAndPassword={(email, password) =>
               this.loginUser(email, password)
             }
           />
-        </>
-      );
-    } else if (path === "/signup") {
-      return (
-        <>
+        );
+      case "/signup":
+        return (
           <SignUpForm
             signInWithGoogleOAuth={() => this.signInWithGoogleOAuth()}
             createUserWithEmailAndPasswordHandler={user =>
               this.registerUser(user)
             }
           />
-        </>
-      );
+        );
+
+      default:
+        return <Redirect to="/" />;
     }
   }
 
