@@ -1,5 +1,17 @@
 import React from "react";
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
+import { blockStatement } from "@babel/types";
+
+const containerStyle = {
+  position: "relative",
+  width: "100%",
+  height: "100%"
+};
+
+const style = {
+  width: "100%",
+  height: "100%"
+};
 
 export class MapContainer extends React.Component {
   render() {
@@ -11,6 +23,8 @@ export class MapContainer extends React.Component {
           lng: -88.081807
         }}
         zoom={8}
+        containerStyle={containerStyle}
+        style={style}
       >
         <Marker name={"Current location"} />
 
