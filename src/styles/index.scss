@@ -363,8 +363,25 @@ button.btn {
 
 // Flexbox
 .flex {
-  display: flex;
-  flex-wrap: wrap;
+  &-1 {
+    flex: 1;
+  }
+
+  &-2 {
+    flex: 2;
+  }
+
+  &-row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  &-col {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+  }
 }
 
 .justify-center {
