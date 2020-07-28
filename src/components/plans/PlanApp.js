@@ -1,6 +1,6 @@
 import React from "react";
 import { UserContext } from "../../context/UserProvider";
-import { Redirect } from "react-router-dom";
+import { Redirect, Switch, Route, matchPath } from "react-router-dom";
 import CreatePlan from "./CreatePlan";
 import EditPlan from "./EditPlan";
 import PlaceDetailsModal from "./PlaceDetailsModal";
@@ -18,9 +18,9 @@ class PlanApp extends React.Component {
         id: uuidv4(),
         title: "",
         description: "",
-        datetime: new Date(),
-        places: []
-      }
+        datetime: new Date()
+      },
+      places: []
     };
     this.removePlace = this.removePlace.bind(this);
     this.addPlace = this.addPlace.bind(this);
@@ -32,9 +32,23 @@ class PlanApp extends React.Component {
   static contextType = UserContext;
 
   componentDidMount() {
-    if (this.props.match.path == "/plans/plan_id/edit") {
-      this.setState({
-        plan: { ...this.context.currentUser.plan }
+    const match = matchPath(this.props.match.path, {
+      path: "/plans/:plan_id/edit",
+      exact: true,
+      strict: false
+    });
+    if (match) {
+      const plans = this.context.currentUser.plans;
+      const currentPlan = plans.find(plan => {
+        return plan.id === parseInt(match.params.id);
+      });
+      if (!currentPlan) {
+        this.props.history.push(
+          `/users/${this.context.currentUser.displayName}`
+        );
+      }
+      currentPlan.placeIds.forEach(placeId => {
+        console.log("Make call to Google Place API");
       });
       console.log("Get places from firestore that are part of a given plan");
     }
@@ -42,28 +56,22 @@ class PlanApp extends React.Component {
 
   removePlace(placeId) {
     this.setState({
-      plan: {
-        places: this.state.plan.places.filter(place => {
-          return place.id !== placeId;
-        })
-      }
+      places: this.state.places.filter(place => place.id !== placeId)
     });
   }
 
   addPlace(place) {
     this.setState({
-      plan: {
-        places: [...this.state.plan.places, { ...place, id: uuidv4() }]
-      }
+      places: [...this.state.places, { ...place, id: uuidv4() }]
     });
   }
 
   storePlan() {
+    // Google doesn't allow storage of API data unless it's something small, so
+    // I'm just storing the placeIds so that API calls can be made in other parts
+    // of the application for places data
     const plan = { ...this.state.plan };
-    let placeIds = [];
-    plan.places.forEach(place => placeIds.push(place.id));
-    plan.placeIds = placeIds;
-    delete plan.places;
+    plan.placeIds = this.state.places.map(place => place.id);
     this.context.savePlan(plan);
   }
 
@@ -75,51 +83,49 @@ class PlanApp extends React.Component {
   }
 
   renderContent() {
-    const path = this.props.match.path;
-    switch (path) {
-      case "/plans/create":
-        return (
+    return (
+      <Switch>
+        <Route exact path="/plans/create">
           <CreatePlan
             toggleModal={place => this.togglePlaceModal(place)}
             removePlace={placeId => this.removePlace(placeId)}
             addPlace={place => this.addPlace(place)}
-            storePlaces={this.storePlaces}
+            storePlan={this.storePlan}
           />
-        );
-      case "/plans/plan_id/edit":
-        return (
+        </Route>
+        <Route exact path="/plans/:plan_id/edit">
           <EditPlan
             plan={this.state.plan}
             toggleModal={place => this.togglePlaceModal(place)}
             removePlace={placeId => this.removePlace(placeId)}
             addPlace={place => this.addPlace(place)}
-            storePlaces={this.storePlaces}
+            storePlan={this.storePlan}
           />
-        );
-      default:
-        return <Redirect to="/" />;
-    }
+        </Route>
+      </Switch>
+    );
   }
 
   render() {
-    if (!this.context.isLoggedIn) {
-      return <Redirect to="/" />;
-    } else {
-      return (
-        <>
-          <div className="flex-row">
-            <div className="flex-col">
-              <Map toggleModal={place => this.togglePlaceModal(place)} />
-            </div>
-            <div className="flex-col">{this.renderContent()}</div>
+    // if (!this.context.isLoggedIn) {
+    //   return <Redirect to="/" />;
+    // } else {
+    return (
+      <>
+        <div className="flex-row">
+          <div className="google-map flex-col flex-1">
+            <Map toggleModal={place => this.togglePlaceModal(place)} />
           </div>
+          <div className="flex-col flex-2">{this.renderContent()}</div>
+        </div>
+        {this.state.isPlaceModalVisible && (
           <PlaceDetailsModal
             place={this.state.selectedPlace}
             toggleModal={place => this.togglePlaceModal(place)}
           />
-        </>
-      );
-    }
+        )}
+      </>
+    );
   }
 }
 
