@@ -12,7 +12,7 @@ const PlanDetailsModal = props => {
               <img src={props.plan.image} alt={props.plan.title} />
             </div>
             <h3 className="modal-title">{props.plan.title}</h3>
-            <div className="flex align-items space-between">
+            <div className="flex-row align-items space-between">
               <p className="text-medium font-size-sm">
                 {formatDateTime(props.plan.datetime)}
               </p>

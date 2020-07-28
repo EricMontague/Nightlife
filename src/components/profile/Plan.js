@@ -11,7 +11,7 @@ const Plan = props => {
       </div>
       <div className="plan-card-body">
         <h3 className="plan-card-title">{props.plan.title}</h3>
-        <div className="flex align-items space-between">
+        <div className="flex-row align-items space-between">
           <p className="text-medium font-size-sm">
             {formatDateTime(props.plan.datetime)}
           </p>
