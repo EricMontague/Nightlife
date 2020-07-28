@@ -10,7 +10,7 @@ import {
   storeUserDocument
 } from "../../services/firebase";
 import { UserContext } from "../../context/UserProvider";
-import { Redirect } from "react-router-dom";
+import { Redirect, Switch, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 
 class AuthApp extends React.Component {
@@ -65,30 +65,26 @@ class AuthApp extends React.Component {
   }
 
   renderContent() {
-    const path = this.props.match.path;
-    switch (path) {
-      case "/signin":
-        return (
+    return (
+      <Switch>
+        <Route exact path="/signin">
           <SignInForm
             signInWithGoogleOAuth={() => this.signInWithGoogleOAuth()}
             signInWithEmailAndPassword={(email, password) =>
               this.loginUser(email, password)
             }
           />
-        );
-      case "/signup":
-        return (
+        </Route>
+        <Route exact path="/signup">
           <SignUpForm
             signInWithGoogleOAuth={() => this.signInWithGoogleOAuth()}
             createUserWithEmailAndPasswordHandler={user =>
               this.registerUser(user)
             }
           />
-        );
-
-      default:
-        return <Redirect to="/" />;
-    }
+        </Route>
+      </Switch>
+    );
   }
 
   render() {
