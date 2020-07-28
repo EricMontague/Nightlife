@@ -18,7 +18,7 @@ const NavLinks = props => {
           </Link>
         </li>
         <li>
-          <Link to="/create">
+          <Link to="/plans/create">
             <FontAwesomeIcon icon={["fas", "plus-circle"]} />
             Create List
           </Link>
