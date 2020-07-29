@@ -26,6 +26,7 @@ const formatTime = (hours, minutes) => {
   return formattedHours.toString() + ":" + minutes.toString() + " " + period;
 };
 
+// returns datetime in the format of Tue, July 28, 2020
 export const formatDateTime = date => {
   const dayName = days[date.getDay()];
   const monthName = months[date.getMonth()];
@@ -38,5 +39,16 @@ export const formatDateTime = date => {
     date.getDate().toString() +
     ", " +
     formattedTime
+  );
+};
+
+// returns date in the format 07/28/2020
+export const formatDate = date => {
+  return (
+    (date.getMonth() + 1).toString() +
+    "/" +
+    date.getDate().toString() +
+    "/" +
+    date.getFullYear()
   );
 };
