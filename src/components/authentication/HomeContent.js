@@ -16,7 +16,7 @@ const HomeContent = () => {
         <p className="lead">Plan your night out</p>
       </div>
 
-      <Link to="/signup" className="btn btn-primary btn-shadow btn-block mb-1">
+      <Link to="/signup" className="btn btn-primary btn-block mb-1 py-2">
         Continue with email
       </Link>
       <button
@@ -26,7 +26,7 @@ const HomeContent = () => {
             .then(result => console.log("Sign in successful!"))
             .catch(error => console.log(`Error with signin: ${error}`))
         }
-        className="btn btn-secondary btn-shadow btn-block mb-1"
+        className="btn btn-secondary btn-block mb-1 py-2"
       >
         Continue with Google
       </button>

@@ -145,17 +145,14 @@ class SignInForm extends React.Component {
             value={this.state.fields["password"]}
             error={this.state.errors["password"]}
           />
-          <button
-            type="submit"
-            className="btn btn-primary btn-shadow btn-block mb-1"
-          >
+          <button type="submit" className="btn btn-primary btn-block mb-1 py-2">
             Sign In
           </button>
         </form>
         <button
           type="button"
           onClick={() => this.props.signInWithGoogleOAuth()}
-          className="btn btn-secondary btn-shadow btn-block mb-1"
+          className="btn btn-secondary btn-block mb-1 py-2"
         >
           Sign in with Google
         </button>
