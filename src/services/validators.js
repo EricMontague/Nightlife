@@ -26,3 +26,27 @@ export const validateEmail = value => {
   }
   return message;
 };
+
+export const validateDate = (min, max) => {
+  const validate = dateInput => {
+    let message = "";
+    const date = new Date(date);
+    const minDate = new Date(min);
+    const maxDate = new Date(max);
+    if (min && max) {
+      if (date < minDate || date > maxDate) {
+        message = `Date must be between ${min} and ${max}`;
+      }
+    } else if (min && !max) {
+      if (date < minDate) {
+        message = `Date cannot be before ${min}`;
+      }
+    } else if (!min && max) {
+      if (date > maxDate) {
+        message = `Date cannot be after ${max}`;
+      }
+    }
+    return message;
+  };
+  return validate;
+};
