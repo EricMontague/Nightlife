@@ -112,11 +112,11 @@ class PlanApp extends React.Component {
     // } else {
     return (
       <>
-        <div className="flex-row">
-          <div className="google-map flex-col flex-1">
+        <div className="discover-container">
+          <div className="google-map">
             <Map toggleModal={place => this.togglePlaceModal(place)} />
           </div>
-          <div className="flex-col flex-2">{this.renderContent()}</div>
+          <div className="user-actions">{this.renderContent()}</div>
         </div>
         {this.state.isPlaceModalVisible && (
           <PlaceDetailsModal
