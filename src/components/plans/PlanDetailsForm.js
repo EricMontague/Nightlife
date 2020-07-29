@@ -1,21 +1,28 @@
 import React from "react";
 import InputGroup from "../common/InputGroup";
 import TextAreaGroup from "../common/TextAreaGroup";
-import { required, validateLength } from "../../services/validators";
+import DatePicker from "../common/DatePicker";
+import {
+  required,
+  validateLength,
+  validateDate
+} from "../../services/validators";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { formatDate } from "../../services/dates";
 import PropTypes from "prop-types";
 
 class PlanDetailsForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fields: { title: "", description: "" },
-      errors: { title: "", description: "" },
-      charactersLeft: { title: 100, description: 140 },
+      fields: { title: "", description: "", date: formatDate(new Date()) },
+      errors: { title: "", description: "", date: "" },
       hasError: false
     };
     this.validators = {
       title: [required, validateLength(1, 100)],
-      description: [required, validateLength(1, 140)]
+      description: [required, validateLength(1, 140)],
+      date: [required, validateDate(new Date(), "")]
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -111,13 +118,25 @@ class PlanDetailsForm extends React.Component {
   render() {
     return (
       <div className="card">
+        <h3 className="card-title mb-2">Plan Details</h3>
+        <p className="mb-3 text-medium">
+          Enter some details about your night out
+        </p>
         <form onSubmit={this.handleSubmit}>
-          <input type="date" name="date" placeholder="yyyy-mm-dd" />
+          <DatePicker
+            name="date"
+            placeholder="dd/mm/yyyy"
+            autoFocus={true}
+            value={this.state.fields["date"]}
+            error={this.state.errors["date"]}
+            handleChange={this.handleChange}
+          />
+
           <InputGroup
             type="text"
             inputName="title"
-            labelName="Plan title"
-            autoFocus={true}
+            labelName="Title"
+            autoFocus={false}
             handleChange={this.handleChange}
             handleBlur={this.handleBlur}
             handleFocus={this.handleFocus}
@@ -126,18 +145,19 @@ class PlanDetailsForm extends React.Component {
           />
           <TextAreaGroup
             name="description"
-            labelName="Plan description"
+            labelName="Description"
             autoFocus={false}
             handleChange={this.handleChange}
             handleBlur={this.handleBlur}
             handleFocus={this.handleFocus}
             value={this.state.fields["description"]}
             error={this.state.errors["description"]}
-            rows={6}
+            rows={60}
             cols={8}
           />
-          <button type="submit" className="btn btn-primary btn-shadow">
+          <button type="submit" className="btn btn-primary float-right">
             Next
+            <FontAwesomeIcon icon={["fa", "chevron-right"]} />
           </button>
         </form>
       </div>
