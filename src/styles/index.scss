@@ -162,6 +162,32 @@
   }
 }
 
+.back-btn {
+  svg {
+    margin-right: 0.3rem;
+    transition: transform 0.1s ease-in-out;
+  }
+
+  &:hover svg {
+    transform: translateX(-0.15rem);
+  }
+}
+
+.forward-btn {
+  svg {
+    margin-left: 0.3rem;
+    transition: transform 0.1s ease-in-out;
+  }
+  &:hover svg {
+    transform: translateX(0.15rem);
+  }
+}
+
+// borders
+.border-bottom {
+  border-bottom: 1px solid#bbb8b8 !important;
+}
+
 // Padding & Margin
 .p-all {
   &-1 {
@@ -199,6 +225,27 @@
   }
 }
 
+.px {
+  &-1 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  &-2 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  &-3 {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+
+  &-4 {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+}
 .py {
   &-1 {
     padding-top: 0.5rem !important;
@@ -479,6 +526,7 @@
 // Cards
 
 .card {
+  position: relative;
   padding: 2rem;
   background: #fff;
   border-radius: 5px;
@@ -491,6 +539,7 @@
   }
 
   &-header {
+    position: relative;
     margin: 0.8rem 0 2rem 0;
   }
 
@@ -519,6 +568,33 @@
 
   form {
     width: 100%;
+  }
+}
+
+// Places
+.place-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+  margin-bottom: 0.5rem;
+  background: #fff;
+  border: 1px solid #bbb8b8;
+
+  svg {
+    cursor: pointer;
+    margin-left: auto;
+    color: $primary-color;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+.rating {
+  svg {
+    color: #ffb400;
   }
 }
 
@@ -887,6 +963,10 @@
   overflow-y: hidden;
 }
 
+.no-shadow {
+  box-shadow: none;
+}
+
 .discover-container {
   display: flex;
   flex-wrap: wrap;
@@ -920,15 +1000,17 @@
   .input-group {
     margin-bottom: 1rem;
   }
+}
 
-  .btn {
-    svg {
-      margin-left: 0.3rem;
-      transition: transform 0.1s ease-in-out;
-    }
+.sort {
+  &-results {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
 
-    &:hover svg {
-      transform: translateX(0.15rem);
+    .pipe {
+      display: inline-block;
+      margin: 0 0.3rem;
     }
   }
 }
