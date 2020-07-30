@@ -33,7 +33,7 @@ InputGroup.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
-  error: PropTypes.string.isRequired
+  error: PropTypes.string
 };
 
 export default InputGroup;
