@@ -3,7 +3,7 @@ import Plans from "./Plans";
 import PropTypes from "prop-types";
 
 const ProfileContent = props => {
-  if (props.plans.length == 0) {
+  if (props.plans.length === 0) {
     return (
       <div className="container text-center pb-3">
         <h3 className="mb-2 font-size-md">

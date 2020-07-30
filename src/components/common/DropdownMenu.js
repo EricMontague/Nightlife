@@ -9,14 +9,10 @@ const DropdownMenu = props => {
     document.body.classList.remove("no-scroll-y");
   }
   return (
-    <div
-      className={"dropdown-overlay" + " " + (props.isOpen ? "show" : "hide")}
-    >
+    <div className={"dropdown-overlay" + (props.isOpen ? " show" : " hide")}>
       <ul
         className={
-          "dropdown-menu bg-dark h-100vh" +
-          " " +
-          (props.isOpen ? "slide-in" : "")
+          "dropdown-menu bg-dark h-100vh" + (props.isOpen ? " slide-in" : "")
         }
       >
         <div
