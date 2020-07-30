@@ -5,7 +5,8 @@ import DatePicker from "../common/DatePicker";
 import {
   required,
   validateLength,
-  validateDate
+  validateDateFormat,
+  validateDateRange
 } from "../../services/validators";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatDate } from "../../services/dates";
@@ -22,7 +23,11 @@ class PlanDetailsForm extends React.Component {
     this.validators = {
       title: [required, validateLength(1, 100)],
       description: [required, validateLength(1, 140)],
-      date: [required, validateDate(new Date(), "")]
+      date: [
+        required,
+        validateDateFormat(/\d{2}\/\d{2}\/\d{4}/, "mm/dd/yyyy"),
+        validateDateRange(new Date(), "")
+      ]
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -125,7 +130,7 @@ class PlanDetailsForm extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <DatePicker
             name="date"
-            placeholder="dd/mm/yyyy"
+            placeholder="mm/dd/yyyy"
             autoFocus={true}
             value={this.state.fields["date"]}
             error={this.state.errors["date"]}
@@ -155,7 +160,10 @@ class PlanDetailsForm extends React.Component {
             rows={60}
             cols={8}
           />
-          <button type="submit" className="btn btn-primary float-right">
+          <button
+            type="submit"
+            className="btn btn-primary forward-btn float-right"
+          >
             Next
             <FontAwesomeIcon icon={["fa", "chevron-right"]} />
           </button>
