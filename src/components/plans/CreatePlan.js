@@ -7,7 +7,7 @@ class CreatePlan extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDiscoverView: false
+      isDiscoverView: true
     };
     this.toggleView = this.toggleView.bind(this);
   }
