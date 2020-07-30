@@ -8,7 +8,9 @@ import {
   faEdit,
   faListUl,
   faChevronRight,
-  faChevronLeft
+  faChevronLeft,
+  faStar,
+  faStarHalf
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -20,5 +22,7 @@ library.add(
   faEdit,
   faListUl,
   faChevronRight,
-  faChevronLeft
+  faChevronLeft,
+  faStar,
+  faStarHalf
 );
