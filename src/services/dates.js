@@ -44,11 +44,13 @@ export const formatDateTime = date => {
 
 // returns date in the format 07/28/2020
 export const formatDate = date => {
-  return (
-    (date.getMonth() + 1).toString() +
-    "/" +
-    date.getDate().toString() +
-    "/" +
-    date.getFullYear()
-  );
+  const year = date.getFullYear().toString();
+  let month = date.getMonth() + 1;
+  if (month < 10) {
+    month = "0" + month.toString();
+  } else {
+    month = month.toString();
+  }
+  const dateNumber = date.getDate().toString();
+  return year + "-" + month + "-" + dateNumber;
 };
