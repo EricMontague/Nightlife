@@ -1,6 +1,5 @@
 import React from "react";
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
-import { blockStatement } from "@babel/types";
 
 export class MapContainer extends React.Component {
   render() {
