@@ -15,7 +15,7 @@
   background: $dark-color;
   z-index: 9996;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 
   &-container {
     display: flex;
@@ -277,6 +277,24 @@
   &-2 {
     margin-top: 1rem !important;
     margin-bottom: 1rem !important;
+  }
+}
+
+.mt {
+  &-1 {
+    margin-top: 0.5rem !important;
+  }
+
+  &-2 {
+    margin-top: 1rem !important;
+  }
+
+  &-3 {
+    margin-top: 1.5rem !important;
+  }
+
+  &-4 {
+    margin-top: 2rem !important;
   }
 }
 
@@ -577,22 +595,60 @@
   flex-direction: column;
   cursor: pointer;
   padding: 1rem 1.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   background: #fff;
-  border: 1px solid #bbb8b8;
+  border: 1px solid #dadada;
+  // border: 1px solid #bbb8b8;
+  border-radius: 0.4rem;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+      0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 3px 5px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &-title {
+    font-size: 1.1rem;
+  }
+
+  &-body {
+    margin-bottom: 0.5rem;
+
+    p {
+      font-size: 0.95rem;
+    }
+  }
+
+  &-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    p:first-child {
+      font-size: 0.9rem;
+      color: darken($secondary-color, 5%);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 
   svg {
     cursor: pointer;
     margin-left: auto;
-    color: $primary-color;
+    color: darken($primary-color, 5%);
 
     &:hover {
-      opacity: 0.9;
+      opacity: 0.8;
     }
   }
 }
 
 .rating {
+  margin: 0.3rem 0;
   svg {
     color: #ffb400;
   }
@@ -1002,16 +1058,39 @@
   }
 }
 
-.sort {
-  &-results {
-    position: absolute;
-    top: 1rem;
-    right: 2rem;
+.sort-results {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
 
-    .pipe {
-      display: inline-block;
-      margin: 0 0.3rem;
-    }
+  .pipe {
+    display: inline-block;
+    margin-left: 0.3rem;
+  }
+
+  label {
+    font-family: "Open Sans", Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size: 0.95rem;
+  }
+
+  .select-list {
+    font-size: 0.9rem;
+  }
+}
+
+.select-list {
+  cursor: pointer;
+  border: none;
+  border-radius: 0.4rem;
+  font-family: "Open Sans", Arial, Helvetica, sans-serif;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus {
+    outline-color: $secondary-color;
   }
 }
 
