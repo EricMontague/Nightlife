@@ -45,11 +45,11 @@ class DiscoverView extends React.Component {
 
   render() {
     return (
-      <div className="card">
+      <div className="card places-section">
         <div className="sort-results">
           <label htmlFor="sort-by">Sort By</label>
           <span className="pipe">|</span>
-          <select name="sort-by" id="sort-by">
+          <select name="sort-by" id="sort-by" className="select-list">
             <option value="">Choose an option</option>
             <option value="Rating: low to high">Rating: low to high</option>
             <option value="Rating: high to low">Rating: high to low</option>
@@ -57,8 +57,8 @@ class DiscoverView extends React.Component {
             <option value="Price: high to low">Price: high to low</option>
           </select>
         </div>
-        <div className="card-header border-bottom pb-2">
-          <h3 className="card-title">Discover Places</h3>
+        <div className="card-header border-bottom mt-4 pb-2">
+          <h3 className="card-title mb-2">Discover Places</h3>
           <InputGroup
             type="text"
             inputName="search"
