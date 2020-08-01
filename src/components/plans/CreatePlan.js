@@ -3,35 +3,34 @@ import DiscoverView from "./DiscoverView";
 import PlanDetailsForm from "./PlanDetailsForm";
 import PropTypes from "prop-types";
 
-class CreatePlan extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isDiscoverView: true
-    };
-    this.toggleView = this.toggleView.bind(this);
+const CreatePlan = props => {
+  if (props.isDiscoverView) {
+    return (
+      <DiscoverView
+        handleBackClick={props.toggleView}
+        handleFinishClick={props.storePlan}
+        handlePlaceSelected={props.fetchPlace}
+        handleDeleteClick={props.deletePlace}
+        places={props.places}
+      />
+    );
+  } else {
+    return (
+      <PlanDetailsForm
+        toggleView={props.toggleView}
+        setPlanDetails={props.setPlanDetails}
+      />
+    );
   }
-
-  toggleView() {
-    this.setState({
-      isDiscoverView: !this.state.isDiscoverView
-    });
-  }
-
-  render() {
-    if (this.state.isDiscoverView) {
-      return <DiscoverView toggleView={this.toggleView} />;
-    } else {
-      return <PlanDetailsForm toggleView={this.toggleView} />;
-    }
-  }
-}
+};
 
 CreatePlan.propTypes = {
   toggleModal: PropTypes.func.isRequired,
-  removePlace: PropTypes.func.isRequired,
-  addPlace: PropTypes.func.isRequired,
-  storePlan: PropTypes.func.isRequired
+  deletePlace: PropTypes.func.isRequired,
+  fetchPlace: PropTypes.func.isRequired,
+  storePlan: PropTypes.func.isRequired,
+  isDiscoverView: PropTypes.bool.isRequired,
+  setPlanDetails: PropTypes.func.isRequired
 };
 
 export default CreatePlan;
