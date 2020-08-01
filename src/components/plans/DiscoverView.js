@@ -1,6 +1,7 @@
 import React from "react";
-import InputGroup from "../common/InputGroup";
-import Place from "./Place";
+import SortingSelectList from "../common/SortingSelectList";
+import PlaceList from "./PlaceList";
+import Autocomplete from "react-google-autocomplete";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
@@ -10,7 +11,19 @@ class DiscoverView extends React.Component {
     this.state = {
       search: ""
     };
-
+    this.fields = [
+      "place_id", // basic billing
+      "formatted_address", // basic billing
+      "geometry.location", // basic billing
+      "business_status", // basic billing
+      "icon", // basic billing
+      "name", // basic billing
+      "opening_hours", // contact billing
+      "website", // contact billing
+      "rating", // atmosphere billing
+      "price_level", // atmosphere billing
+      "photo" // basic billing
+    ];
     this.handleChange = this.handleChange.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
@@ -46,61 +59,41 @@ class DiscoverView extends React.Component {
   render() {
     return (
       <div className="card places-section">
-        <div className="sort-results">
-          <label htmlFor="sort-by">Sort By</label>
-          <span className="pipe">|</span>
-          <select name="sort-by" id="sort-by" className="select-list">
-            <option value="">Choose an option</option>
-            <option value="Rating: low to high">Rating: low to high</option>
-            <option value="Rating: high to low">Rating: high to low</option>
-            <option value="Price: low to high">Price: low to high</option>
-            <option value="Price: high to low">Price: high to low</option>
-          </select>
-        </div>
+        <SortingSelectList
+          label="Sort By"
+          defaultValue={{ value: "", text: "Choose an option" }}
+          values={[
+            "Rating: low to high",
+            "Rating: high to low",
+            "Price: low to high",
+            "Price: high to low"
+          ]}
+        />
         <div className="card-header border-bottom mt-4 pb-2">
           <h3 className="card-title mb-2">Discover Places</h3>
-          <InputGroup
-            type="text"
-            inputName="search"
-            labelName="Search"
-            autoFocus={true}
-            handleChange={this.handleChange}
-            handleBlur={this.handleBlur}
-            handleFocus={this.handleFocus}
-            value={this.state.search}
+          <Autocomplete
+            className="autocomplete"
+            onPlaceSelected={this.props.handlePlaceSelected}
+            types={["establishment"]}
+            placeholder="Search"
+            fields={this.fields}
+            autoFocus
           />
         </div>
-        <div className="card-body mb-3">
-          <Place
-            place={{
-              name: "Place One",
-              address: "176 Main St., Brooklyn, NY 09883",
-              rating: 5,
-              priciness: "$$$"
-            }}
-          />
-          <Place
-            place={{
-              name: "Place Two",
-              address: "176 Main St., Brooklyn, NY 09883",
-              rating: 4.5,
-              priciness: "$$$$"
-            }}
-          />
-          <Place
-            place={{
-              name: "Place Three",
-              address: "176 Main St., Brooklyn, NY 09883",
-              rating: 5,
-              priciness: "$$"
-            }}
-          />
-        </div>
-        <button type="button" className="btn btn-medium back-btn">
+        <PlaceList places={this.props.places} />
+        <button
+          type="button"
+          className="btn btn-medium back-btn"
+          oncClick={this.props.handleBackClick}
+        >
           <FontAwesomeIcon icon={["fa", "chevron-left"]} />
           Back
         </button>
-        <button type="button" className="btn btn-primary float-right">
+        <button
+          type="button"
+          className="btn btn-primary float-right"
+          onClick={this.props.handleFinishClick}
+        >
           Finish
         </button>
       </div>
@@ -109,7 +102,12 @@ class DiscoverView extends React.Component {
 }
 
 DiscoverView.propTypes = {
-  toggleView: PropTypes.func.isRequired
+  toggleView: PropTypes.func.isRequired,
+  handlePlaceSelected: PropTypes.func.isRequired,
+  handleDeleteClick: PropTypes.func.isRequired,
+  handleFinishClick: PropTypes.func.isRequired,
+  handleBackClick: PropTypes.func.isRequired,
+  places: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string.isRequired))
 };
 
 export default DiscoverView;
