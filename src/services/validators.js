@@ -28,7 +28,20 @@ export const validateEmail = value => {
 };
 
 // expects input to be string
-export const validateDateRange = (min, max) => {
+export const validateDateFormat = (dateRegexp, format) => {
+  const validate = dateInput => {
+    let message = "";
+    if (!dateRegexp.test(dateInput)) {
+      message = `Date format should be ${format}`;
+    }
+    return message;
+  };
+
+  return validate;
+};
+
+// expects input to be string
+const validateDateRange = (min, max) => {
   const validate = dateInput => {
     let message = "";
     const date = new Date(dateInput);
@@ -52,15 +65,10 @@ export const validateDateRange = (min, max) => {
   return validate;
 };
 
-// expects input to be string
-export const validateDateFormat = (dateRegexp, format) => {
-  const validate = dateInput => {
+export const validateDateTime = dateRange => {
+  const validate = dateTime => {
     let message = "";
-    if (!dateRegexp.test(dateInput)) {
-      message = `Date format should be ${format}`;
-    }
     return message;
   };
-
   return validate;
 };
