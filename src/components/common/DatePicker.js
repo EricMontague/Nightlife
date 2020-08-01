@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const DatePicker = props => {
-  console.log(props.value);
   return (
     <div className="input-group">
       <input
