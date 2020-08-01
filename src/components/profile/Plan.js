@@ -1,5 +1,5 @@
 import React from "react";
-import { formatDateTime } from "../../services/dates";
+import { formatDateTime } from "../../services/dateTimeHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
