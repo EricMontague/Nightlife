@@ -13,6 +13,7 @@ class PlanApp extends React.Component {
     super(props);
     this.state = {
       isPlaceModalVisible: false,
+      isDiscoverView: true,
       selectedPlace: null,
       plan: {
         id: uuidv4(),
@@ -20,11 +21,32 @@ class PlanApp extends React.Component {
         description: "",
         datetime: new Date()
       },
-      places: []
+      places: [
+        {
+          name: "Place One",
+          address: "176 Main St., Brooklyn, NY 09883",
+          rating: 5,
+          priciness: "$$$"
+        },
+        {
+          name: "Place Two",
+          address: "176 Main St., Brooklyn, NY 09883",
+          rating: 4.5,
+          priciness: "$$$$"
+        },
+        {
+          name: "Place Three",
+          address: "176 Main St., Brooklyn, NY 09883",
+          rating: 5,
+          priciness: "$$"
+        }
+      ]
     };
-    this.removePlace = this.removePlace.bind(this);
-    this.addPlace = this.addPlace.bind(this);
+    this.fetchPlace = this.fetchPlace.bind(this);
+    this.deletePlace = this.deletePlace.bind(this);
+    this.setPlanDetails = this.setPlanDetails.bind(this);
     this.storePlan = this.storePlan.bind(this);
+    this.toggleView = this.toggleView.bind(this);
     this.togglePlaceModal = this.togglePlaceModal.bind(this);
     this.renderContent = this.renderContent.bind(this);
   }
@@ -54,15 +76,24 @@ class PlanApp extends React.Component {
     }
   }
 
-  removePlace(placeId) {
+  fetchPlace(place) {
+    console.log("Making API call");
+    // this.setState({
+    //   places: [...this.state.places, { ...place, id: uuidv4() }]
+    // });
+  }
+
+  deletePlace(placeId) {
     this.setState({
       places: this.state.places.filter(place => place.id !== placeId)
     });
   }
 
-  addPlace(place) {
+  // Add or update a plan
+  setPlanDetails(plan) {
     this.setState({
-      places: [...this.state.places, { ...place, id: uuidv4() }]
+      id: this.state.id,
+      ...plan
     });
   }
 
@@ -73,6 +104,10 @@ class PlanApp extends React.Component {
     const plan = { ...this.state.plan };
     plan.placeIds = this.state.places.map(place => place.id);
     this.context.savePlan(plan);
+  }
+
+  toggleView() {
+    this.setState({ isDiscoverView: !this.state.isDiscoverView });
   }
 
   togglePlaceModal(place) {
@@ -87,19 +122,27 @@ class PlanApp extends React.Component {
       <Switch>
         <Route exact path="/plans/create">
           <CreatePlan
-            toggleModal={place => this.togglePlaceModal(place)}
-            removePlace={placeId => this.removePlace(placeId)}
-            addPlace={place => this.addPlace(place)}
+            fetchPlace={place => this.fetchPlace(place)}
+            deletePlace={placeId => this.deletePlace(placeId)}
+            setPlanDetails={plan => this.setPlanDetails(plan)}
             storePlan={this.storePlan}
+            toggleView={this.toggleView}
+            toggleModal={place => this.togglePlaceModal(place)}
+            places={this.state.places}
+            isDiscoverView={this.state.isDiscoverView}
           />
         </Route>
         <Route exact path="/plans/:plan_id/edit">
           <EditPlan
-            plan={this.state.plan}
-            toggleModal={place => this.togglePlaceModal(place)}
-            removePlace={placeId => this.removePlace(placeId)}
-            addPlace={place => this.addPlace(place)}
+            fetchPlace={place => this.fetchPlace(place)}
+            deletePlace={placeId => this.deletePlace(placeId)}
+            setPlanDetails={plan => this.setPlanDetails(plan)}
             storePlan={this.storePlan}
+            toggleView={this.toggleView}
+            toggleModal={place => this.togglePlaceModal(place)}
+            places={this.state.places}
+            isDiscoverView={this.state.isDiscoverView}
+            plan={this.state.plan}
           />
         </Route>
       </Switch>
