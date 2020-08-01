@@ -512,6 +512,7 @@
   input[type="text"],
   input[type="password"],
   input[type="date"],
+  input[type="time"],
   textarea {
     border-radius: 0.4rem;
     border: 1px solid rgba(0, 0, 0, 0.5);
@@ -519,13 +520,16 @@
     padding: 1rem;
   }
 
-  input[type="date"]:focus {
+  input[type="date"]:focus,
+  input[type="time"]:focus {
     outline: none;
     border: 2px solid $secondary-color;
   }
 
   input[type="date"]:focus,
-  input[type="date"]::placeholder {
+  input[type="date"]::placeholder,
+  input[type="time"]:focus,
+  input[type="time"]::placeholder {
     color: darken($secondary-color, 5%);
   }
 
