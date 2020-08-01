@@ -2,22 +2,29 @@ import React from "react";
 import InputGroup from "../common/InputGroup";
 import TextAreaGroup from "../common/TextAreaGroup";
 import DatePicker from "../common/DatePicker";
+import TimePicker from "../common/TimePicker";
 import {
   required,
   validateLength,
   validateDateFormat,
-  validateDateRange
+  validateDateTime
 } from "../../services/validators";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { formatDate } from "../../services/dates";
+import { formatDate } from "../../services/dateTimeHelpers";
 import PropTypes from "prop-types";
 
 class PlanDetailsForm extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      fields: { title: "", description: "", date: formatDate(new Date()) },
-      errors: { title: "", description: "", date: "" },
+      fields: {
+        title: "",
+        description: "",
+        date: formatDate(new Date()),
+        time: new Date().toTimeString().slice(0, 5)
+      },
+      errors: { title: "", description: "", date: "", time: "" },
       hasError: false
     };
     this.validators = {
@@ -26,7 +33,10 @@ class PlanDetailsForm extends React.Component {
       date: [
         required,
         validateDateFormat(/\d{2}\/\d{2}\/\d{4}/, "mm/dd/yyyy"),
-        validateDateRange(new Date(), "")
+        validateDateTime({
+          minDate: new Date().toLocaleDateString(),
+          maxDate: ""
+        })
       ]
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,8 +51,9 @@ class PlanDetailsForm extends React.Component {
     event.preventDefault();
     this.validateOnSubmit().then(() => {
       if (!this.state.hasError) {
+        this.props.setPlanDetails({ ...this.state.fields });
         this.props.toggleView();
-        this.clear();
+        // this.clear();
       }
     });
   }
@@ -136,7 +147,13 @@ class PlanDetailsForm extends React.Component {
             error={this.state.errors["date"]}
             handleChange={this.handleChange}
           />
-
+          <TimePicker
+            name="time"
+            autoFocus={false}
+            value={this.state.fields["time"]}
+            error={this.state.errors["time"]}
+            handleChange={this.handleChange}
+          />
           <InputGroup
             type="text"
             inputName="title"
@@ -174,7 +191,8 @@ class PlanDetailsForm extends React.Component {
 }
 
 PlanDetailsForm.propTypes = {
-  toggleView: PropTypes.func.isRequired
+  toggleView: PropTypes.func.isRequired,
+  setPlanDetails: PropTypes.func.isRequired
 };
 
 export default PlanDetailsForm;
