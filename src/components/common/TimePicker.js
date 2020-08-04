@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const TimePicker = props => {
-  console.log(props.value);
   return (
     <div className="input-group">
       <input
@@ -14,6 +13,7 @@ const TimePicker = props => {
         className={props.error ? "input-with-error" : ""}
         aria-label={props.name}
       />
+      <small className="error-message">{props.error ? props.error : ""}</small>
     </div>
   );
 };
