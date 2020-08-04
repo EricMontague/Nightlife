@@ -473,6 +473,8 @@
 
   input[type="text"].input-without-error,
   input[type="password"].input-without-error,
+  input[type="date"].input-without-error,
+  input[type="time"].input-without-error,
   input.autocomplete.input-without-error,
   textarea.input-without-error {
     outline: none;
@@ -482,14 +484,24 @@
   input[type="text"].input-with-error,
   input[type="password"].input-with-error,
   input[type="time"].input-with-error,
-  input[type="date"].input-with-error textarea.input-with-error {
+  input[type="date"].input-with-error,
+  textarea.input-with-error {
     outline: none;
     border: 2px solid darken($primary-color, 5%);
   }
 
   input[type="time"].input-with-error,
-  input[type="date"].input-with-error {
+  input[type="date"].input-with-error,
+  input[type="time"].input-with-error::placeholder,
+  input[type="date"].input-with-error::placeholder {
     color: darken($primary-color, 5%);
+  }
+
+  input[type="time"].input-without-error,
+  input[type="date"].input-without-error,
+  input[type="time"].input-without-error::placeholder,
+  input[type="date"].input-without-error::placeholder {
+    color: darken($secondary-color, 5%);
   }
 
   .label-with-error {
@@ -526,19 +538,6 @@
     border: 1px solid rgba(0, 0, 0, 0.5);
     width: 100%;
     padding: 1rem;
-  }
-
-  input[type="date"]:focus,
-  input[type="time"]:focus {
-    outline: none;
-    border: 2px solid $secondary-color;
-  }
-
-  input[type="date"]:focus,
-  input[type="date"]::placeholder,
-  input[type="time"]:focus,
-  input[type="time"]::placeholder {
-    color: darken($secondary-color, 5%);
   }
 
   .error-message {
@@ -1033,6 +1032,10 @@
 
 .no-shadow {
   box-shadow: none;
+}
+
+.no-transition {
+  transition: none !important;
 }
 
 .discover-container {
