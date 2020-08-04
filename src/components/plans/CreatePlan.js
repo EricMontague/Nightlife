@@ -30,7 +30,15 @@ CreatePlan.propTypes = {
   fetchPlace: PropTypes.func.isRequired,
   storePlan: PropTypes.func.isRequired,
   isDiscoverView: PropTypes.bool.isRequired,
-  setPlanDetails: PropTypes.func.isRequired
+  setPlanDetails: PropTypes.func.isRequired,
+  places: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      address: PropTypes.string.isRequired,
+      rating: PropTypes.number.isRequired,
+      priciness: PropTypes.string.isRequired
+    })
+  )
 };
 
 export default CreatePlan;
