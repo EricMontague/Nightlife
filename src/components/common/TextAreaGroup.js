@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
 const TextAreaGroup = props => {
+  const textareaRef = React.createRef();
+  
+  // Workaround to deal with issue of the label not staying up after a form is submitted
+  // And this field has an error
+  // Also addresses the issue of having the label be moved up when the input is prefilled
+  useEffect(() => {
+    if (
+      textareaRef.current === document.activeElement ||
+      textareaRef.current.value
+    ) {
+      textareaRef.current.nextElementSibling.classList.add("label-selected");
+    }
+  });
+
   return (
     <div className="input-group">
       <textarea
+        ref={textareaRef}
         autoFocus={props.autoFocus}
         type={props.type}
         id={props.name}
