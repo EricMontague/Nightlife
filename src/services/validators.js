@@ -1,5 +1,3 @@
-import formatDate from "./dateTimeHelpers";
-
 export const required = value => {
   let message = "";
   if (!value) {
@@ -73,10 +71,10 @@ export const validateDateTime = (dateInput, timeInput) => {
   const now = new Date();
   const dateTime = new Date(`${dateInput} ${timeInput}`);
   if (
-    dateTime.getDate() === now.getDate() &&
-    dateTime.toLocaleTimeString().slice(0, 5) <
-      now.toLocaleTimeString().slice(0, 5) ||
-      dateTime.getDate() < now.getDate()
+    (dateTime.getDate() === now.getDate() &&
+      dateTime.toLocaleTimeString().slice(0, 5) <
+        now.toLocaleTimeString().slice(0, 5)) ||
+    dateTime.getDate() < now.getDate()
   ) {
     message = "Time cannot be in the past";
   }
