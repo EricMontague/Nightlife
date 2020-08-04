@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
 const InputGroup = props => {
+  const inputRef = React.createRef();
+
+  // Workaround to deal with issue of the label not staying up after a form is submitted
+  // And this field has an error
+  // Also addresses the issue of having the label be moved up when the input is prefilled
+  useEffect(() => {
+    if (inputRef.current === document.activeElement || inputRef.current.value) {
+      inputRef.current.nextElementSibling.classList.add("label-selected");
+    }
+  });
+
   return (
     <div className="input-group">
       <input
+        ref={inputRef}
         autoFocus={props.autoFocus}
         type={props.type}
         id={props.inputName}
