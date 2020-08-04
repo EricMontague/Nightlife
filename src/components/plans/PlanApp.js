@@ -13,7 +13,7 @@ class PlanApp extends React.Component {
     super(props);
     this.state = {
       isPlaceModalVisible: false,
-      isDiscoverView: true,
+      isDiscoverView: false,
       selectedPlace: null,
       plan: {
         id: uuidv4(),
@@ -48,7 +48,6 @@ class PlanApp extends React.Component {
     this.storePlan = this.storePlan.bind(this);
     this.toggleView = this.toggleView.bind(this);
     this.togglePlaceModal = this.togglePlaceModal.bind(this);
-    this.renderContent = this.renderContent.bind(this);
   }
 
   static contextType = UserContext;
@@ -117,38 +116,6 @@ class PlanApp extends React.Component {
     });
   }
 
-  renderContent() {
-    return (
-      <Switch>
-        <Route exact path="/plans/create">
-          <CreatePlan
-            fetchPlace={place => this.fetchPlace(place)}
-            deletePlace={placeId => this.deletePlace(placeId)}
-            setPlanDetails={plan => this.setPlanDetails(plan)}
-            storePlan={this.storePlan}
-            toggleView={this.toggleView}
-            toggleModal={place => this.togglePlaceModal(place)}
-            places={this.state.places}
-            isDiscoverView={this.state.isDiscoverView}
-          />
-        </Route>
-        <Route exact path="/plans/:plan_id/edit">
-          <EditPlan
-            fetchPlace={place => this.fetchPlace(place)}
-            deletePlace={placeId => this.deletePlace(placeId)}
-            setPlanDetails={plan => this.setPlanDetails(plan)}
-            storePlan={this.storePlan}
-            toggleView={this.toggleView}
-            toggleModal={place => this.togglePlaceModal(place)}
-            places={this.state.places}
-            isDiscoverView={this.state.isDiscoverView}
-            plan={this.state.plan}
-          />
-        </Route>
-      </Switch>
-    );
-  }
-
   render() {
     // if (!this.context.isLoggedIn) {
     //   return <Redirect to="/" />;
@@ -159,7 +126,35 @@ class PlanApp extends React.Component {
           <div className="google-map">
             <Map toggleModal={place => this.togglePlaceModal(place)} />
           </div>
-          <div className="user-actions">{this.renderContent()}</div>
+          <div className="user-actions">
+            <Switch>
+              <Route exact path="/plans/create">
+                <CreatePlan
+                  fetchPlace={place => this.fetchPlace(place)}
+                  deletePlace={placeId => this.deletePlace(placeId)}
+                  setPlanDetails={plan => this.setPlanDetails(plan)}
+                  storePlan={this.storePlan}
+                  toggleView={this.toggleView}
+                  toggleModal={place => this.togglePlaceModal(place)}
+                  places={this.state.places}
+                  isDiscoverView={this.state.isDiscoverView}
+                />
+              </Route>
+              <Route exact path="/plans/:plan_id/edit">
+                <EditPlan
+                  fetchPlace={place => this.fetchPlace(place)}
+                  deletePlace={placeId => this.deletePlace(placeId)}
+                  setPlanDetails={plan => this.setPlanDetails(plan)}
+                  storePlan={this.storePlan}
+                  toggleView={this.toggleView}
+                  toggleModal={place => this.togglePlaceModal(place)}
+                  places={this.state.places}
+                  isDiscoverView={this.state.isDiscoverView}
+                  plan={this.state.plan}
+                />
+              </Route>
+            </Switch>
+          </div>
         </div>
         {this.state.isPlaceModalVisible && (
           <PlaceDetailsModal
