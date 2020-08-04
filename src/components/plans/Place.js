@@ -7,7 +7,7 @@ const Place = props => {
   return (
     <div className="place-card">
       <div className="place-card-body">
-        <h4 class="place-card-title">{props.place.name}</h4>
+        <h4 className="place-card-title">{props.place.name}</h4>
         <Rating stars={props.place.rating} />
         <p>
           {props.place.priciness} | {props.place.address}
