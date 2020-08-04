@@ -6,7 +6,7 @@ import TimePicker from "../common/TimePicker";
 import {
   required,
   validateLength,
-  validateDateFormat,
+  validateDateRange,
   validateDateTime
 } from "../../services/validators";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,14 +30,8 @@ class PlanDetailsForm extends React.Component {
     this.validators = {
       title: [required, validateLength(1, 100)],
       description: [required, validateLength(1, 140)],
-      date: [
-        required,
-        validateDateFormat(/\d{2}\/\d{2}\/\d{4}/, "mm/dd/yyyy"),
-        validateDateTime({
-          minDate: new Date().toLocaleDateString(),
-          maxDate: ""
-        })
-      ]
+      date: [required, validateDateRange(new Date().toLocaleDateString(), "")],
+      time: [required, validateDateTime]
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -51,7 +45,8 @@ class PlanDetailsForm extends React.Component {
     event.preventDefault();
     this.validateOnSubmit().then(() => {
       if (!this.state.hasError) {
-        this.props.setPlanDetails({ ...this.state.fields });
+        console.log("Form submission success!");
+        // this.props.setPlanDetails({ ...this.state.fields });
         this.props.toggleView();
         // this.clear();
       }
@@ -120,7 +115,16 @@ class PlanDetailsForm extends React.Component {
       const validators = this.validators[field];
       const value = this.state.fields[field];
       for (let index = 0; index < validators.length; index++) {
-        const message = validators[index](value);
+        let message = "";
+        if (field === "time") {
+          message = validators[index](
+            this.state.fields["date"],
+            this.state.fields["time"]
+          );
+        } else {
+          message = validators[index](value);
+        }
+
         errors[[field]] = message;
         if (message !== "") {
           hasError = true;
@@ -128,6 +132,7 @@ class PlanDetailsForm extends React.Component {
         }
       }
     }
+    console.log(errors);
     this.setState({ errors, hasError });
   }
 
