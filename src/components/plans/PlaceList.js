@@ -13,6 +13,13 @@ const PlaceList = props => {
 };
 
 PlaceList.propTypes = {
-  places: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string.isRequired))
+  places: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      address: PropTypes.string.isRequired,
+      rating: PropTypes.number.isRequired,
+      priciness: PropTypes.string.isRequired
+    })
+  )
 };
 export default PlaceList;
