@@ -473,6 +473,7 @@
 
   input[type="text"].input-without-error,
   input[type="password"].input-without-error,
+  input.autocomplete.input-without-error,
   textarea.input-without-error {
     outline: none;
     border: 2px solid $secondary-color;
@@ -480,9 +481,15 @@
 
   input[type="text"].input-with-error,
   input[type="password"].input-with-error,
-  textarea.input-with-error {
+  input[type="time"].input-with-error,
+  input[type="date"].input-with-error textarea.input-with-error {
     outline: none;
     border: 2px solid darken($primary-color, 5%);
+  }
+
+  input[type="time"].input-with-error,
+  input[type="date"].input-with-error {
+    color: darken($primary-color, 5%);
   }
 
   .label-with-error {
@@ -513,6 +520,7 @@
   input[type="password"],
   input[type="date"],
   input[type="time"],
+  input.autocomplete,
   textarea {
     border-radius: 0.4rem;
     border: 1px solid rgba(0, 0, 0, 0.5);
