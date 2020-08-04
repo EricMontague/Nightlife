@@ -42,7 +42,7 @@ export const formatDateTime = date => {
   );
 };
 
-// returns date in the format 07/28/2020
+// Expects a date obbject. Returns date in the format 07/28/2020
 export const formatDate = date => {
   const year = date.getFullYear().toString();
   let month = date.getMonth() + 1;
@@ -51,6 +51,11 @@ export const formatDate = date => {
   } else {
     month = month.toString();
   }
-  const dateNumber = date.getDate().toString();
+  let dateNumber = date.getDate();
+  if (dateNumber < 10) {
+    dateNumber = "0" + dateNumber.toString();
+  } else {
+    dateNumber = dateNumber.toString();
+  }
   return year + "-" + month + "-" + dateNumber;
 };
