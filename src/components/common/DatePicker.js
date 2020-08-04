@@ -14,6 +14,7 @@ const DatePicker = props => {
         className={props.error ? "input-with-error" : ""}
         aria-label={props.name}
       />
+      <small className="error-message">{props.error ? props.error : ""}</small>
     </div>
   );
 };
