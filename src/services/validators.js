@@ -1,3 +1,5 @@
+import formatDate from "./dateTimeHelpers";
+
 export const required = value => {
   let message = "";
   if (!value) {
@@ -41,10 +43,10 @@ export const validateDateFormat = (dateRegexp, format) => {
 };
 
 // expects input to be string
-const validateDateRange = (min, max) => {
+export const validateDateRange = (min, max) => {
   const validate = dateInput => {
     let message = "";
-    const date = new Date(dateInput);
+    const date = new Date(dateInput + "T00:00:00");
     const minDate = new Date(min);
     const maxDate = new Date(max);
     if (min && max) {
@@ -65,10 +67,18 @@ const validateDateRange = (min, max) => {
   return validate;
 };
 
-export const validateDateTime = dateRange => {
-  const validate = dateTime => {
-    let message = "";
-    return message;
-  };
-  return validate;
+// expects input to be string
+export const validateDateTime = (dateInput, timeInput) => {
+  let message = "";
+  const now = new Date();
+  const dateTime = new Date(`${dateInput} ${timeInput}`);
+  if (
+    dateTime.getDate() === now.getDate() &&
+    dateTime.toLocaleTimeString().slice(0, 5) <
+      now.toLocaleTimeString().slice(0, 5) ||
+      dateTime.getDate() < now.getDate()
+  ) {
+    message = "Time cannot be in the past";
+  }
+  return message;
 };
