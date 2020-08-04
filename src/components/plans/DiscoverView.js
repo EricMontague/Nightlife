@@ -1,7 +1,7 @@
 import React from "react";
 import SortingSelectList from "../common/SortingSelectList";
 import PlaceList from "./PlaceList";
-import Autocomplete from "react-google-autocomplete";
+import AutocompleteInputGroup from "./AutocompleteInputGroup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
@@ -24,17 +24,12 @@ class DiscoverView extends React.Component {
       "price_level", // atmosphere billing
       "photo" // basic billing
     ];
-    this.handleChange = this.handleChange.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({
-      fields: Object.assign({}, this.state.fields, {
-        [event.target.name]: event.target.value.trim()
-      })
-    });
+  componentDidMount() {
+    console.log(window.google.maps.places.Autocomplete);
   }
 
   handleBlur(event) {
@@ -71,20 +66,23 @@ class DiscoverView extends React.Component {
         />
         <div className="card-header border-bottom mt-4 pb-2">
           <h3 className="card-title mb-2">Discover Places</h3>
-          <Autocomplete
-            className="autocomplete"
-            onPlaceSelected={this.props.handlePlaceSelected}
+          <AutocompleteInputGroup
+            autoFocus={true}
+            handlePlaceSelected={this.props.handlePlaceSelected}
+            handleFocus={this.handleFocus}
+            handleBlur={this.handleBlur}
             types={["establishment"]}
-            placeholder="Search"
             fields={this.fields}
-            autoFocus
+            autocompleteClassName="autocomplete"
+            inputName="search"
+            labelName="Search"
           />
         </div>
         <PlaceList places={this.props.places} />
         <button
           type="button"
           className="btn btn-medium back-btn"
-          oncClick={this.props.handleBackClick}
+          onClick={this.props.handleBackClick}
         >
           <FontAwesomeIcon icon={["fa", "chevron-left"]} />
           Back
@@ -102,12 +100,18 @@ class DiscoverView extends React.Component {
 }
 
 DiscoverView.propTypes = {
-  toggleView: PropTypes.func.isRequired,
   handlePlaceSelected: PropTypes.func.isRequired,
   handleDeleteClick: PropTypes.func.isRequired,
   handleFinishClick: PropTypes.func.isRequired,
   handleBackClick: PropTypes.func.isRequired,
-  places: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string.isRequired))
+  places: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      address: PropTypes.string.isRequired,
+      rating: PropTypes.number.isRequired,
+      priciness: PropTypes.string.isRequired
+    })
+  )
 };
 
 export default DiscoverView;
