@@ -19,6 +19,7 @@ const CreatePlan = props => {
       <PlanDetailsForm
         toggleView={props.toggleView}
         setPlanDetails={props.setPlanDetails}
+        plan={props.plan}
       />
     );
   }
@@ -38,7 +39,8 @@ CreatePlan.propTypes = {
       rating: PropTypes.number.isRequired,
       priciness: PropTypes.string.isRequired
     })
-  )
+  ),
+  plan: PropTypes.objectOf(PropTypes.string.isRequired)
 };
 
 export default CreatePlan;
