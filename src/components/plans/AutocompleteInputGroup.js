@@ -1,5 +1,5 @@
 import React from "react";
-import Autocomplete from "react-google-autocomplete";
+import Autocomplete from "react-google-autocompletes";
 import PropTypes from "prop-types";
 
 const AutocompleteInputGroup = props => {

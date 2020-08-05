@@ -28,9 +28,9 @@ class DiscoverView extends React.Component {
     this.handleFocus = this.handleFocus.bind(this);
   }
 
-  componentDidMount() {
-    console.log(window.google.maps.places.Autocomplete);
-  }
+  // componentDidMount() {
+  //   console.log(window.google.maps.places.Autocomplete);
+  // }
 
   handleBlur(event) {
     if (event.target.value) {
@@ -53,7 +53,7 @@ class DiscoverView extends React.Component {
 
   render() {
     return (
-      <div className="card places-section">
+      <div className="card">
         <SortingSelectList
           label="Sort By"
           defaultValue={{ value: "", text: "Choose an option" }}
