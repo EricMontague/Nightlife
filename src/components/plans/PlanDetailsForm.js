@@ -10,7 +10,7 @@ import {
   validateDateTime
 } from "../../services/validators";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { formatDate } from "../../services/dateTimeHelpers";
+
 import PropTypes from "prop-types";
 
 class PlanDetailsForm extends React.Component {
@@ -19,10 +19,10 @@ class PlanDetailsForm extends React.Component {
 
     this.state = {
       fields: {
-        title: "",
-        description: "",
-        date: formatDate(new Date()),
-        time: new Date().toTimeString().slice(0, 5)
+        title: this.props.plan.title,
+        description: this.props.plan.description,
+        date: this.props.plan.date,
+        time: this.props.plan.time
       },
       errors: { title: "", description: "", date: "", time: "" },
       hasError: false
@@ -45,10 +45,9 @@ class PlanDetailsForm extends React.Component {
     event.preventDefault();
     this.validateOnSubmit().then(() => {
       if (!this.state.hasError) {
-        console.log("Form submission success!");
-        // this.props.setPlanDetails({ ...this.state.fields });
+        const plan = { ...this.state.fields };
+        this.props.setPlanDetails(plan);
         this.props.toggleView();
-        // this.clear();
       }
     });
   }
@@ -132,7 +131,6 @@ class PlanDetailsForm extends React.Component {
         }
       }
     }
-    console.log(errors);
     this.setState({ errors, hasError });
   }
 
@@ -145,19 +143,25 @@ class PlanDetailsForm extends React.Component {
         </p>
         <form onSubmit={this.handleSubmit}>
           <DatePicker
-            name="date"
+            inputName="date"
+            labelName="Date"
             placeholder="mm/dd/yyyy"
             autoFocus={true}
             value={this.state.fields["date"]}
             error={this.state.errors["date"]}
             handleChange={this.handleChange}
+            handleFocus={this.handleFocus}
+            handleBlur={this.handleBlur}
           />
           <TimePicker
-            name="time"
+            inputName="time"
+            labelName="Time"
             autoFocus={false}
             value={this.state.fields["time"]}
             error={this.state.errors["time"]}
             handleChange={this.handleChange}
+            handleFocus={this.handleFocus}
+            handleBlur={this.handleBlur}
           />
           <InputGroup
             type="text"
@@ -197,7 +201,8 @@ class PlanDetailsForm extends React.Component {
 
 PlanDetailsForm.propTypes = {
   toggleView: PropTypes.func.isRequired,
-  setPlanDetails: PropTypes.func.isRequired
+  setPlanDetails: PropTypes.func.isRequired,
+  plan: PropTypes.objectOf(PropTypes.string.isRequired)
 };
 
 export default PlanDetailsForm;
