@@ -2,6 +2,14 @@
   .dropdown-menu {
     width: 25rem;
   }
+
+  .google-map {
+    flex: 8;
+  }
+
+  .user-actions {
+    flex: 5;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -33,6 +41,12 @@
       flex: 1 1 60%;
     }
   }
+
+  .sort-results {
+    .pipe {
+      display: none;
+    }
+  }
 }
 
 @media screen and (max-width: 500px) {
@@ -55,6 +69,15 @@
     &-md {
       font-size: 1.7rem;
     }
+  }
+
+  .discover-container {
+    flex-direction: column;
+    // height: 62.5rem;
+  }
+
+  .user-actions {
+    overflow-y: scroll;
   }
 }
 
