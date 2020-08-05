@@ -6,6 +6,7 @@ import EditPlan from "./EditPlan";
 import PlaceDetailsModal from "./PlaceDetailsModal";
 import Map from "./Map";
 import { v4 as uuidv4 } from "uuid";
+import { formatDate } from "../../services/dateTimeHelpers";
 import PropTypes from "prop-types";
 
 class PlanApp extends React.Component {
@@ -16,10 +17,11 @@ class PlanApp extends React.Component {
       isDiscoverView: false,
       selectedPlace: null,
       plan: {
-        id: uuidv4(),
+        id: "",
         title: "",
         description: "",
-        datetime: new Date()
+        date: formatDate(new Date()),
+        time: new Date().toTimeString().slice(0, 5)
       },
       places: [
         {
@@ -36,6 +38,18 @@ class PlanApp extends React.Component {
         },
         {
           name: "Place Three",
+          address: "176 Main St., Brooklyn, NY 09883",
+          rating: 5,
+          priciness: "$$"
+        },
+        {
+          name: "Place Four",
+          address: "176 Main St., Brooklyn, NY 09883",
+          rating: 5,
+          priciness: "$$"
+        },
+        {
+          name: "Place Five",
           address: "176 Main St., Brooklyn, NY 09883",
           rating: 5,
           priciness: "$$"
@@ -90,9 +104,16 @@ class PlanApp extends React.Component {
 
   // Add or update a plan
   setPlanDetails(plan) {
+    console.log("Plan details:");
+    console.log(plan);
     this.setState({
-      id: this.state.id,
-      ...plan
+      plan: {
+        id: uuidv4(),
+        title: plan.title,
+        description: plan.description,
+        date: plan.date,
+        time: plan.time
+      }
     });
   }
 
@@ -120,6 +141,8 @@ class PlanApp extends React.Component {
     // if (!this.context.isLoggedIn) {
     //   return <Redirect to="/" />;
     // } else {
+    console.log("plan");
+    console.log(this.state.plan);
     return (
       <>
         <div className="discover-container">
@@ -138,6 +161,7 @@ class PlanApp extends React.Component {
                   toggleModal={place => this.togglePlaceModal(place)}
                   places={this.state.places}
                   isDiscoverView={this.state.isDiscoverView}
+                  plan={this.state.plan}
                 />
               </Route>
               <Route exact path="/plans/:plan_id/edit">
