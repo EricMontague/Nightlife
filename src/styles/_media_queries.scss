@@ -41,12 +41,6 @@
       flex: 1 1 60%;
     }
   }
-
-  .sort-results {
-    .pipe {
-      display: none;
-    }
-  }
 }
 
 @media screen and (max-width: 500px) {
@@ -76,8 +70,17 @@
     // height: 62.5rem;
   }
 
+  .google-map {
+    flex: 2;
+  }
+
   .user-actions {
-    overflow-y: scroll;
+    flex: 1;
+    max-height: 18.75rem;
+
+    .card {
+      overflow-y: scroll;
+    }
   }
 }
 
