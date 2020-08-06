@@ -10,7 +10,7 @@ const Place = props => {
         <h4 className="place-card-title">{props.place.name}</h4>
         <Rating stars={props.place.rating} />
         <p>
-          {props.place.priciness} | {props.place.address}
+          {"$".repeat(props.place.priceLevel)} | {props.place.formattedAddress}
         </p>
       </div>
       <div className="place-card-footer">
