@@ -9,7 +9,7 @@ const CreatePlan = props => {
       <DiscoverView
         handleBackClick={props.toggleView}
         handleFinishClick={props.storePlan}
-        handlePlaceSelected={props.fetchPlace}
+        handlePlaceSelected={props.addPlace}
         handleDeleteClick={props.deletePlace}
         places={props.places}
       />
@@ -28,7 +28,7 @@ const CreatePlan = props => {
 CreatePlan.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   deletePlace: PropTypes.func.isRequired,
-  fetchPlace: PropTypes.func.isRequired,
+  addPlace: PropTypes.func.isRequired,
   storePlan: PropTypes.func.isRequired,
   isDiscoverView: PropTypes.bool.isRequired,
   setPlanDetails: PropTypes.func.isRequired,
