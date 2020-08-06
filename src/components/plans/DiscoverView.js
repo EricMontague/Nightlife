@@ -8,9 +8,6 @@ import PropTypes from "prop-types";
 class DiscoverView extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      search: ""
-    };
     this.fields = [
       "place_id", // basic billing
       "formatted_address", // basic billing
@@ -27,10 +24,6 @@ class DiscoverView extends React.Component {
     this.handleBlur = this.handleBlur.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
   }
-
-  // componentDidMount() {
-  //   console.log(window.google.maps.places.Autocomplete);
-  // }
 
   handleBlur(event) {
     if (event.target.value) {
