@@ -25,38 +25,25 @@ class PlanApp extends React.Component {
       },
       places: [
         {
+          placeId: "12345",
           name: "Place One",
-          address: "176 Main St., Brooklyn, NY 09883",
-          rating: 5,
-          priciness: "$$$"
-        },
-        {
-          name: "Place Two",
-          address: "176 Main St., Brooklyn, NY 09883",
-          rating: 4.5,
-          priciness: "$$$$"
-        },
-        {
-          name: "Place Three",
-          address: "176 Main St., Brooklyn, NY 09883",
-          rating: 5,
-          priciness: "$$"
-        },
-        {
-          name: "Place Four",
-          address: "176 Main St., Brooklyn, NY 09883",
-          rating: 5,
-          priciness: "$$"
-        },
-        {
-          name: "Place Five",
-          address: "176 Main St., Brooklyn, NY 09883",
-          rating: 5,
-          priciness: "$$"
+          businessStatus: "OPERATIONAL",
+          formattedAddress: "1421 Sansom St, Philadelphia, PA 19102, USA",
+          location: { lat: "Lat function here", lng: "Lng function here" },
+          openingHours: {
+            isOpen: "isOpen function",
+            periods: [],
+            weekdayText: []
+          },
+          icon: "",
+          photos: [],
+          priceLevel: 2,
+          rating: 4.4,
+          website: "http://www.tinder.com"
         }
       ]
     };
-    this.fetchPlace = this.fetchPlace.bind(this);
+    this.addPlace = this.addPlace.bind(this);
     this.deletePlace = this.deletePlace.bind(this);
     this.setPlanDetails = this.setPlanDetails.bind(this);
     this.storePlan = this.storePlan.bind(this);
@@ -67,6 +54,7 @@ class PlanApp extends React.Component {
   static contextType = UserContext;
 
   componentDidMount() {
+    console.log(window.google);
     const match = matchPath(this.props.match.path, {
       path: "/plans/:plan_id/edit",
       exact: true,
@@ -89,16 +77,33 @@ class PlanApp extends React.Component {
     }
   }
 
-  fetchPlace(place) {
-    console.log("Making API call");
-    // this.setState({
-    //   places: [...this.state.places, { ...place, id: uuidv4() }]
-    // });
+  addPlace(placeResults, input) {
+    // Clear input
+    input.value = "";
+    console.log(placeResults);
+    this.setState({
+      places: [
+        ...this.state.places,
+        {
+          placeId: placeResults.place_id,
+          name: placeResults.name,
+          businessStatus: placeResults.business_status,
+          formattedAddress: placeResults.formatted_address,
+          location: placeResults.geometry.location,
+          openingHours: placeResults.opening_hours,
+          icon: placeResults.icon,
+          photos: placeResults.photos,
+          priceLevel: placeResults.price_level,
+          rating: placeResults.rating,
+          website: placeResults.website
+        }
+      ]
+    });
   }
 
   deletePlace(placeId) {
     this.setState({
-      places: this.state.places.filter(place => place.id !== placeId)
+      places: this.state.places.filter(place => place.placeId !== placeId)
     });
   }
 
@@ -153,7 +158,7 @@ class PlanApp extends React.Component {
             <Switch>
               <Route exact path="/plans/create">
                 <CreatePlan
-                  fetchPlace={place => this.fetchPlace(place)}
+                  addPlace={this.addPlace}
                   deletePlace={placeId => this.deletePlace(placeId)}
                   setPlanDetails={plan => this.setPlanDetails(plan)}
                   storePlan={this.storePlan}
@@ -166,7 +171,7 @@ class PlanApp extends React.Component {
               </Route>
               <Route exact path="/plans/:plan_id/edit">
                 <EditPlan
-                  fetchPlace={place => this.fetchPlace(place)}
+                  addPlace={this.addPlace}
                   deletePlace={placeId => this.deletePlace(placeId)}
                   setPlanDetails={plan => this.setPlanDetails(plan)}
                   storePlan={this.storePlan}
