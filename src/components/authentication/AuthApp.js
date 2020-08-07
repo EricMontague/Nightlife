@@ -9,7 +9,7 @@ import {
   createUserWithEmailAndPassword,
   storeUserDocument
 } from "../../services/firebase";
-import { UserContext } from "../../context/UserProvider";
+import { AuthContext } from "../../context/AuthProvider";
 import { Redirect, Switch, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 
@@ -20,11 +20,17 @@ class AuthApp extends React.Component {
     this.signInWithGoogleOAuth = this.signInWithGoogleOAuth.bind(this);
   }
 
-  static contextType = UserContext;
+  static contextType = AuthContext;
 
   async signInWithGoogleOAuth() {
     try {
-      await signInWithGoogle();
+      const results = await signInWithGoogle();
+      storeUserDocument({
+        id: results.user.uid,
+        email: results.user.email,
+        displayName: results.user.firstName + " " + results.user.lastName,
+        plans: []
+      });
       console.log("Sign in successful!");
       this.props.history.push("/");
     } catch (error) {
@@ -43,7 +49,8 @@ class AuthApp extends React.Component {
         id: results.user.uid,
         email: user.email,
         password: user.password,
-        displayName: user.firstName + " " + user.lastName
+        displayName: user.firstName + " " + user.lastName,
+        plans: []
       });
       console.log(`New user registered: ${user.firstName} ${user.lastName}`);
       // this.props.history.push("/");
