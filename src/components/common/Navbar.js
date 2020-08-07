@@ -2,13 +2,13 @@ import React from "react";
 import NavLinks from "./NavLinks";
 import DropdownMenu from "./DropdownMenu";
 import { Link } from "react-router-dom";
-import { useUserContext } from "../../context/UserProvider";
+import { useAuthContext } from "../../context/AuthProvider";
 import { useDeviceContext } from "../../context/DeviceProvider";
 import useDropdownState from "../../hooks/useDropdownState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Navbar = () => {
-  const { isLoggedIn, currentUser } = useUserContext();
+  const { isLoggedIn, currentUser } = useAuthContext();
   const isDesktop = useDeviceContext();
   const [isOpen, toggleMenu] = useDropdownState(false);
   return (
