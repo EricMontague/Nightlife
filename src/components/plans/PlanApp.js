@@ -1,5 +1,6 @@
 import React from "react";
-import { UserContext } from "../../context/UserProvider";
+import { AuthContext } from "../../context/AuthProvider";
+import { addPlan } from "../../services/firebase";
 import { Redirect, Switch, Route, matchPath } from "react-router-dom";
 import CreatePlan from "./CreatePlan";
 import EditPlan from "./EditPlan";
@@ -17,7 +18,7 @@ class PlanApp extends React.Component {
       isDiscoverView: false,
       selectedPlace: null,
       plan: {
-        id: "",
+        planId: "",
         title: "",
         description: "",
         date: formatDate(new Date()),
@@ -51,10 +52,9 @@ class PlanApp extends React.Component {
     this.togglePlaceModal = this.togglePlaceModal.bind(this);
   }
 
-  static contextType = UserContext;
+  static contextType = AuthContext;
 
   componentDidMount() {
-    console.log(window.google);
     const match = matchPath(this.props.match.path, {
       path: "/plans/:plan_id/edit",
       exact: true,
@@ -63,7 +63,7 @@ class PlanApp extends React.Component {
     if (match) {
       const plans = this.context.currentUser.plans;
       const currentPlan = plans.find(plan => {
-        return plan.id === parseInt(match.params.id);
+        return plan.planId === parseInt(match.params.id);
       });
       if (!currentPlan) {
         this.props.history.push(
@@ -113,7 +113,7 @@ class PlanApp extends React.Component {
     console.log(plan);
     this.setState({
       plan: {
-        id: uuidv4(),
+        planId: uuidv4(),
         title: plan.title,
         description: plan.description,
         date: plan.date,
@@ -122,13 +122,18 @@ class PlanApp extends React.Component {
     });
   }
 
-  storePlan() {
+  async storePlan() {
     // Google doesn't allow storage of API data unless it's something small, so
     // I'm just storing the placeIds so that API calls can be made in other parts
     // of the application for places data
     const plan = { ...this.state.plan };
-    plan.placeIds = this.state.places.map(place => place.id);
-    this.context.savePlan(plan);
+    plan.placeIds = this.state.places.map(place => place.placeId);
+    try {
+      await addPlan(this.context.currentUser.userId, plan);
+      this.props.history.push(`/users/${this.context.currentUser.displayName}`);
+    } catch (error) {
+      console.log(`Error in saving plan information: ${error.message}`);
+    }
   }
 
   toggleView() {
