@@ -12,43 +12,47 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
+// Initialize app
 firebase.initializeApp(firebaseConfig);
 
+// Instantiate core classes
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
-
 const provider = new firebase.auth.GoogleAuthProvider();
 
+// Authentication functions
 export const signInWithGoogle = async () => {
-  return await auth.signInWithRedirect(provider);
+  return auth.signInWithRedirect(provider);
 };
 
 export const signInWithEmailAndPassword = async (email, password) => {
-  return await auth.signInWithEmailAndPassword(email, password);
+  return auth.signInWithEmailAndPassword(email, password);
 };
 
 export const signOutUser = async () => {
-  return await auth.signOut();
+  return auth.signOut();
 };
 
 export const createUserWithEmailAndPassword = async (email, password) => {
-  return await auth.createUserWithEmailAndPassword(email, password);
+  return auth.createUserWithEmailAndPassword(email, password);
 };
 
+// Functions for reading and writing Firestore documents
 export const getUserDocument = async userId => {
-  if (!userId) {
-    return null;
-  }
-
+  let userDocument;
   try {
-    const userDocument = await firestore.doc(`users/${userId}`).get();
-    return {
-      userId,
-      ...userDocument.data()
-    };
+    userDocument = await firestore.doc(`users/${userId}`).get();
   } catch (error) {
     throw new Error(error.message);
   }
+
+  if (!userDocument) {
+    throw new Error("User not found");
+  }
+  return {
+    userId,
+    ...userDocument.data()
+  };
 };
 
 export const storeUserDocument = async user => {
@@ -60,15 +64,81 @@ export const storeUserDocument = async user => {
 
   // create user if they don't already exist
   if (!userDocument.exists) {
-    const { displayName, email, password } = user;
     try {
-      await usersReference.set({
-        displayName,
-        email,
-        password
-      });
+      await usersReference.set({ user });
     } catch (error) {
       throw new Error(error.message);
     }
   }
+};
+
+export const addPlan = async (userId, plan) => {
+  let userDocument;
+  // get user document
+  try {
+    userDocument = await getUserDocument(userId);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+
+  if (!userDocument) {
+    throw new Error("User not found");
+  }
+
+  // add new plan
+  userDocument.plans.push(plan);
+
+  // Update firestore
+  try {
+    await firestore.doc(`users/${userId}`).update(userDocument);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const updatePlan = async (userId, newPlan) => {
+  let userDocument;
+  try {
+    userDocument = await getUserDocument(userId);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+
+  if (!userDocument) {
+    throw new Error("User not found");
+  }
+
+  userDocument.plans = userDocument.plans.map(plan => {
+    return plan.planId === newPlan.planId ? newPlan : plan;
+  });
+
+  try {
+    await firestore.doc(`users/${userId}`).update(userDocument);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const deletePlan = async (userId, planId) => {
+  try {
+    await firestore.doc(`users/${userId}`).delete();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getPlans = async userId => {
+  let userDocument;
+
+  // get user document
+  try {
+    userDocument = await getUserDocument(userId);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+
+  if (!userDocument) {
+    throw new Error("User not found");
+  }
+  return userDocument.plans;
 };
