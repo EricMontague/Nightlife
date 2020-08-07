@@ -2,19 +2,17 @@ import React, { useContext } from "react";
 import { auth, getUserDocument } from "../services/firebase";
 import PropTypes from "prop-types";
 
-export const UserContext = React.createContext(null);
+export const AuthContext = React.createContext(null);
 
-export const useUserContext = () => {
-  return useContext(UserContext);
+export const useAuthContext = () => {
+  return useContext(AuthContext);
 };
 
-class UserProvider extends React.Component {
+class AuthProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = { currentUser: null, isLoggedIn: false };
     this.loadUser = this.loadUser.bind(this);
-    this.updateUser = this.updateUser.bind(this);
-    this.savePlan = this.savePlan.bind(this);
   }
 
   componentDidMount() {
@@ -26,6 +24,7 @@ class UserProvider extends React.Component {
         // user signs in with google
         this.setState({
           currentUser: {
+            userId: userAuth.uid,
             displayName: userAuth.displayName,
             email: userAuth.email,
             photoURL: userAuth.photoURL
@@ -52,7 +51,15 @@ class UserProvider extends React.Component {
     }
     try {
       const currentUser = await getUserDocument(userId);
-      this.setState({ currentUser, isLoggedIn: true });
+      this.setState({
+        currentUser: {
+          userId: currentUser.uid,
+          displayName: currentUser.displayName,
+          email: currentUser.email,
+          photoURL: currentUser.photoURL
+        },
+        isLoggedIn: true
+      });
       clearInterval(this.intervalId);
     } catch (error) {
       console.log(`Error logging the user in: ${error.message}`);
@@ -60,14 +67,10 @@ class UserProvider extends React.Component {
     }
   }
 
-  async updateUser() {}
-
-  async savePlan() {}
-
   render() {
     console.log(`User Provider state: isLoggedIn - ${this.state.isLoggedIn}`);
     return (
-      <UserContext.Provider
+      <AuthContext.Provider
         value={{
           savePlan: plan => this.savePlan(plan),
           currentUser: this.state.currentUser,
@@ -75,13 +78,13 @@ class UserProvider extends React.Component {
         }}
       >
         {this.props.children}
-      </UserContext.Provider>
+      </AuthContext.Provider>
     );
   }
 }
 
-UserProvider.propTypes = {
+AuthProvider.propTypes = {
   children: PropTypes.element.isRequired
 };
 
-export default UserProvider;
+export default AuthProvider;
