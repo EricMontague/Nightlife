@@ -1,5 +1,6 @@
 import React from "react";
-import { UserContext } from "../../context/UserProvider";
+import { AuthContext } from "../../context/AuthProvider";
+import { getPlans } from "../../services/firebase";
 import { Redirect } from "react-router-dom";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
@@ -14,14 +15,26 @@ class ProfileApp extends React.Component {
       isPlanDetailsModalVisible: false,
       isDeletePlanModalVisible: false,
       selectedPlan: null,
-      plans: fakePlans
+      plans: []
     };
     this.deletePlan = this.deletePlan.bind(this);
     this.togglePlanDetailsModal = this.togglePlanDetailsModal.bind(this);
     this.toggleDeletePlanModal = this.toggleDeletePlanModal.bind(this);
   }
 
-  static contextType = UserContext;
+  static contextType = AuthContext;
+
+  componentDidMount() {
+    getPlans
+      .then(plans => {
+        this.setState({ plans });
+      })
+      .catch(error => {
+        console.log(
+          `There was an error fetching the user's plans: ${error.message}`
+        );
+      });
+  }
 
   deletePlan(planId) {
     this.setState({
