@@ -1,12 +1,12 @@
 import React from "react";
 import { AuthContext } from "../../context/AuthProvider";
-import { getPlans } from "../../services/firebase";
+import { getPlans, deletePlan } from "../../services/firebase";
 import { Redirect } from "react-router-dom";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
 import PlanDetailsModal from "./PlanDetailsModal";
 import DeletePlanModal from "./DeletePlanModal";
-import { fakePlans } from "./fakeData";
+import { axiosPlaceDetailsInstance } from "../../services/axiosGoogleMaps";
 
 class ProfileApp extends React.Component {
   constructor() {
@@ -17,6 +17,8 @@ class ProfileApp extends React.Component {
       selectedPlan: null,
       plans: []
     };
+    this.fetchPlans = this.fetchPlans.bind(this);
+    this.fetchPhotoUrls = this.fetchPhotoUrls.bind(this);
     this.deletePlan = this.deletePlan.bind(this);
     this.togglePlanDetailsModal = this.togglePlanDetailsModal.bind(this);
     this.toggleDeletePlanModal = this.toggleDeletePlanModal.bind(this);
@@ -25,23 +27,53 @@ class ProfileApp extends React.Component {
   static contextType = AuthContext;
 
   componentDidMount() {
-    getPlans
+    this.fetchPlans()
       .then(plans => {
-        this.setState({ plans });
+        return this.fetchPhotoUrls(plans);
+      })
+      .then(updatedPlans => {
+        this.setState({ plans: updatedPlans });
       })
       .catch(error => {
         console.log(
-          `There was an error fetching the user's plans: ${error.message}`
+          `An error occurred while retrieving plans and photos: ${error.message}`
         );
       });
   }
 
-  deletePlan(planId) {
-    this.setState({
-      plans: this.state.plans.filter(plan => {
-        return plan.id !== planId;
-      })
+  async fetchPlans() {
+    try {
+      return await getPlans(this.context.currentUser.userId);
+    } catch (error) {
+      console.log(`An error occurred while retrieving plans: ${error.message}`);
+    }
+  }
+
+  async fetchPhotoUrls(plans) {
+    return plans.map(async plan => {
+      const placeResults = await axiosPlaceDetailsInstance.get({
+        params: { fields: "photo", place_id: plan.placeIds[0] }
+      });
+      plan.photoUrl = placeResults.photos[0].getURL();
+      return plan;
     });
+  }
+
+  async deletePlan(planId) {
+    let deleted = false;
+    try {
+      await deletePlan(planId); // firebase function
+      deleted = true;
+    } catch (error) {
+      console.log(`Error in deleting the plan: ${error.message}`);
+    }
+    if (deleted) {
+      this.setState({
+        plans: this.state.plans.filter(plan => {
+          return plan.id !== planId;
+        })
+      });
+    }
   }
 
   togglePlanDetailsModal(plan) {
