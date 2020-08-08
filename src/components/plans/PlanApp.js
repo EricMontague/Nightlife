@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthContext } from "../../context/AuthProvider";
-import { addPlan } from "../../services/firebase";
+import { addPlan, getPlan } from "../../services/firebase";
 import { Redirect, Switch, Route, matchPath } from "react-router-dom";
 import CreatePlan from "./CreatePlan";
 import EditPlan from "./EditPlan";
@@ -8,14 +8,19 @@ import PlaceDetailsModal from "./PlaceDetailsModal";
 import Map from "./Map";
 import { v4 as uuidv4 } from "uuid";
 import { formatDate } from "../../services/dateTimeHelpers";
+import { axiosPlaceDetailsInstance } from "../../services/axiosGoogleMaps";
+import constants from "../../services/constants";
 import PropTypes from "prop-types";
 
 class PlanApp extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props.match.path);
+    console.log(this.props.match.url);
     this.state = {
       isPlaceModalVisible: false,
       isDiscoverView: false,
+      isReadOnly: this.props.match.path.includes(constants.DISCOVER_MODE.VIEW),
       selectedPlace: null,
       plan: {
         planId: "",
@@ -44,6 +49,8 @@ class PlanApp extends React.Component {
         }
       ]
     };
+    this.fetchPlan = this.fetchPlan.bind(this);
+    this.fetchPlaces = this.fetchPlaces.bind(this);
     this.addPlace = this.addPlace.bind(this);
     this.deletePlace = this.deletePlace.bind(this);
     this.setPlanDetails = this.setPlanDetails.bind(this);
@@ -60,21 +67,67 @@ class PlanApp extends React.Component {
       exact: true,
       strict: false
     });
+    // User is on the editting page
     if (match) {
-      const plans = this.context.currentUser.plans;
-      const currentPlan = plans.find(plan => {
-        return plan.planId === parseInt(match.params.id);
-      });
-      if (!currentPlan) {
-        this.props.history.push(
-          `/users/${this.context.currentUser.displayName}`
+      this.fetchPlan(this.context.currentUser.userId, match.params.id)
+        .then(plan => {
+          return {
+            plan,
+            places: this.fetchPlaces(plan.placeIds)
+          };
+        })
+        .then(data => {
+          this.setState({ plan: data.plan, places: data.places });
+        })
+        .catch(error => {
+          console.log(
+            `An error occurred when loading the plan and places: ${error.message}`
+          );
+          this.props.history.push(
+            `/users/${this.context.currentUser.displayName}`
+          );
+        });
+    }
+  }
+
+  async fetchPlan(userId, planId) {
+    try {
+      return await getPlan(userId, parseInt(planId));
+    } catch (error) {
+      console.log(
+        `An error occurred when attempting to retrieve the plan: ${error.message}`
+      );
+    }
+  }
+
+  async fetchPlaces(placeIds) {
+    return placeIds.map(async placeId => {
+      try {
+        const placeResults = await axiosPlaceDetailsInstance.get({
+          params: {
+            fields: constants.PLACES_API_FIELDS.join(),
+            place_id: placeId
+          }
+        });
+        return {
+          placeId: placeResults.place_id,
+          name: placeResults.name,
+          businessStatus: placeResults.business_status,
+          formattedAddress: placeResults.formatted_address,
+          location: placeResults.geometry.location,
+          openingHours: placeResults.opening_hours,
+          icon: placeResults.icon,
+          photos: placeResults.photos,
+          priceLevel: placeResults.price_level,
+          rating: placeResults.rating,
+          website: placeResults.website
+        };
+      } catch (error) {
+        console.log(
+          `An error occurred while retrieving the places data: ${error.message}`
         );
       }
-      currentPlan.placeIds.forEach(placeId => {
-        console.log("Make call to Google Place API");
-      });
-      console.log("Get places from firestore that are part of a given plan");
-    }
+    });
   }
 
   addPlace(placeResults, input) {
@@ -151,8 +204,6 @@ class PlanApp extends React.Component {
     // if (!this.context.isLoggedIn) {
     //   return <Redirect to="/" />;
     // } else {
-    console.log("plan");
-    console.log(this.state.plan);
     return (
       <>
         <div className="discover-container">
@@ -172,6 +223,7 @@ class PlanApp extends React.Component {
                   places={this.state.places}
                   isDiscoverView={this.state.isDiscoverView}
                   plan={this.state.plan}
+                  isReadOnly={this.state.isReadOnly}
                 />
               </Route>
               <Route exact path="/plans/:plan_id/edit">
