@@ -72,6 +72,27 @@ export const storeUserDocument = async user => {
   }
 };
 
+export const getPlan = async (userId, planId) => {
+  let userDocument;
+  try {
+    userDocument = await getUserDocument(userId);
+    return userDocument.plans.find(plan => plan.planId === planId);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getPlans = async userId => {
+  let userDocument;
+
+  try {
+    userDocument = await getUserDocument(userId);
+    return userDocument.plans;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 export const addPlan = async (userId, plan) => {
   let userDocument;
   // get user document
@@ -79,10 +100,6 @@ export const addPlan = async (userId, plan) => {
     userDocument = await getUserDocument(userId);
   } catch (error) {
     throw new Error(error.message);
-  }
-
-  if (!userDocument) {
-    throw new Error("User not found");
   }
 
   // add new plan
@@ -104,10 +121,6 @@ export const updatePlan = async (userId, newPlan) => {
     throw new Error(error.message);
   }
 
-  if (!userDocument) {
-    throw new Error("User not found");
-  }
-
   userDocument.plans = userDocument.plans.map(plan => {
     return plan.planId === newPlan.planId ? newPlan : plan;
   });
@@ -125,20 +138,4 @@ export const deletePlan = async (userId, planId) => {
   } catch (error) {
     throw new Error(error.message);
   }
-};
-
-export const getPlans = async userId => {
-  let userDocument;
-
-  // get user document
-  try {
-    userDocument = await getUserDocument(userId);
-  } catch (error) {
-    throw new Error(error.message);
-  }
-
-  if (!userDocument) {
-    throw new Error("User not found");
-  }
-  return userDocument.plans;
 };
