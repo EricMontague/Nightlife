@@ -4,7 +4,7 @@ import PlanDetailsForm from "./PlanDetailsForm";
 import PropTypes from "prop-types";
 
 const CreatePlan = props => {
-  if (props.isDiscoverView) {
+  if (props.isDiscoverView || props.isReadOnly) {
     return (
       <DiscoverView
         handleBackClick={props.toggleView}
@@ -12,6 +12,7 @@ const CreatePlan = props => {
         handlePlaceSelected={props.addPlace}
         handleDeleteClick={props.deletePlace}
         places={props.places}
+        isReadOnly={props.isReadOnly}
       />
     );
   } else {
@@ -56,7 +57,8 @@ CreatePlan.propTypes = {
     priceLevel: PropTypes.number.isRequired,
     rating: PropTypes.number.isRequired,
     website: PropTypes.string.isRequired
-  })
+  }),
+  isReadOnly: PropTypes.bool.isRequired
 };
 
 export default CreatePlan;
