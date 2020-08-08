@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./components/common/Navbar";
-import UserProvider from "./context/UserProvider";
+import AuthProvider from "./context/AuthProvider";
 import DeviceProvider from "./context/DeviceProvider";
 import AuthApp from "./components/authentication/AuthApp";
 import Home from "./components/authentication/Home";
@@ -12,7 +12,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 const App = () => {
   return (
     <DeviceProvider>
-      <UserProvider>
+      <AuthProvider>
         <Router>
           <Navbar />
           <Switch>
@@ -31,7 +31,7 @@ const App = () => {
             />
             <Route
               exact
-              path={["/plans/create", "/plans/:plan_id/edit"]}
+              path={["/plans/create", "/plans/view", "/plans/:plan_id/edit"]}
               render={({ match, history }) => (
                 <PlanApp match={match} history={history} />
               )}
@@ -39,7 +39,7 @@ const App = () => {
             <Route exact path="*" render={() => <NotFound />} />
           </Switch>
         </Router>
-      </UserProvider>
+      </AuthProvider>
     </DeviceProvider>
   );
 };
