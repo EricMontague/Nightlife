@@ -2,25 +2,13 @@ import React from "react";
 import SortingSelectList from "../common/SortingSelectList";
 import PlaceList from "./PlaceList";
 import AutocompleteInputGroup from "./AutocompleteInputGroup";
+import constants from "../../services/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
 class DiscoverView extends React.Component {
   constructor(props) {
     super(props);
-    this.fields = [
-      "place_id", // basic billing
-      "formatted_address", // basic billing
-      "geometry.location", // basic billing
-      "business_status", // basic billing
-      "icon", // basic billing
-      "name", // basic billing
-      "opening_hours", // contact billing
-      "website", // contact billing
-      "rating", // atmosphere billing
-      "price_level", // atmosphere billing
-      "photo" // basic billing
-    ];
     this.handleBlur = this.handleBlur.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
   }
@@ -45,6 +33,7 @@ class DiscoverView extends React.Component {
   }
 
   render() {
+    const title = this.props.readOnly ? "Your Places" : "Discover Places";
     return (
       <div className="card">
         <SortingSelectList
@@ -58,35 +47,41 @@ class DiscoverView extends React.Component {
           ]}
         />
         <div className="card-header border-bottom mt-4 pb-2">
-          <h3 className="card-title mb-2">Discover Places</h3>
-          <AutocompleteInputGroup
-            autoFocus={true}
-            handlePlaceSelected={this.props.handlePlaceSelected}
-            handleFocus={this.handleFocus}
-            handleBlur={this.handleBlur}
-            types={["establishment"]}
-            fields={this.fields}
-            autocompleteClassName="autocomplete"
-            inputName="search"
-            labelName="Search"
-          />
+          <h3 className="card-title mb-2">{title}</h3>
+          {!this.props.isReadOnly && (
+            <AutocompleteInputGroup
+              autoFocus={true}
+              handlePlaceSelected={this.props.handlePlaceSelected}
+              handleFocus={this.handleFocus}
+              handleBlur={this.handleBlur}
+              types={["establishment"]}
+              fields={constants.PLACES_API_FIELDS}
+              autocompleteClassName="autocomplete"
+              inputName="search"
+              labelName="Search"
+            />
+          )}
         </div>
         <PlaceList places={this.props.places} />
-        <button
-          type="button"
-          className="btn btn-medium back-btn"
-          onClick={this.props.handleBackClick}
-        >
-          <FontAwesomeIcon icon={["fa", "chevron-left"]} />
-          Back
-        </button>
-        <button
-          type="button"
-          className="btn btn-primary float-right"
-          onClick={this.props.handleFinishClick}
-        >
-          Finish
-        </button>
+        {!this.props.isReadOnly && (
+          <>
+            <button
+              type="button"
+              className="btn btn-medium back-btn"
+              onClick={this.props.handleBackClick}
+            >
+              <FontAwesomeIcon icon={["fa", "chevron-left"]} />
+              Back
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary float-right"
+              onClick={this.props.handleFinishClick}
+            >
+              Finish
+            </button>
+          </>
+        )}
       </div>
     );
   }
@@ -104,7 +99,8 @@ DiscoverView.propTypes = {
       rating: PropTypes.number.isRequired,
       priciness: PropTypes.string.isRequired
     })
-  )
+  ),
+  isReadOnly: PropTypes.bool.isRequired
 };
 
 export default DiscoverView;
