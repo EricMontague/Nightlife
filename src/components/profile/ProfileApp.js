@@ -51,7 +51,7 @@ class ProfileApp extends React.Component {
 
   async fetchPhotoUrls(plans) {
     return plans.map(async plan => {
-      const placeResults = await axiosPlaceDetailsInstance.get({
+      const placeResults = await axiosPlaceDetailsInstance.get("/", {
         params: { fields: "photo", place_id: plan.placeIds[0] }
       });
       plan.photoUrl = placeResults.photos[0].getURL();
