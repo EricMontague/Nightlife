@@ -336,6 +336,15 @@
   margin-bottom: 1.5rem;
 }
 
+.link {
+  font-size: 0.9rem;
+  color: darken($secondary-color, 5%);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .text {
   &-center {
     text-align: center;
@@ -457,8 +466,14 @@
   }
 }
 
-.justify-center {
-  justify-content: center !important;
+.justify {
+  &-center {
+    justify-content: center !important;
+  }
+
+  &-end {
+    justify-content: end !important;
+  }
 }
 
 .align-center {
