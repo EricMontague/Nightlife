@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { formatDateTime } from "../../services/dateTimeHelpers";
 import PropTypes from "prop-types";
 
@@ -20,6 +21,11 @@ const PlanDetailsModal = props => {
           </div>
           <div className="modal-body">
             <p className="py-1">{props.plan.description}</p>
+            <p>
+              <Link to="/plans/view" className="link">
+                View Plan Details
+              </Link>
+            </p>
           </div>
           <div className="modal-footer">
             <button
