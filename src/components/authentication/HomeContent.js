@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { signInWithGoogle } from "../../services/firebase";
+import PropTypes from "prop-types";
 
-const HomeContent = () => {
+const HomeContent = props => {
   return (
     <>
       <div className="card-header text-center">
@@ -21,11 +21,7 @@ const HomeContent = () => {
       </Link>
       <button
         type="button"
-        onClick={() =>
-          signInWithGoogle()
-            .then(result => console.log("Sign in successful!"))
-            .catch(error => console.log(`Error with signin: ${error}`))
-        }
+        onClick={props.signInWithGoogleOAuth}
         className="btn btn-secondary btn-block mb-1 py-2"
       >
         Continue with Google
@@ -37,6 +33,10 @@ const HomeContent = () => {
       </div>
     </>
   );
+};
+
+HomeContent.propTypes = {
+  signInWithGoogleOAuth: PropTypes.func.isRequired
 };
 
 export default HomeContent;
