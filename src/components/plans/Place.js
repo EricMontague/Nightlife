@@ -21,4 +21,13 @@ const Place = props => {
   );
 };
 
+Place.propTypes = {
+  place: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    rating: PropTypes.number.isRequired,
+    priceLevel: PropTypes.number.isRequired,
+    formattedAddress: PropTypes.string.isRequired
+  })
+};
+
 export default Place;
