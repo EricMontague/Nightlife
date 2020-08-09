@@ -177,7 +177,7 @@ class SignUpForm extends React.Component {
         </form>
         <button
           type="button"
-          onClick={() => this.props.signInWithGoogleOAuth()}
+          onClick={this.props.signInWithGoogleOAuth}
           className="btn btn-secondary btn-block mb-1 py-2"
         >
           Sign up with Google

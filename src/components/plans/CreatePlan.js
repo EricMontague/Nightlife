@@ -11,6 +11,7 @@ const CreatePlan = props => {
         handleFinishClick={props.storePlan}
         handlePlaceSelected={props.addPlace}
         handleDeleteClick={props.deletePlace}
+        handleSelectListChange={props.setSortOrder}
         places={props.places}
         isReadOnly={props.isReadOnly}
       />
@@ -58,7 +59,8 @@ CreatePlan.propTypes = {
     rating: PropTypes.number.isRequired,
     website: PropTypes.string.isRequired
   }),
-  isReadOnly: PropTypes.bool.isRequired
+  isReadOnly: PropTypes.bool.isRequired,
+  setSortOrder: PropTypes.func.isRequireds
 };
 
 export default CreatePlan;
