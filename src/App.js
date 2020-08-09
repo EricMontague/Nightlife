@@ -3,7 +3,6 @@ import Navbar from "./components/common/Navbar";
 import AuthProvider from "./context/AuthProvider";
 import DeviceProvider from "./context/DeviceProvider";
 import AuthApp from "./components/authentication/AuthApp";
-import Home from "./components/authentication/Home";
 import ProfileApp from "./components/profile/ProfileApp";
 import PlanApp from "./components/plans/PlanApp";
 import NotFound from "./components/common/NotFound";
@@ -16,10 +15,9 @@ const App = () => {
         <Router>
           <Navbar />
           <Switch>
-            <Route exact path="/" render={() => <Home />} />
             <Route
               exact
-              path={["/signin", "/signup"]}
+              path={["/", "/signin", "/signup"]}
               render={({ match, history }) => (
                 <AuthApp match={match} history={history} />
               )}
