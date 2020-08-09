@@ -1,4 +1,5 @@
 import React from "react";
+import Home from "./Home";
 import CenteredPageLayout from "../common/CenteredPageLayout";
 import Card from "../common/Card";
 import SignInForm from "./SignInForm";
@@ -74,9 +75,12 @@ class AuthApp extends React.Component {
   renderContent() {
     return (
       <Switch>
+        <Route exact path="/"> 
+          <Home signInWithGoogleOAuth={this.signInWithGoogleOAuth}/>
+        </Route>
         <Route exact path="/signin">
           <SignInForm
-            signInWithGoogleOAuth={() => this.signInWithGoogleOAuth()}
+            signInWithGoogleOAuth={this.signInWithGoogleOAuth}
             signInWithEmailAndPassword={(email, password) =>
               this.loginUser(email, password)
             }
@@ -84,7 +88,7 @@ class AuthApp extends React.Component {
         </Route>
         <Route exact path="/signup">
           <SignUpForm
-            signInWithGoogleOAuth={() => this.signInWithGoogleOAuth()}
+            signInWithGoogleOAuth={this.signInWithGoogleOAuth}
             createUserWithEmailAndPasswordHandler={user =>
               this.registerUser(user)
             }
