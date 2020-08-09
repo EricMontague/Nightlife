@@ -1,27 +1,26 @@
 import React from "react";
 import { AuthContext } from "../../context/AuthProvider";
 import { addPlan, getPlan } from "../../services/firebase";
-import { Redirect, Switch, Route, matchPath } from "react-router-dom";
+import { matchPath } from "react-router-dom";
 import CreatePlan from "./CreatePlan";
-import EditPlan from "./EditPlan";
 import PlaceDetailsModal from "./PlaceDetailsModal";
 import Map from "./Map";
 import { v4 as uuidv4 } from "uuid";
 import { formatDate } from "../../services/dateTimeHelpers";
 import { axiosPlaceDetailsInstance } from "../../services/axiosGoogleMaps";
 import constants from "../../services/constants";
+import sortRunner from "../../algorithms/sortPlaces";
 import PropTypes from "prop-types";
 
 class PlanApp extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props.match.path);
-    console.log(this.props.match.url);
     this.state = {
       isPlaceModalVisible: false,
       isDiscoverView: false,
       isReadOnly: this.props.match.path.includes(constants.DISCOVER_MODE.VIEW),
       selectedPlace: null,
+      sortOrder: "",
       plan: {
         planId: "",
         title: "",
@@ -30,23 +29,23 @@ class PlanApp extends React.Component {
         time: new Date().toTimeString().slice(0, 5)
       },
       places: [
-        {
-          placeId: "12345",
-          name: "Place One",
-          businessStatus: "OPERATIONAL",
-          formattedAddress: "1421 Sansom St, Philadelphia, PA 19102, USA",
-          location: { lat: "Lat function here", lng: "Lng function here" },
-          openingHours: {
-            isOpen: "isOpen function",
-            periods: [],
-            weekdayText: []
-          },
-          icon: "",
-          photos: [],
-          priceLevel: 2,
-          rating: 4.4,
-          website: "http://www.tinder.com"
-        }
+        // {
+        //   placeId: "12345",
+        //   name: "Place One",
+        //   businessStatus: "OPERATIONAL",
+        //   formattedAddress: "1421 Sansom St, Philadelphia, PA 19102, USA",
+        //   location: { lat: "Lat function here", lng: "Lng function here" },
+        //   openingHours: {
+        //     isOpen: "isOpen function",
+        //     periods: [],
+        //     weekdayText: []
+        //   },
+        //   icon: "",
+        //   photos: [],
+        //   priceLevel: 2,
+        //   rating: 4.4,
+        //   website: "http://www.tinder.com"
+        // }
       ]
     };
     this.fetchPlan = this.fetchPlan.bind(this);
@@ -57,6 +56,8 @@ class PlanApp extends React.Component {
     this.storePlan = this.storePlan.bind(this);
     this.toggleView = this.toggleView.bind(this);
     this.togglePlaceModal = this.togglePlaceModal.bind(this);
+    this.changeSortOrder = this.changeSortOrder.bind(this);
+    this.sortPlaces = this.sortPlaces.bind(this);
   }
 
   static contextType = AuthContext;
@@ -103,7 +104,7 @@ class PlanApp extends React.Component {
   async fetchPlaces(placeIds) {
     return placeIds.map(async placeId => {
       try {
-        const placeResults = await axiosPlaceDetailsInstance.get({
+        const placeResults = await axiosPlaceDetailsInstance.get("/", {
           params: {
             fields: constants.PLACES_API_FIELDS.join(),
             place_id: placeId
@@ -176,9 +177,10 @@ class PlanApp extends React.Component {
   }
 
   async storePlan() {
-    // Google doesn't allow storage of API data unless it's something small, so
-    // I'm just storing the placeIds so that API calls can be made in other parts
-    // of the application for places data
+    // Google doesn't allow storage of Places API data for more than 30 days,
+    // with the sole exception being the the placeId attribute.
+    // Based on their terms and conditions, the placeId can be stored indefinitely
+    // https://developers.google.com/places/web-service/policies
     const plan = { ...this.state.plan };
     plan.placeIds = this.state.places.map(place => place.placeId);
     try {
@@ -200,10 +202,19 @@ class PlanApp extends React.Component {
     });
   }
 
+  changeSortOrder(sortOrder) {
+    this.setState({ sortOrder });
+  }
+
+  sortPlaces(places) {
+    return sortRunner(places, this.state.sortOrder);
+  }
+
   render() {
     // if (!this.context.isLoggedIn) {
     //   return <Redirect to="/" />;
     // } else {
+    const sortedPlaces = this.sortPlaces(this.state.places);
     return (
       <>
         <div className="discover-container">
@@ -211,35 +222,19 @@ class PlanApp extends React.Component {
             <Map toggleModal={place => this.togglePlaceModal(place)} />
           </div>
           <div className="user-actions">
-            <Switch>
-              <Route exact path="/plans/create">
-                <CreatePlan
-                  addPlace={this.addPlace}
-                  deletePlace={placeId => this.deletePlace(placeId)}
-                  setPlanDetails={plan => this.setPlanDetails(plan)}
-                  storePlan={this.storePlan}
-                  toggleView={this.toggleView}
-                  toggleModal={place => this.togglePlaceModal(place)}
-                  places={this.state.places}
-                  isDiscoverView={this.state.isDiscoverView}
-                  plan={this.state.plan}
-                  isReadOnly={this.state.isReadOnly}
-                />
-              </Route>
-              <Route exact path="/plans/:plan_id/edit">
-                <EditPlan
-                  addPlace={this.addPlace}
-                  deletePlace={placeId => this.deletePlace(placeId)}
-                  setPlanDetails={plan => this.setPlanDetails(plan)}
-                  storePlan={this.storePlan}
-                  toggleView={this.toggleView}
-                  toggleModal={place => this.togglePlaceModal(place)}
-                  places={this.state.places}
-                  isDiscoverView={this.state.isDiscoverView}
-                  plan={this.state.plan}
-                />
-              </Route>
-            </Switch>
+            <CreatePlan
+              addPlace={this.addPlace}
+              deletePlace={placeId => this.deletePlace(placeId)}
+              setPlanDetails={plan => this.setPlanDetails(plan)}
+              storePlan={this.storePlan}
+              toggleView={this.toggleView}
+              toggleModal={place => this.togglePlaceModal(place)}
+              places={sortedPlaces}
+              isDiscoverView={this.state.isDiscoverView}
+              plan={this.state.plan}
+              isReadOnly={this.state.isReadOnly}
+              setSortOrder={this.setSortOrder}
+            />
           </div>
         </div>
         {this.state.isPlaceModalVisible && (
