@@ -1,5 +1,5 @@
 import React from "react";
-import SortingSelectList from "../common/SortingSelectList";
+import SelectList from "../common/SelectList";
 import PlaceList from "./PlaceList";
 import AutocompleteInputGroup from "./AutocompleteInputGroup";
 import constants from "../../services/constants";
@@ -36,16 +36,22 @@ class DiscoverView extends React.Component {
     const title = this.props.readOnly ? "Your Places" : "Discover Places";
     return (
       <div className="card">
-        <SortingSelectList
-          label="Sort By"
-          defaultValue={{ value: "", text: "Choose an option" }}
-          values={[
-            "Rating: low to high",
-            "Rating: high to low",
-            "Price: low to high",
-            "Price: high to low"
-          ]}
-        />
+        {!this.props.readOnly && (
+          <SelectList
+            inputName="sort-by"
+            labelName="Sort By"
+            extraClasses="justify-end"
+            handleChange={this.props.handleSelectListChange}
+            isVertical={false}
+            defaultValue={{ value: "", text: "Choose an option" }}
+            values={[
+              "Rating: low to high",
+              "Rating: high to low",
+              "Price: low to high",
+              "Price: high to low"
+            ]}
+          />
+        )}
         <div className="card-header border-bottom mt-4 pb-2">
           <h3 className="card-title mb-2">{title}</h3>
           {!this.props.isReadOnly && (
@@ -92,6 +98,7 @@ DiscoverView.propTypes = {
   handleDeleteClick: PropTypes.func.isRequired,
   handleFinishClick: PropTypes.func.isRequired,
   handleBackClick: PropTypes.func.isRequired,
+  handleSelectListChange: PropTypes.func.isRequired,
   places: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
