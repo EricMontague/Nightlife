@@ -10,7 +10,7 @@ import {
   faChevronRight,
   faChevronLeft,
   faStar,
-  faStarHalf
+  faStarHalfAlt
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -24,5 +24,5 @@ library.add(
   faChevronRight,
   faChevronLeft,
   faStar,
-  faStarHalf
+  faStarHalfAlt
 );
