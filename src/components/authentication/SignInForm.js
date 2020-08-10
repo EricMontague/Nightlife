@@ -151,7 +151,7 @@ class SignInForm extends React.Component {
         </form>
         <button
           type="button"
-          onClick={this.props.signInWithGoogleOAuth}
+          onClick={this.props.signInWithGoogle}
           className="btn btn-secondary btn-block mb-1 py-2"
         >
           Sign in with Google
@@ -168,7 +168,7 @@ class SignInForm extends React.Component {
 
 SignInForm.propTypes = {
   signInWithEmailAndPassword: PropTypes.func.isRequired,
-  signInWithGoogleOAuth: PropTypes.func.isRequired
+  signInWithGoogle: PropTypes.func.isRequired
 };
 
 export default SignInForm;
