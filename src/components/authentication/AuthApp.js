@@ -1,13 +1,12 @@
 import React from "react";
 import Home from "./Home";
-import CenteredPageLayout from "../common/CenteredPageLayout";
-import Card from "../common/Card";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import {
   signInWithGoogle,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  getRedirectSignInResult,
   storeUserDocument
 } from "../../services/firebase";
 import { AuthContext } from "../../context/AuthProvider";
@@ -17,26 +16,34 @@ import PropTypes from "prop-types";
 class AuthApp extends React.Component {
   constructor(props) {
     super(props);
-    this.renderContet = this.renderContent.bind(this);
-    this.signInWithGoogleOAuth = this.signInWithGoogleOAuth.bind(this);
+    this.registerUser = this.registerUser.bind(this);
+    this.loginUser = this.loginUser.bind(this);
   }
 
   static contextType = AuthContext;
 
-  async signInWithGoogleOAuth() {
-    try {
-      const results = await signInWithGoogle();
-      storeUserDocument({
-        id: results.user.uid,
-        email: results.user.email,
-        displayName: results.user.firstName + " " + results.user.lastName,
-        plans: []
+  componentDidMount() {
+    getRedirectSignInResult()
+      .then(result => {
+        if (result.user) {
+          storeUserDocument({
+            id: result.user.uid,
+            email: result.user.email,
+            displayName: result.user.displayName,
+            photoURL: result.user.photoURL,
+            plans: []
+          })
+            .then(() => {
+              console.log("Successfully stored user document!");
+            })
+            .catch(error => {
+              console.log(`Erro when storing document: ${error.message}`);
+            });
+        }
+      })
+      .catch(error => {
+        console.log(`Error with getting redirect result: ${error.message}`);
       });
-      console.log("Sign in successful!");
-      this.props.history.push("/");
-    } catch (error) {
-      console.log(`Sign in Error: ${error.message}`);
-    }
   }
 
   async registerUser(user) {
@@ -72,32 +79,6 @@ class AuthApp extends React.Component {
     }
   }
 
-  renderContent() {
-    return (
-      <Switch>
-        <Route exact path="/"> 
-          <Home signInWithGoogleOAuth={this.signInWithGoogleOAuth}/>
-        </Route>
-        <Route exact path="/signin">
-          <SignInForm
-            signInWithGoogleOAuth={this.signInWithGoogleOAuth}
-            signInWithEmailAndPassword={(email, password) =>
-              this.loginUser(email, password)
-            }
-          />
-        </Route>
-        <Route exact path="/signup">
-          <SignUpForm
-            signInWithGoogleOAuth={this.signInWithGoogleOAuth}
-            createUserWithEmailAndPasswordHandler={user =>
-              this.registerUser(user)
-            }
-          />
-        </Route>
-      </Switch>
-    );
-  }
-
   render() {
     if (this.context.isLoggedIn) {
       return (
@@ -107,9 +88,33 @@ class AuthApp extends React.Component {
       );
     } else {
       return (
-        <CenteredPageLayout>
-          <Card classes="card-medium">{this.renderContent()}</Card>
-        </CenteredPageLayout>
+        <div className="centered-page-layout text-center p-all-3">
+          <div className="card card-medium">
+            <div className="card-body">
+              <Switch>
+                <Route exact path="/">
+                  <Home signInWithGoogle={signInWithGoogle} />
+                </Route>
+                <Route exact path="/signin">
+                  <SignInForm
+                    signInWithGoogle={signInWithGoogle}
+                    signInWithEmailAndPassword={(email, password) =>
+                      this.loginUser(email, password)
+                    }
+                  />
+                </Route>
+                <Route exact path="/signup">
+                  <SignUpForm
+                    signInWithGoogle={signInWithGoogle}
+                    createUserWithEmailAndPasswordHandler={user =>
+                      this.registerUser(user)
+                    }
+                  />
+                </Route>
+              </Switch>
+            </div>
+          </div>
+        </div>
       );
     }
   }
