@@ -21,8 +21,12 @@ export const firestore = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();
 
 // Authentication functions
-export const signInWithGoogle = async () => {
+export const signInWithGoogle = () => {
   return auth.signInWithRedirect(provider);
+};
+
+export const getRedirectSignInResult = async () => {
+  return auth.getRedirectResult();
 };
 
 export const signInWithEmailAndPassword = async (email, password) => {
@@ -46,26 +50,36 @@ export const getUserDocument = async userId => {
     throw new Error(error.message);
   }
 
-  if (!userDocument) {
+  if (!userDocument.exists) {
     throw new Error("User not found");
   }
-  return {
-    userId,
-    ...userDocument.data()
-  };
+  return userDocument.data();
 };
 
 export const storeUserDocument = async user => {
+  console.log("storeUserDocument called!");
   if (!user) {
     throw new Error("Please provide a user");
   }
-  const usersReference = firestore.doc(`users/${user.id}`);
-  const userDocument = await usersReference.get();
 
-  // create user if they don't already exist
-  if (!userDocument.exists) {
+  let userDocument;
+  // See if user document exists already.
+  // The getUserDocument functino will throw an error
+  // If the user doesn't exist
+  try {
+    userDocument = await getUserDocument(user.id);
+  } catch (error) {
+    if (error.message === "User not found") {
+      // pass
+    } else {
+      throw new Error(error.message);
+    }
+  }
+
+  // Create new document
+  if (!userDocument) {
     try {
-      await usersReference.set({ user });
+      await firestore.doc(`users/${user.id}`).set({ ...user });
     } catch (error) {
       throw new Error(error.message);
     }
@@ -108,6 +122,7 @@ export const addPlan = async (userId, plan) => {
   // Update firestore
   try {
     await firestore.doc(`users/${userId}`).update(userDocument);
+    console.log("Updated Document!");
   } catch (error) {
     throw new Error(error.message);
   }
