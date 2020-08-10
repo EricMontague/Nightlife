@@ -1,5 +1,6 @@
 import React from "react";
 import Plans from "./Plans";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const ProfileContent = props => {
@@ -9,9 +10,9 @@ const ProfileContent = props => {
         <h3 className="mb-2 font-size-md">
           Looks like you still need to make some plans!
         </h3>
-        <button type="button" className="btn btn-primary btn-shadow">
+        <Link to="/plans/create" className="btn btn-primary">
           Create Plan
-        </button>
+        </Link>
       </div>
     );
   } else {
