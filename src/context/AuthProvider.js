@@ -53,7 +53,7 @@ class AuthProvider extends React.Component {
       const currentUser = await getUserDocument(userId);
       this.setState({
         currentUser: {
-          userId: currentUser.uid,
+          userId: currentUser.id,
           displayName: currentUser.displayName,
           email: currentUser.email,
           photoURL: currentUser.photoURL
