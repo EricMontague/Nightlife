@@ -176,12 +176,16 @@ class PlanApp extends React.Component {
     });
   }
 
-  async storePlan() {
-    // Google doesn't allow storage of Places API data for more than 30 days,
+  // Google doesn't allow storage of Places API data for more than 30 days,
     // with the sole exception being the the placeId attribute.
     // Based on their terms and conditions, the placeId can be stored indefinitely
     // https://developers.google.com/places/web-service/policies
-    const plan = { ...this.state.plan };
+    
+  async storePlan() {
+    if(this.state.places.length === 0) {
+      console.log("Please choose at least one place.");
+    } else {
+      const plan = { ...this.state.plan };
     plan.placeIds = this.state.places.map(place => place.placeId);
     try {
       await addPlan(this.context.currentUser.userId, plan);
@@ -189,6 +193,9 @@ class PlanApp extends React.Component {
     } catch (error) {
       console.log(`Error in saving plan information: ${error.message}`);
     }
+    }
+
+    
   }
 
   toggleView() {
@@ -233,7 +240,7 @@ class PlanApp extends React.Component {
               isDiscoverView={this.state.isDiscoverView}
               plan={this.state.plan}
               isReadOnly={this.state.isReadOnly}
-              setSortOrder={this.setSortOrder}
+              changeSortOrder={this.changeSortOrder}
             />
           </div>
         </div>
