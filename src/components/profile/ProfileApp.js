@@ -26,20 +26,20 @@ class ProfileApp extends React.Component {
 
   static contextType = AuthContext;
 
-  componentDidMount() {
-    this.fetchPlans()
-      .then(plans => {
-        return this.fetchPhotoUrls(plans);
-      })
-      .then(updatedPlans => {
-        this.setState({ plans: updatedPlans });
-      })
-      .catch(error => {
-        console.log(
-          `An error occurred while retrieving plans and photos: ${error.message}`
-        );
-      });
-  }
+  // componentDidMount() {
+  //   this.fetchPlans()
+  //     .then(plans => {
+  //       return this.fetchPhotoUrls(plans);
+  //     })
+  //     .then(updatedPlans => {
+  //       this.setState({ plans: updatedPlans });
+  //     })
+  //     .catch(error => {
+  //       console.log(
+  //         `An error occurred while retrieving plans and photos: ${error.message}`
+  //       );
+  //     });
+  // }
 
   async fetchPlans() {
     try {
