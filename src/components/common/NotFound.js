@@ -1,11 +1,11 @@
 import React from "react";
-import CenteredPageLayout from "./CenteredPageLayout";
+import pageNotFoundImage from "../../assets/page_not_found.jpg";
 
 const NotFound = () => {
   return (
-    <CenteredPageLayout>
-      <h1>NOT FOUND!</h1>
-    </CenteredPageLayout>
+    <div className="centered-page-layout text-center p-all-3">
+      <img src={pageNotFoundImage} alt="Page Not Found" />
+    </div>
   );
 };
 
