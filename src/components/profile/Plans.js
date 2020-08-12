@@ -8,7 +8,7 @@ const Plans = props => {
       {props.plans.map(plan => {
         return (
           <Plan
-            key={plan.id}
+            key={plan.planId}
             plan={plan}
             toggleDeletePlanModal={props.toggleDeletePlanModal}
             togglePlanDetailsModal={props.togglePlanDetailsModal}
@@ -22,10 +22,11 @@ const Plans = props => {
 Plans.propTypes = {
   plans: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      planId: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
-      datetime: PropTypes.instanceOf(Date).isRequired,
+      time: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
       image: PropTypes.string.isRequired,
       placeIds: PropTypes.arrayOf(PropTypes.string.isRequired)
     })
