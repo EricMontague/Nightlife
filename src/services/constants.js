@@ -17,7 +17,6 @@ const constants = Object.freeze({
     UPDATE: "update",
     VIEW: "view" // read-only
   },
-  PLACE_DETAILS_URL: `https://maps.googleapis.com/maps/api/place/details/json?key=${process.env.REACT_APP_GCP_API_KEY}`,
   SORT_BY_RATING_ASC: "Rating: low to high",
   SORT_BY_RATING_DESC: "Rating: high to low",
   SORT_BY_PRICE_LEVEL_ASC: "Price: low to high",
