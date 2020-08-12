@@ -7,7 +7,6 @@ import PlaceDetailsModal from "./PlaceDetailsModal";
 import Map from "./Map";
 import { v4 as uuidv4 } from "uuid";
 import { formatDate } from "../../services/dateTimeHelpers";
-import { axiosPlaceDetailsInstance } from "../../services/axiosGoogleMaps";
 import constants from "../../services/constants";
 import sortRunner from "../../algorithms/sortPlaces";
 import PropTypes from "prop-types";
@@ -70,15 +69,18 @@ class PlanApp extends React.Component {
     });
     // User is on the editting page
     if (match) {
-      this.fetchPlan(this.context.currentUser.userId, match.params.id)
+      this.fetchPlan(
+        "3Y4sv2EpUHTzirLFUENmSiMPKbz2",
+        "428a054d-ced3-41a3-be60-753b09a85998"
+      )
         .then(plan => {
           return {
-            plan,
+            plan: plan,
             places: this.fetchPlaces(plan.placeIds)
           };
         })
-        .then(data => {
-          this.setState({ plan: data.plan, places: data.places });
+        .then((plan, places) => {
+          this.setState({ plan, places });
         })
         .catch(error => {
           console.log(
@@ -93,7 +95,7 @@ class PlanApp extends React.Component {
 
   async fetchPlan(userId, planId) {
     try {
-      return await getPlan(userId, parseInt(planId));
+      return await getPlan(userId, planId);
     } catch (error) {
       console.log(
         `An error occurred when attempting to retrieve the plan: ${error.message}`
@@ -101,40 +103,48 @@ class PlanApp extends React.Component {
     }
   }
 
-  async fetchPlaces(placeIds) {
-    return placeIds.map(async placeId => {
-      try {
-        const placeResults = await axiosPlaceDetailsInstance.get("/", {
-          params: {
-            fields: constants.PLACES_API_FIELDS.join(),
-            place_id: placeId
+  fetchPlaces(placeIds) {
+    // const { google } = mapProps;
+    const placesService = new window.google.maps.places.PlacesService(
+      document.createElement("div")
+    );
+    const places = [];
+    placeIds.forEach(placeId => {
+      placesService.getDetails(
+        {
+          fields: constants.PLACES_API_FIELDS,
+          placeId: placeId
+        },
+        (placeResults, status) => {
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            places.push({
+              placeId: placeResults.place_id,
+              name: placeResults.name,
+              businessStatus: placeResults.business_status,
+              formattedAddress: placeResults.formatted_address,
+              location: placeResults.geometry.location,
+              openingHours: placeResults.opening_hours,
+              icon: placeResults.icon,
+              photos: placeResults.photos,
+              priceLevel: placeResults.price_level,
+              rating: placeResults.rating,
+              website: placeResults.website
+            });
+          } else {
+            console.log(
+              `There was an error fetching place details data: ${status}`
+            );
           }
-        });
-        return {
-          placeId: placeResults.place_id,
-          name: placeResults.name,
-          businessStatus: placeResults.business_status,
-          formattedAddress: placeResults.formatted_address,
-          location: placeResults.geometry.location,
-          openingHours: placeResults.opening_hours,
-          icon: placeResults.icon,
-          photos: placeResults.photos,
-          priceLevel: placeResults.price_level,
-          rating: placeResults.rating,
-          website: placeResults.website
-        };
-      } catch (error) {
-        console.log(
-          `An error occurred while retrieving the places data: ${error.message}`
-        );
-      }
+        }
+      );
     });
+    return places;
   }
 
   addPlace(placeResults, input) {
     // Clear input
     input.value = "";
-    console.log(placeResults);
+
     this.setState({
       places: [
         ...this.state.places,
@@ -177,25 +187,25 @@ class PlanApp extends React.Component {
   }
 
   // Google doesn't allow storage of Places API data for more than 30 days,
-    // with the sole exception being the the placeId attribute.
-    // Based on their terms and conditions, the placeId can be stored indefinitely
-    // https://developers.google.com/places/web-service/policies
-    
+  // with the sole exception being the the placeId attribute.
+  // Based on their terms and conditions, the placeId can be stored indefinitely
+  // https://developers.google.com/places/web-service/policies
+
   async storePlan() {
-    if(this.state.places.length === 0) {
+    if (this.state.places.length === 0) {
       console.log("Please choose at least one place.");
     } else {
       const plan = { ...this.state.plan };
-    plan.placeIds = this.state.places.map(place => place.placeId);
-    try {
-      await addPlan(this.context.currentUser.userId, plan);
-      this.props.history.push(`/users/${this.context.currentUser.displayName}`);
-    } catch (error) {
-      console.log(`Error in saving plan information: ${error.message}`);
+      plan.placeIds = this.state.places.map(place => place.placeId);
+      try {
+        await addPlan(this.context.currentUser.userId, plan);
+        this.props.history.push(
+          `/users/${this.context.currentUser.displayName}`
+        );
+      } catch (error) {
+        console.log(`Error in saving plan information: ${error.message}`);
+      }
     }
-    }
-
-    
   }
 
   toggleView() {
@@ -221,6 +231,7 @@ class PlanApp extends React.Component {
     // if (!this.context.isLoggedIn) {
     //   return <Redirect to="/" />;
     // } else {
+
     const sortedPlaces = this.sortPlaces(this.state.places);
     return (
       <>
