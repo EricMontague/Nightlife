@@ -13,7 +13,7 @@ const Plan = props => {
         <h3 className="plan-card-title">{props.plan.title}</h3>
         <div className="flex-row align-items space-between">
           <p className="text-medium font-size-sm">
-            {formatDateTime(props.plan.datetime)}
+            {formatDateTime(new Date(props.plan.date + " " + props.plan.time))}
           </p>
         </div>
         <p className="py-1">{props.plan.description}</p>
@@ -37,10 +37,11 @@ export default Plan;
 
 Plan.propTypes = {
   plan: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    planId: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    datetime: PropTypes.instanceOf(Date).isRequired,
+    time: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     placeIds: PropTypes.arrayOf(PropTypes.string.isRequired)
   }),
