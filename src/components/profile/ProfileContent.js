@@ -32,7 +32,7 @@ const ProfileContent = props => {
 ProfileContent.propTypes = {
   plans: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      planId: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       datetime: PropTypes.instanceOf(Date).isRequired,
