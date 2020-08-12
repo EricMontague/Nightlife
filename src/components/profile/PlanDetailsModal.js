@@ -54,7 +54,7 @@ const PlanDetailsModal = props => {
 
 PlanDetailsModal.propTypes = {
   plan: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    planId: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     datetime: PropTypes.instanceOf(Date).isRequired,
