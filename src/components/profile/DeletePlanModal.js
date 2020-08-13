@@ -2,6 +2,25 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const DeletePlanModal = props => {
+  const handleDeleteBtnClick = event => {
+    event.target.parentElement.parentElement.classList.replace(
+      "animation-slide-down",
+      "animation-slide-up"
+    );
+    setTimeout(() => {
+      props.toggleModal(props.plan);
+      props.handleDeleteClick(props.plan.planId);
+    }, 400);
+  };
+
+  const handleCancelBtnClick = event => {
+    event.target.parentElement.parentElement.classList.replace(
+      "animation-slide-down",
+      "animation-slide-up"
+    );
+    setTimeout(() => props.toggleModal(props.plan), 400);
+  };
+
   return (
     <div className="modal">
       <div className="modal-container-centered">
@@ -18,32 +37,17 @@ const DeletePlanModal = props => {
           <div className="modal-footer justify-center">
             <button
               type="button"
-              className="btn btn-light btn-shadow"
-              onClick={event => {
-                event.target.parentElement.parentElement.classList.replace(
-                  "animation-slide-down",
-                  "animation-slide-up"
-                );
-                setTimeout(() => props.toggleModal(props.plan), 400);
-              }}
+              className="btn btn-primary btn-shadow"
+              onClick={handleDeleteBtnClick}
             >
-              Close
+              Delete
             </button>
             <button
               type="button"
-              className="btn btn-primary btn-shadow"
-              onClick={event => {
-                event.target.parentElement.parentElement.classList.replace(
-                  "animation-slide-down",
-                  "animation-slide-up"
-                );
-                setTimeout(() => {
-                  props.toggleModal(props.plan);
-                  props.handleDeleteClick(props.plan.id);
-                }, 400);
-              }}
+              className="btn btn-light btn-shadow"
+              onClick={handleCancelBtnClick}
             >
-              Delete
+              Close
             </button>
           </div>
         </div>
