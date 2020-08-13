@@ -48,7 +48,7 @@ class PlanApp extends React.Component {
       ]
     };
     this.fetchPlan = this.fetchPlan.bind(this);
-    this.fetchPlaces = this.fetchPlaces.bind(this);
+    this.setInitialState = this.setInitialState.bind(this);
     this.addPlace = this.addPlace.bind(this);
     this.deletePlace = this.deletePlace.bind(this);
     this.setPlanDetails = this.setPlanDetails.bind(this);
@@ -62,34 +62,31 @@ class PlanApp extends React.Component {
   static contextType = AuthContext;
 
   componentDidMount() {
-    const match = matchPath(this.props.match.path, {
+    const matchEditPath = matchPath(this.props.match.path, {
       path: "/plans/:plan_id/edit",
       exact: true,
       strict: false
     });
+    const matchReadOnlyPath = matchPath(this.props.match.path, {
+      path: "/plans/:plan_id/view",
+      exact: true,
+      strict: false
+    });
     // User is on the editting page
-    if (match) {
-      this.fetchPlan(
-        "3Y4sv2EpUHTzirLFUENmSiMPKbz2",
-        "428a054d-ced3-41a3-be60-753b09a85998"
-      )
-        .then(plan => {
-          return {
-            plan: plan,
-            places: this.fetchPlaces(plan.placeIds)
-          };
-        })
-        .then((plan, places) => {
-          this.setState({ plan, places });
-        })
-        .catch(error => {
-          console.log(
-            `An error occurred when loading the plan and places: ${error.message}`
-          );
-          this.props.history.push(
-            `/users/${this.context.currentUser.displayName}`
-          );
-        });
+    if (matchEditPath || matchReadOnlyPath) {
+      const splitPath = this.props.location.pathname.split("/");
+      this.getInitialState(this.context.currentUser.userId, splitPath[2]);
+    }
+  }
+
+  async getInitialState(userId, planId) {
+    try {
+      const plan = await this.fetchPlan(userId, planId);
+      this.setInitialState(plan);
+    } catch (error) {
+      console.log(
+        `An error occurred when setting the initial State: ${error.message}`
+      );
     }
   }
 
@@ -103,12 +100,13 @@ class PlanApp extends React.Component {
     }
   }
 
-  fetchPlaces(placeIds) {
+  setInitialState(plan) {
     // const { google } = mapProps;
     const placesService = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
-    const places = [];
+    const placeIds = plan.placeIds;
+    delete plan.placeIds;
     placeIds.forEach(placeId => {
       placesService.getDetails(
         {
@@ -117,7 +115,7 @@ class PlanApp extends React.Component {
         },
         (placeResults, status) => {
           if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-            places.push({
+            const place = {
               placeId: placeResults.place_id,
               name: placeResults.name,
               businessStatus: placeResults.business_status,
@@ -129,6 +127,11 @@ class PlanApp extends React.Component {
               priceLevel: placeResults.price_level,
               rating: placeResults.rating,
               website: placeResults.website
+            };
+
+            this.setState({
+              plan: plan,
+              places: [...this.state.places, place]
             });
           } else {
             console.log(
@@ -138,7 +141,6 @@ class PlanApp extends React.Component {
         }
       );
     });
-    return places;
   }
 
   addPlace(placeResults, input) {
@@ -173,15 +175,10 @@ class PlanApp extends React.Component {
 
   // Add or update a plan
   setPlanDetails(plan) {
-    console.log("Plan details:");
-    console.log(plan);
     this.setState({
       plan: {
         planId: uuidv4(),
-        title: plan.title,
-        description: plan.description,
-        date: plan.date,
-        time: plan.time
+        ...plan
       }
     });
   }
@@ -207,6 +204,8 @@ class PlanApp extends React.Component {
       }
     }
   }
+
+  async updatePlan() {}
 
   toggleView() {
     this.setState({ isDiscoverView: !this.state.isDiscoverView });
@@ -288,6 +287,12 @@ PlanApp.propTypes = {
     goBack: PropTypes.func.isRequired,
     goForward: PropTypes.func.isRequired,
     block: PropTypes.func.isRequired
+  }),
+  location: PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
+    hash: PropTypes.string.isRequired
   })
 };
 
