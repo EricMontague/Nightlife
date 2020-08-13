@@ -15,19 +15,24 @@ const PlanDetailsModal = props => {
             <h3 className="modal-title">{props.plan.title}</h3>
             <div className="flex-row align-items space-between">
               <p className="text-medium font-size-sm">
-                {formatDateTime(props.plan.datetime)}
+                {formatDateTime(
+                  new Date(props.plan.date + " " + props.plan.time)
+                )}
               </p>
             </div>
           </div>
           <div className="modal-body">
             <p className="py-1">{props.plan.description}</p>
             <p>
-              <Link to="/plans/view" className="link">
+              <Link to={`/plans/${props.plan.planId}/view`} className="link">
                 View Plan Details
               </Link>
             </p>
           </div>
           <div className="modal-footer">
+            <button type="button" className="btn btn-secondary btn-shadow">
+              Edit
+            </button>
             <button
               type="button"
               className="btn btn-light btn-shadow"
@@ -42,9 +47,6 @@ const PlanDetailsModal = props => {
             >
               Close
             </button>
-            <button type="button" className="btn btn-secondary btn-shadow">
-              Edit
-            </button>
           </div>
         </div>
       </div>
@@ -57,7 +59,8 @@ PlanDetailsModal.propTypes = {
     planId: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    datetime: PropTypes.instanceOf(Date).isRequired,
+    time: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     placeIds: PropTypes.arrayOf(PropTypes.string.isRequired)
   }),
