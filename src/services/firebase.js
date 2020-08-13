@@ -148,6 +148,27 @@ export const updatePlan = async (userId, newPlan) => {
 };
 
 export const deletePlan = async (userId, planId) => {
+  let userDocument;
+
+  try {
+    userDocument = await getUserDocument(userId);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+
+  userDocument.plans = userDocument.plans.filter(plan => {
+    return plan.planId !== planId;
+  });
+
+  try {
+    await firestore.doc(`users/${userId}`).update(userDocument);
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+};
+
+export const deleteUser = async userId => {
   try {
     await firestore.doc(`users/${userId}`).delete();
   } catch (error) {
