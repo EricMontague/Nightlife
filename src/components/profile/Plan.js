@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { formatDateTime } from "../../services/dateTimeHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
@@ -18,7 +19,10 @@ const Plan = props => {
         </div>
         <p className="py-1">{props.plan.description}</p>
         <div className="icons">
-          <FontAwesomeIcon icon={["fa", "edit"]} />
+          <Link to={`/plans/${props.plan.planId}/edit`}>
+            <FontAwesomeIcon icon={["fa", "edit"]} />
+          </Link>
+
           <FontAwesomeIcon
             icon={["fa", "trash-alt"]}
             onClick={() => props.toggleDeletePlanModal(props.plan)}
