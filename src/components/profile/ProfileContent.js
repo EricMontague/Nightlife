@@ -1,5 +1,5 @@
 import React from "react";
-import Plans from "./Plans";
+import PlanList from "./PlanList";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
@@ -19,7 +19,7 @@ const ProfileContent = props => {
     return (
       <div className="container">
         <h1 className="section-header">View Your Plans</h1>
-        <Plans
+        <PlanList
           plans={props.plans}
           toggleDeletePlanModal={props.toggleDeletePlanModal}
           togglePlanDetailsModal={props.togglePlanDetailsModal}
@@ -35,7 +35,8 @@ ProfileContent.propTypes = {
       planId: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
-      datetime: PropTypes.instanceOf(Date).isRequired,
+      time: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
       image: PropTypes.string.isRequired,
       placeIds: PropTypes.arrayOf(PropTypes.string.isRequired)
     })

@@ -2,7 +2,7 @@ import React from "react";
 import Plan from "./Plan";
 import PropTypes from "prop-types";
 
-const Plans = props => {
+const PlanList = props => {
   return (
     <div className="plan-cards-container">
       {props.plans.map(plan => {
@@ -19,7 +19,7 @@ const Plans = props => {
   );
 };
 
-Plans.propTypes = {
+PlanList.propTypes = {
   plans: PropTypes.arrayOf(
     PropTypes.shape({
       planId: PropTypes.string.isRequired,
@@ -35,4 +35,4 @@ Plans.propTypes = {
   togglePlanDetailsModal: PropTypes.func.isRequired
 };
 
-export default Plans;
+export default PlanList;
