@@ -33,10 +33,10 @@ class DiscoverView extends React.Component {
   }
 
   render() {
-    const title = this.props.readOnly ? "Your Places" : "Discover Places";
+    const title = this.props.isReadOnly ? "Your Places" : "Discover Places";
     return (
       <div className="card">
-        {!this.props.readOnly && (
+        {!this.props.isReadOnly && (
           <SelectList
             inputName="sort-by"
             labelName="Sort By"
@@ -68,7 +68,11 @@ class DiscoverView extends React.Component {
             />
           )}
         </div>
-        <PlaceList places={this.props.places} />
+        <PlaceList
+          places={this.props.places}
+          handleDeleteClick={this.props.handleDeleteClick}
+          isReadOnly={this.props.isReadOnly}
+        />
         {!this.props.isReadOnly && (
           <>
             <button
@@ -101,12 +105,45 @@ DiscoverView.propTypes = {
   handleSelectListChange: PropTypes.func.isRequired,
   places: PropTypes.arrayOf(
     PropTypes.shape({
+      placeId: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      address: PropTypes.string.isRequired,
-      rating: PropTypes.number.isRequired,
-      priciness: PropTypes.string.isRequired
+      businessStatus: PropTypes.string.isRequired,
+      formattedAddress: PropTypes.string.isRequired,
+      location: PropTypes.objectOf(PropTypes.func.isRequired),
+      openingHours: PropTypes.shape({
+        isOpen: PropTypes.func.isRequired,
+        periods: PropTypes.arrayOf(
+          PropTypes.shape({
+            close: PropTypes.shape({
+              day: PropTypes.number.isRequired,
+              time: PropTypes.string.isRequired,
+              hours: PropTypes.number.isRequired,
+              minutes: PropTypes.number.isRequired
+            }),
+            open: PropTypes.shape({
+              day: PropTypes.number.isRequired,
+              time: PropTypes.string.isRequired,
+              hours: PropTypes.number.isRequired,
+              minutes: PropTypes.number.isRequired
+            })
+          })
+        )
+      }),
+      icon: PropTypes.string.isRequired,
+      photos: PropTypes.arrayOf(
+        PropTypes.shape({
+          getUrl: PropTypes.func.isRequired,
+          height: PropTypes.number.isRequired,
+          html_attributions: PropTypes.arrayOf(PropTypes.string.isRequired),
+          width: PropTypes.number.isRequired
+        })
+      ),
+      priceLevel: PropTypes.number,
+      rating: PropTypes.number,
+      website: PropTypes.string
     })
   ),
+
   isReadOnly: PropTypes.bool.isRequired
 };
 
