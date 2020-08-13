@@ -41,6 +41,21 @@ class PlanDetailsForm extends React.Component {
     this.validateOnSubmit = this.validateOnSubmit.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.plan !== this.props.plan) {
+      console.log("Calling componentDidUpdate");
+      console.log(this.props.plan);
+      this.setState({
+        fields: {
+          title: this.props.plan.title,
+          description: this.props.plan.description,
+          date: this.props.plan.date,
+          time: this.props.plan.time
+        }
+      });
+    }
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     this.validateOnSubmit().then(() => {
@@ -202,23 +217,7 @@ class PlanDetailsForm extends React.Component {
 PlanDetailsForm.propTypes = {
   toggleView: PropTypes.func.isRequired,
   setPlanDetails: PropTypes.func.isRequired,
-  plan: PropTypes.shape({
-    placeId: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    businessStatus: PropTypes.string.isRequired,
-    formattedAddress: PropTypes.string.isRequired,
-    location: PropTypes.objectOf(PropTypes.func.isRequired),
-    openingHours: PropTypes.shape({
-      isOpen: PropTypes.func.isRequired,
-      periods: PropTypes.arrayOf(PropTypes.string.isRequired),
-      weekdayText: PropTypes.arrayOf(PropTypes.string.isRequired)
-    }),
-    icon: PropTypes.string.isRequired,
-    photos: PropTypes.arrayOf(PropTypes.string.isRequired),
-    priceLevel: PropTypes.number.isRequired,
-    rating: PropTypes.number.isRequired,
-    website: PropTypes.string.isRequired
-  })
+  plan: PropTypes.objectOf(PropTypes.string.isRequired)
 };
 
 export default PlanDetailsForm;
