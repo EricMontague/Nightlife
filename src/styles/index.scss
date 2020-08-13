@@ -21,7 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: $website-width;
+    // max-width: $website-width;
     margin: auto;
     padding: 0 2.5rem;
     height: 100%;
@@ -348,6 +348,14 @@
 .text {
   &-center {
     text-align: center;
+  }
+
+  &-md {
+    font-size: 2rem;
+  }
+
+  &-lg {
+    font-size: 3rem;
   }
 
   &-primary {
@@ -742,13 +750,14 @@
     padding-bottom: 0.5rem;
     height: 100%;
 
-    svg {
+    a svg {
+      margin-right: 0.5rem;
+      color: $secondary-color !important;
+    }
+
+    & > svg {
       cursor: pointer;
       margin-right: 0.5rem;
-
-      &:first-child {
-        color: $secondary-color;
-      }
 
       &:nth-child(2) {
         color: $primary-color;

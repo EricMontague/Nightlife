@@ -82,6 +82,16 @@
       overflow-y: scroll;
     }
   }
+
+  .text {
+    &-md {
+      font-size: 1.5rem;
+    }
+
+    &-lg {
+      font-size: 2.5rem;
+    }
+  }
 }
 
 @media screen and (max-width: 300px) {
