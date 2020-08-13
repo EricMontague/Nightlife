@@ -18,19 +18,60 @@ const Place = props => {
       </div>
       <div className="place-card-footer">
         <p>View Details</p>
-        <FontAwesomeIcon icon={["fa", "trash-alt"]} />
+        {!props.isReadOnly && (
+          <FontAwesomeIcon
+            icon={["fa", "trash-alt"]}
+            onClick={() => props.handleDeleteClick(props.place.placeId)}
+          />
+        )}
       </div>
     </div>
   );
 };
 
 Place.propTypes = {
-  place: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    rating: PropTypes.number.isRequired,
-    priceLevel: PropTypes.number.isRequired,
-    formattedAddress: PropTypes.string.isRequired
-  })
+  places: PropTypes.arrayOf(
+    PropTypes.shape({
+      placeId: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      businessStatus: PropTypes.string.isRequired,
+      formattedAddress: PropTypes.string.isRequired,
+      location: PropTypes.objectOf(PropTypes.func.isRequired),
+      openingHours: PropTypes.shape({
+        isOpen: PropTypes.func.isRequired,
+        periods: PropTypes.arrayOf(
+          PropTypes.shape({
+            close: PropTypes.shape({
+              day: PropTypes.number.isRequired,
+              time: PropTypes.string.isRequired,
+              hours: PropTypes.number.isRequired,
+              minutes: PropTypes.number.isRequired
+            }),
+            open: PropTypes.shape({
+              day: PropTypes.number.isRequired,
+              time: PropTypes.string.isRequired,
+              hours: PropTypes.number.isRequired,
+              minutes: PropTypes.number.isRequired
+            })
+          })
+        )
+      }),
+      icon: PropTypes.string.isRequired,
+      photos: PropTypes.arrayOf(
+        PropTypes.shape({
+          getUrl: PropTypes.func.isRequired,
+          height: PropTypes.number.isRequired,
+          html_attributions: PropTypes.arrayOf(PropTypes.string.isRequired),
+          width: PropTypes.number.isRequired
+        })
+      ),
+      priceLevel: PropTypes.number,
+      rating: PropTypes.number,
+      website: PropTypes.string
+    })
+  ),
+  handleDeleteClick: PropTypes.func.isRequired,
+  isReadOnly: PropTypes.bool.isRequired
 };
 
 export default Place;
