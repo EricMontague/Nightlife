@@ -29,9 +29,13 @@ const App = () => {
             />
             <Route
               exact
-              path={["/plans/create", "/plans/view", "/plans/:plan_id/edit"]}
-              render={({ match, history }) => (
-                <PlanApp match={match} history={history} />
+              path={[
+                "/plans/create",
+                "/plans/:plan_id/view",
+                "/plans/:plan_id/edit"
+              ]}
+              render={({ match, history, location }) => (
+                <PlanApp match={match} history={history} location={location} />
               )}
             />
             <Route exact path="*" render={() => <NotFound />} />
