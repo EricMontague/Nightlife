@@ -19,21 +19,21 @@ class ProfileApp extends React.Component {
 
     this.hasPlacesLibraryScript = this.hasPlacesLibraryScript.bind(this);
     this.loadScriptUrl = this.loadScriptUrl.bind(this);
-    this.fetchData = this.fetchData.bind(this);
+    this.getInitialState = this.getInitialState.bind(this);
     this.fetchPlans = this.fetchPlans.bind(this);
-    this.fetchPhotoUrls = this.fetchPhotoUrls.bind(this);
+    this.setInitialState = this.setInitialState.bind(this);
     this.deletePlan = this.deletePlan.bind(this);
     this.togglePlanDetailsModal = this.togglePlanDetailsModal.bind(this);
     this.toggleDeletePlanModal = this.toggleDeletePlanModal.bind(this);
     this.googleMapsScriptUrl = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GCP_API_KEY}`;
-    window.fetchData = this.fetchData; // necessary to properly setup the callback for the places API
+    window.getInitialState = this.getInitialState; // necessary to properly setup the callback for the places API
   }
 
   static contextType = AuthContext;
 
   componentDidMount() {
     const placesLibrary = "&libraries=places";
-    const callback = "&callback=fetchData";
+    const callback = "&callback=getInitialState";
     if (!this.hasPlacesLibraryScript(placesLibrary)) {
       this.loadScriptUrl(this.googleMapsScriptUrl + callback + placesLibrary);
     }
@@ -68,10 +68,10 @@ class ProfileApp extends React.Component {
     document.body.appendChild(scriptElement);
   }
 
-  async fetchData() {
+  async getInitialState() {
     try {
       const plans = await this.fetchPlans();
-      this.fetchPhotoUrls(plans);
+      this.setInitialState(plans);
     } catch (error) {
       console.log(
         `An error occurred while retrieving plans and photos: ${error.message}`
@@ -87,7 +87,7 @@ class ProfileApp extends React.Component {
     }
   }
 
-  fetchPhotoUrls(plans) {
+  setInitialState(plans) {
     const placesService = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
@@ -117,7 +117,7 @@ class ProfileApp extends React.Component {
   async deletePlan(planId) {
     let deleted = false;
     try {
-      await deletePlan(planId); // firebase function
+      await deletePlan(this.context.currentUser.userId, planId); // firebase function
       deleted = true;
     } catch (error) {
       console.log(`Error in deleting the plan: ${error.message}`);
@@ -125,7 +125,7 @@ class ProfileApp extends React.Component {
     if (deleted) {
       this.setState({
         plans: this.state.plans.filter(plan => {
-          return plan.id !== planId;
+          return plan.planId !== planId;
         })
       });
     }
