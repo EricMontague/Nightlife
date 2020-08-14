@@ -1,7 +1,6 @@
 import React from "react";
 import { AuthContext } from "../../context/AuthProvider";
-import { addPlan, getPlan } from "../../services/firebase";
-import { matchPath } from "react-router-dom";
+import { addPlan, getPlan, updatePlan } from "../../services/firebase";
 import CreatePlan from "./CreatePlan";
 import PlaceDetailsModal from "./PlaceDetailsModal";
 import Map from "./Map";
@@ -10,14 +9,16 @@ import { formatDate } from "../../services/dateTimeHelpers";
 import constants from "../../services/constants";
 import sortRunner from "../../algorithms/sortPlaces";
 import PropTypes from "prop-types";
+import { trimObjectFieldValues } from "../../services/helpers";
 
 class PlanApp extends React.Component {
   constructor(props) {
     super(props);
+    this.splitPath = this.props.location.pathname.split("/");
     this.state = {
       isPlaceModalVisible: false,
       isDiscoverView: false,
-      isReadOnly: this.props.match.path.includes(constants.DISCOVER_MODE.VIEW),
+      discoverMode: this.splitPath[this.splitPath.length - 1],
       selectedPlace: null,
       sortOrder: "",
       plan: {
@@ -27,29 +28,13 @@ class PlanApp extends React.Component {
         date: formatDate(new Date()),
         time: new Date().toTimeString().slice(0, 5)
       },
-      places: [
-        // {
-        //   placeId: "12345",
-        //   name: "Place One",
-        //   businessStatus: "OPERATIONAL",
-        //   formattedAddress: "1421 Sansom St, Philadelphia, PA 19102, USA",
-        //   location: { lat: "Lat function here", lng: "Lng function here" },
-        //   openingHours: {
-        //     isOpen: "isOpen function",
-        //     periods: [],
-        //     weekdayText: []
-        //   },
-        //   icon: "",
-        //   photos: [],
-        //   priceLevel: 2,
-        //   rating: 4.4,
-        //   website: "http://www.tinder.com"
-        // }
-      ]
+      places: []
     };
     this.fetchPlan = this.fetchPlan.bind(this);
+    this.fetchPlaces = this.fetchPlaces.bind(this);
     this.setInitialState = this.setInitialState.bind(this);
     this.addPlace = this.addPlace.bind(this);
+    this.updatePlan = this.updatePlan.bind(this);
     this.deletePlace = this.deletePlace.bind(this);
     this.setPlanDetails = this.setPlanDetails.bind(this);
     this.storePlan = this.storePlan.bind(this);
@@ -62,27 +47,23 @@ class PlanApp extends React.Component {
   static contextType = AuthContext;
 
   componentDidMount() {
-    const matchEditPath = matchPath(this.props.match.path, {
-      path: "/plans/:plan_id/edit",
-      exact: true,
-      strict: false
-    });
-    const matchReadOnlyPath = matchPath(this.props.match.path, {
-      path: "/plans/:plan_id/view",
-      exact: true,
-      strict: false
-    });
     // User is on the editting page
-    if (matchEditPath || matchReadOnlyPath) {
-      const splitPath = this.props.location.pathname.split("/");
-      this.getInitialState(this.context.currentUser.userId, splitPath[2]);
+    const page = this.splitPath[this.splitPath.length - 1];
+    if (
+      page === constants.DISCOVER_MODE.EDIT ||
+      page === constants.DISCOVER_MODE.VIEW
+    ) {
+      this.getInitialState(this.context.currentUser.userId, this.splitPath[2]);
     }
   }
 
   async getInitialState(userId, planId) {
     try {
       const plan = await this.fetchPlan(userId, planId);
-      this.setInitialState(plan);
+      this.setState({
+        plan
+      });
+      this.fetchPlaces(plan);
     } catch (error) {
       console.log(
         `An error occurred when setting the initial State: ${error.message}`
@@ -100,46 +81,41 @@ class PlanApp extends React.Component {
     }
   }
 
-  setInitialState(plan) {
+  setInitialState(placeResults, status) {
+    if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+      const place = {
+        placeId: placeResults.place_id,
+        name: placeResults.name,
+        businessStatus: placeResults.business_status,
+        formattedAddress: placeResults.formatted_address,
+        location: placeResults.geometry.location,
+        openingHours: placeResults.opening_hours,
+        icon: placeResults.icon,
+        photos: placeResults.photos,
+        priceLevel: placeResults.price_level,
+        rating: placeResults.rating,
+        website: placeResults.website
+      };
+
+      this.setState({
+        places: [...this.state.places, place]
+      });
+    } else {
+      console.log(`There was an error fetching place details data: ${status}`);
+    }
+  }
+
+  fetchPlaces(plan) {
     // const { google } = mapProps;
     const placesService = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
-    const placeIds = plan.placeIds;
-    delete plan.placeIds;
-    placeIds.forEach(placeId => {
-      placesService.getDetails(
-        {
-          fields: constants.PLACES_API_FIELDS,
-          placeId: placeId
-        },
-        (placeResults, status) => {
-          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-            const place = {
-              placeId: placeResults.place_id,
-              name: placeResults.name,
-              businessStatus: placeResults.business_status,
-              formattedAddress: placeResults.formatted_address,
-              location: placeResults.geometry.location,
-              openingHours: placeResults.opening_hours,
-              icon: placeResults.icon,
-              photos: placeResults.photos,
-              priceLevel: placeResults.price_level,
-              rating: placeResults.rating,
-              website: placeResults.website
-            };
-
-            this.setState({
-              plan: plan,
-              places: [...this.state.places, place]
-            });
-          } else {
-            console.log(
-              `There was an error fetching place details data: ${status}`
-            );
-          }
-        }
-      );
+    plan.placeIds.forEach(placeId => {
+      const placeRequest = {
+        fields: constants.PLACES_API_FIELDS,
+        placeId: placeId
+      };
+      placesService.getDetails(placeRequest, this.setInitialState);
     });
   }
 
@@ -175,10 +151,11 @@ class PlanApp extends React.Component {
 
   // Add or update a plan
   setPlanDetails(plan) {
+    const trimmedPlan = trimObjectFieldValues(plan);
     this.setState({
       plan: {
         planId: uuidv4(),
-        ...plan
+        ...trimmedPlan
       }
     });
   }
@@ -205,7 +182,20 @@ class PlanApp extends React.Component {
     }
   }
 
-  async updatePlan() {}
+  async updatePlan() {
+    if (this.state.places.length === 0) {
+      console.log("Please choose at least one place.");
+    } else {
+      const plan = { ...this.state.plan };
+      plan.placeIds = this.state.places.map(place => place.placeId);
+      try {
+        await updatePlan(this.context.currentUser.userId, plan);
+        this.props.history.push(`/users/${this.context.currentUser.userId}`);
+      } catch (error) {
+        console.log(`Error in updating plan information: ${error.message}`);
+      }
+    }
+  }
 
   toggleView() {
     this.setState({ isDiscoverView: !this.state.isDiscoverView });
@@ -243,13 +233,14 @@ class PlanApp extends React.Component {
               addPlace={this.addPlace}
               deletePlace={placeId => this.deletePlace(placeId)}
               setPlanDetails={plan => this.setPlanDetails(plan)}
+              updatePlan={this.updatePlan}
               storePlan={this.storePlan}
               toggleView={this.toggleView}
               toggleModal={place => this.togglePlaceModal(place)}
               places={sortedPlaces}
               isDiscoverView={this.state.isDiscoverView}
               plan={this.state.plan}
-              isReadOnly={this.state.isReadOnly}
+              discoverMode={this.state.discoverMode}
               changeSortOrder={this.changeSortOrder}
             />
           </div>
