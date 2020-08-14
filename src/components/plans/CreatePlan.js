@@ -1,10 +1,14 @@
 import React from "react";
+import constants from "../../services/constants";
 import DiscoverView from "./DiscoverView";
 import PlanDetailsForm from "./PlanDetailsForm";
 import PropTypes from "prop-types";
 
 const CreatePlan = props => {
-  if (props.isDiscoverView || props.isReadOnly) {
+  if (
+    props.isDiscoverView ||
+    props.discoverMode === constants.DISCOVER_MODE.VIEW
+  ) {
     return (
       <DiscoverView
         handleBackClick={props.toggleView}
@@ -12,8 +16,9 @@ const CreatePlan = props => {
         handlePlaceSelected={props.addPlace}
         handleDeleteClick={props.deletePlace}
         handleSelectListChange={props.changeSortOrder}
+        handleUpdateClick={props.updatePlan}
         places={props.places}
-        isReadOnly={props.isReadOnly}
+        discoverMode={props.discoverMode}
       />
     );
   } else {
@@ -34,7 +39,15 @@ CreatePlan.propTypes = {
   storePlan: PropTypes.func.isRequired,
   isDiscoverView: PropTypes.bool.isRequired,
   setPlanDetails: PropTypes.func.isRequired,
-  plan: PropTypes.objectOf(PropTypes.string.isRequired),
+  updatePlan: PropTypes.func.isRequired,
+  plan: PropTypes.shape({
+    planId: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    time: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    placeIds: PropTypes.arrayOf(PropTypes.string)
+  }),
   places: PropTypes.arrayOf(
     PropTypes.shape({
       placeId: PropTypes.string.isRequired,
@@ -75,7 +88,7 @@ CreatePlan.propTypes = {
       website: PropTypes.string
     })
   ),
-  isReadOnly: PropTypes.bool.isRequired,
+  discoverMode: PropTypes.string.isRequired,
   changeSortOrder: PropTypes.func.isRequired
 };
 
