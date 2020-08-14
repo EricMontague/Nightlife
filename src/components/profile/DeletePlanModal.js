@@ -34,17 +34,17 @@ const DeletePlanModal = props => {
               history.
             </p>
           </div>
-          <div className="modal-footer justify-center">
+          <div className="modal-footer modal-footer-center">
             <button
               type="button"
-              className="btn btn-primary btn-shadow"
+              className="btn btn-primary"
               onClick={handleDeleteBtnClick}
             >
               Delete
             </button>
             <button
               type="button"
-              className="btn btn-light btn-shadow"
+              className="btn btn-light"
               onClick={handleCancelBtnClick}
             >
               Close
