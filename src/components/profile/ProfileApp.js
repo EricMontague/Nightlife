@@ -21,6 +21,7 @@ class ProfileApp extends React.Component {
     this.loadScriptUrl = this.loadScriptUrl.bind(this);
     this.getInitialState = this.getInitialState.bind(this);
     this.fetchPlans = this.fetchPlans.bind(this);
+    this.fetchPlanPhotos = this.fetchPlanPhotos.bind(this);
     this.setInitialState = this.setInitialState.bind(this);
     this.deletePlan = this.deletePlan.bind(this);
     this.togglePlanDetailsModal = this.togglePlanDetailsModal.bind(this);
@@ -71,7 +72,7 @@ class ProfileApp extends React.Component {
   async getInitialState() {
     try {
       const plans = await this.fetchPlans();
-      this.setInitialState(plans);
+      this.fetchPlanPhotos(plans);
     } catch (error) {
       console.log(
         `An error occurred while retrieving plans and photos: ${error.message}`
@@ -87,30 +88,33 @@ class ProfileApp extends React.Component {
     }
   }
 
-  setInitialState(plans) {
+  setInitialState(plan) {
+    const handlePlaceResults = (placeResults, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        const updatedPlan = {
+          ...plan,
+          image: placeResults.photos[0].getUrl()
+        };
+        this.setState({ plans: [...this.state.plans, updatedPlan] });
+      } else {
+        console.log(
+          `There was an error retrieving the place's photo: ${status}`
+        );
+      }
+    };
+    return handlePlaceResults;
+  }
+
+  fetchPlanPhotos(plans) {
     const placesService = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
     plans.forEach(plan => {
-      placesService.getDetails(
-        {
-          fields: ["photo"],
-          placeId: plan.placeIds[0]
-        },
-        (placeResults, status) => {
-          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-            const updatedPlan = {
-              ...plan,
-              image: placeResults.photos[0].getUrl()
-            };
-            this.setState({ plans: [...this.state.plans, updatedPlan] });
-          } else {
-            console.log(
-              `There was an error retrieving the place's photo: ${status}`
-            );
-          }
-        }
-      );
+      const placeRequest = {
+        fields: ["photo"],
+        placeId: plan.placeIds[0]
+      };
+      placesService.getDetails(placeRequest, this.setInitialState(plan));
     });
   }
 
