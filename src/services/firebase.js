@@ -128,7 +128,7 @@ export const addPlan = async (userId, plan) => {
   }
 };
 
-export const updatePlan = async (userId, newPlan) => {
+export const updatePlan = async (userId, updatedPlan) => {
   let userDocument;
   try {
     userDocument = await getUserDocument(userId);
@@ -137,8 +137,10 @@ export const updatePlan = async (userId, newPlan) => {
   }
 
   userDocument.plans = userDocument.plans.map(plan => {
-    return plan.planId === newPlan.planId ? newPlan : plan;
+    return plan.planId === updatedPlan.planId ? updatedPlan : plan;
   });
+
+  console.log(userDocument);
 
   try {
     await firestore.doc(`users/${userId}`).update(userDocument);
