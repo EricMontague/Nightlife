@@ -70,7 +70,7 @@ class PlanDetailsForm extends React.Component {
   handleChange(event) {
     this.setState({
       fields: Object.assign({}, this.state.fields, {
-        [event.target.name]: event.target.value.trim()
+        [event.target.name]: event.target.value
       })
     });
   }
@@ -217,7 +217,14 @@ class PlanDetailsForm extends React.Component {
 PlanDetailsForm.propTypes = {
   toggleView: PropTypes.func.isRequired,
   setPlanDetails: PropTypes.func.isRequired,
-  plan: PropTypes.objectOf(PropTypes.string.isRequired)
+  plan: PropTypes.shape({
+    planId: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    time: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    placeIds: PropTypes.arrayOf(PropTypes.string)
+  })
 };
 
 export default PlanDetailsForm;
