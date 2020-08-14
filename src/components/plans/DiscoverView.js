@@ -33,10 +33,17 @@ class DiscoverView extends React.Component {
   }
 
   render() {
-    const title = this.props.isReadOnly ? "Your Places" : "Discover Places";
+    let title = "Discover Places";
+    if (this.props.discoverMode !== constants.DISCOVER_MODE.CREATE) {
+      title = "Your Places";
+    }
+    let actionBtnText = "Finish";
+    if (this.props.discoverMode === constants.DISCOVER_MODE.EDIT) {
+      actionBtnText = "Update";
+    }
     return (
       <div className="card">
-        {!this.props.isReadOnly && (
+        {this.props.discoverMode !== constants.DISCOVER_MODE.VIEW && (
           <SelectList
             inputName="sort-by"
             labelName="Sort By"
@@ -54,7 +61,7 @@ class DiscoverView extends React.Component {
         )}
         <div className="card-header border-bottom mt-4 pb-2">
           <h3 className="card-title mb-2">{title}</h3>
-          {!this.props.isReadOnly && (
+          {this.props.discoverMode !== constants.DISCOVER_MODE.VIEW && (
             <AutocompleteInputGroup
               autoFocus={true}
               handlePlaceSelected={this.props.handlePlaceSelected}
@@ -71,9 +78,9 @@ class DiscoverView extends React.Component {
         <PlaceList
           places={this.props.places}
           handleDeleteClick={this.props.handleDeleteClick}
-          isReadOnly={this.props.isReadOnly}
+          discoverMode={this.props.discoverMode}
         />
-        {!this.props.isReadOnly && (
+        {this.props.discoverMode !== constants.DISCOVER_MODE.VIEW && (
           <>
             <button
               type="button"
@@ -86,9 +93,13 @@ class DiscoverView extends React.Component {
             <button
               type="button"
               className="btn btn-primary float-right"
-              onClick={this.props.handleFinishClick}
+              onClick={() => {
+                return this.props.discoverMode === constants.DISCOVER_MODE.EDIT
+                  ? this.props.handleUpdateClick()
+                  : this.props.handleFinishClick();
+              }}
             >
-              Finish
+              {actionBtnText}
             </button>
           </>
         )}
@@ -103,6 +114,7 @@ DiscoverView.propTypes = {
   handleFinishClick: PropTypes.func.isRequired,
   handleBackClick: PropTypes.func.isRequired,
   handleSelectListChange: PropTypes.func.isRequired,
+  handleUpdateClick: PropTypes.func.isRequired,
   places: PropTypes.arrayOf(
     PropTypes.shape({
       placeId: PropTypes.string.isRequired,
@@ -144,7 +156,7 @@ DiscoverView.propTypes = {
     })
   ),
 
-  isReadOnly: PropTypes.bool.isRequired
+  discoverMode: PropTypes.string.isRequired
 };
 
 export default DiscoverView;

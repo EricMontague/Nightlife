@@ -1,5 +1,6 @@
 import React from "react";
 import Rating from "./Rating";
+import constants from "../../services/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
@@ -18,7 +19,7 @@ const Place = props => {
       </div>
       <div className="place-card-footer">
         <p>View Details</p>
-        {!props.isReadOnly && (
+        {props.discoverMode !== constants.DISCOVER_MODE.VIEW && (
           <FontAwesomeIcon
             icon={["fa", "trash-alt"]}
             onClick={() => props.handleDeleteClick(props.place.placeId)}
@@ -71,7 +72,7 @@ Place.propTypes = {
     })
   ),
   handleDeleteClick: PropTypes.func.isRequired,
-  isReadOnly: PropTypes.bool.isRequired
+  discoverMode: PropTypes.string.isRequired
 };
 
 export default Place;

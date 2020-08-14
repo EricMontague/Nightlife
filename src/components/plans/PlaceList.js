@@ -11,7 +11,7 @@ const PlaceList = props => {
             key={index}
             place={place}
             handleDeleteClick={props.handleDeleteClick}
-            isReadOnly={props.isReadOnly}
+            discoverMode={props.discoverMode}
           />
         );
       })}
@@ -61,6 +61,6 @@ PlaceList.propTypes = {
     })
   ),
   handleDeleteClick: PropTypes.func.isRequired,
-  isReadOnly: PropTypes.bool.isRequired
+  discoverMode: PropTypes.string.isRequired
 };
 export default PlaceList;
