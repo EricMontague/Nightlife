@@ -23,30 +23,32 @@ const PlanDetailsModal = props => {
           </div>
           <div className="modal-body">
             <p className="py-1">{props.plan.description}</p>
-            <p>
+          </div>
+          <div className="modal-footer">
+            <div className="modal-footer-left">
+              <button type="button" className="btn btn-secondary btn-shadow">
+                Edit
+              </button>
+              <button
+                type="button"
+                className="btn btn-light btn-shadow"
+                // Need to look into react-transition-group instead of this hack
+                onClick={event => {
+                  event.target.parentElement.parentElement.classList.replace(
+                    "animation-slide-down",
+                    "animation-slide-up"
+                  );
+                  setTimeout(() => props.toggleModal(props.plan), 400);
+                }}
+              >
+                Close
+              </button>
+            </div>
+            <div className="modal-footer-right">
               <Link to={`/plans/${props.plan.planId}/view`} className="link">
                 View Plan Details
               </Link>
-            </p>
-          </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-secondary btn-shadow">
-              Edit
-            </button>
-            <button
-              type="button"
-              className="btn btn-light btn-shadow"
-              // Need to look into react-transition-group instead of this hack
-              onClick={event => {
-                event.target.parentElement.parentElement.classList.replace(
-                  "animation-slide-down",
-                  "animation-slide-up"
-                );
-                setTimeout(() => props.toggleModal(props.plan), 400);
-              }}
-            >
-              Close
-            </button>
+            </div>
           </div>
         </div>
       </div>
