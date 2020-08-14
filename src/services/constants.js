@@ -14,7 +14,7 @@ const constants = Object.freeze({
   ],
   DISCOVER_MODE: {
     CREATE: "create",
-    UPDATE: "update",
+    EDIT: "edit",
     VIEW: "view" // read-only
   },
   SORT_BY_RATING_ASC: "Rating: low to high",
