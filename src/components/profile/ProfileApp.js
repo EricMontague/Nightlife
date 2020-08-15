@@ -1,11 +1,17 @@
 import React from "react";
 import { AuthContext } from "../../context/AuthProvider";
 import { getPlans, deletePlan } from "../../services/firebase";
+import {
+  hasGoogleScript,
+  removeGoogleScript,
+  loadGoogleScript
+} from "../../services/helpers";
 import { Redirect } from "react-router-dom";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
 import PlanDetailsModal from "./PlanDetailsModal";
 import DeletePlanModal from "./DeletePlanModal";
+import constants from "../../services/constants";
 
 class ProfileApp extends React.Component {
   constructor() {
@@ -17,8 +23,6 @@ class ProfileApp extends React.Component {
       plans: []
     };
 
-    this.hasPlacesLibraryScript = this.hasPlacesLibraryScript.bind(this);
-    this.loadScriptUrl = this.loadScriptUrl.bind(this);
     this.getInitialState = this.getInitialState.bind(this);
     this.fetchPlans = this.fetchPlans.bind(this);
     this.fetchPlanPhotos = this.fetchPlanPhotos.bind(this);
@@ -26,7 +30,7 @@ class ProfileApp extends React.Component {
     this.deletePlan = this.deletePlan.bind(this);
     this.togglePlanDetailsModal = this.togglePlanDetailsModal.bind(this);
     this.toggleDeletePlanModal = this.toggleDeletePlanModal.bind(this);
-    this.googleMapsScriptUrl = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GCP_API_KEY}`;
+
     window.getInitialState = this.getInitialState; // necessary to properly setup the callback for the places API
   }
 
@@ -35,38 +39,23 @@ class ProfileApp extends React.Component {
   componentDidMount() {
     const placesLibrary = "&libraries=places";
     const callback = "&callback=getInitialState";
-    if (!this.hasPlacesLibraryScript(placesLibrary)) {
-      this.loadScriptUrl(this.googleMapsScriptUrl + callback + placesLibrary);
+    const urlParameters = [
+      constants.GOOGLE_LIBRARIES.places,
+      this.getInitialState.name
+    ];
+    if (!hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
+      loadGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
     }
   }
 
   componentWillUnmount() {
     // Remove google maps script if present
-    const placesLibrary = "libraries=places";
-    if (this.hasPlacesLibraryScript(placesLibrary)) {
-      document
-        .querySelector(`script[src^="${this.googleMapsScriptUrl}"]`)
-        .remove();
+    const urlParameters = [constants.GOOGLE_LIBRARIES.places];
+    if (
+      hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)
+    ) {
+      removeGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
     }
-  }
-
-  hasPlacesLibraryScript(libraryParameters) {
-    let hasPlacesLibrary = false;
-    document
-      .querySelectorAll(`script[src^="${this.googleMapsScriptUrl}"]`)
-      .forEach(scriptTag => {
-        if (scriptTag.src.includes(libraryParameters)) {
-          hasPlacesLibrary = true;
-        }
-      });
-    return hasPlacesLibrary;
-  }
-
-  loadScriptUrl(scriptUrl) {
-    const scriptElement = document.createElement("script");
-    scriptElement.src = scriptUrl;
-    scriptElement.type = "text/javascript";
-    document.body.appendChild(scriptElement);
   }
 
   async getInitialState() {
