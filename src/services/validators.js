@@ -65,16 +65,43 @@ export const validateDateRange = (min, max) => {
   return validate;
 };
 
+// expects two date objects
+const isSameDay = (dateOne, dateTwo) => {
+  return dateOne.toLocaleDateString() === dateTwo.toLocaleDateString();
+};
+
+// expects two dateobjects
+const isBeforeTime = (originalDate, comparisonDate) => {
+  const [originalHours, originalMinutes] = originalDate
+    .toTimeString()
+    .split(":");
+  const [
+    comparisonHours,
+    comparisonMinutes
+  ] = comparisonDate.toTimeString().split(":");
+  if (
+    parseInt(comparisonHours) < parseInt(originalHours) ||
+    (comparisonHours === originalHours &&
+      parseInt(comparisonMinutes) < parseInt(originalMinutes))
+  ) {
+    return true;
+  }
+  return false;
+};
+
+// expects two date obects
+const isBeforeDate = (originalDate, comparisonDate) => {
+  return comparisonDate.getDate() < originalDate.getDate();
+};
+
 // expects input to be string
-export const validateDateTime = (dateInput, timeInput) => {
+export const validateDateTime = (dateString, timeString) => {
   let message = "";
   const now = new Date();
-  const dateTime = new Date(`${dateInput} ${timeInput}`);
+  const dateTime = new Date(`${dateString} ${timeString}`);
   if (
-    (dateTime.getDate() === now.getDate() &&
-      dateTime.toLocaleTimeString().slice(0, 5) <
-        now.toLocaleTimeString().slice(0, 5)) ||
-    dateTime.getDate() < now.getDate()
+    isSameDay(dateTime, now) &&
+    (isBeforeTime(now, dateTime) || isBeforeDate(now, dateTime))
   ) {
     message = "Time cannot be in the past";
   }
