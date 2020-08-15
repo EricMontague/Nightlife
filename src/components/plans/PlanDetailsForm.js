@@ -43,8 +43,6 @@ class PlanDetailsForm extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.plan !== this.props.plan) {
-      console.log("Calling componentDidUpdate");
-      console.log(this.props.plan);
       this.setState({
         fields: {
           title: this.props.plan.title,
@@ -61,7 +59,7 @@ class PlanDetailsForm extends React.Component {
     this.validateOnSubmit().then(() => {
       if (!this.state.hasError) {
         const plan = { ...this.state.fields };
-        this.props.setPlanDetails(plan);
+        this.props.handleFormSubmission(plan);
         this.props.toggleView();
       }
     });
@@ -216,7 +214,7 @@ class PlanDetailsForm extends React.Component {
 
 PlanDetailsForm.propTypes = {
   toggleView: PropTypes.func.isRequired,
-  setPlanDetails: PropTypes.func.isRequired,
+  handleFormSubmission: PropTypes.func.isRequired,
   plan: PropTypes.shape({
     planId: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
