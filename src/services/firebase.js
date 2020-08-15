@@ -90,17 +90,15 @@ export const getPlan = async (userId, planId) => {
   let userDocument;
   try {
     userDocument = await getUserDocument(userId);
-    return userDocument.plans.find(plan => plan.planId === planId);
   } catch (error) {
     throw new Error(error.message);
   }
+  return userDocument.plans.find(plan => plan.planId === planId);
 };
 
 export const getPlans = async userId => {
-  let userDocument;
-
   try {
-    userDocument = await getUserDocument(userId);
+    const userDocument = await getUserDocument(userId);
     return userDocument.plans;
   } catch (error) {
     throw new Error(error.message);
@@ -136,11 +134,15 @@ export const updatePlan = async (userId, updatedPlan) => {
     throw new Error(error.message);
   }
 
+  console.log("Returned user plans: ");
+  console.log(userDocument.plans);
+
   userDocument.plans = userDocument.plans.map(plan => {
     return plan.planId === updatedPlan.planId ? updatedPlan : plan;
   });
 
-  console.log(userDocument);
+  console.log("Updated user plans: ");
+  console.log(userDocument.plans);
 
   try {
     await firestore.doc(`users/${userId}`).update(userDocument);
