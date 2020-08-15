@@ -33,7 +33,6 @@ class AuthProvider extends React.Component {
         });
       } else if (userAuth && !userAuth.displayName) {
         // user signs in with email and password
-        console.log(userAuth);
         this.retries = 5;
         this.intervalId = setInterval(this.loadUser, 1000, userAuth.uid);
       }
@@ -45,7 +44,6 @@ class AuthProvider extends React.Component {
   }
 
   async loadUser(userId) {
-    console.log(`Attempting to load user. Retries left: ${this.retries}`);
     if (this.retries === 1) {
       clearInterval(this.intervalId);
     }
@@ -68,7 +66,6 @@ class AuthProvider extends React.Component {
   }
 
   render() {
-    console.log(`User Provider state: isLoggedIn - ${this.state.isLoggedIn}`);
     return (
       <AuthContext.Provider
         value={{
