@@ -9,7 +9,11 @@ import { formatDate } from "../../services/dateTimeHelpers";
 import constants from "../../services/constants";
 import sortRunner from "../../algorithms/sortPlaces";
 import PropTypes from "prop-types";
-import { trimObjectFieldValues } from "../../services/helpers";
+import {
+  trimObjectFieldValues,
+  removeGoogleScript,
+  hasGoogleScript
+} from "../../services/helpers";
 
 class PlanApp extends React.Component {
   constructor(props) {
@@ -36,7 +40,8 @@ class PlanApp extends React.Component {
     this.addPlace = this.addPlace.bind(this);
     this.updatePlan = this.updatePlan.bind(this);
     this.deletePlace = this.deletePlace.bind(this);
-    this.setPlanDetails = this.setPlanDetails.bind(this);
+    this.addPlanDetails = this.addPlanDetails.bind(this);
+    this.updatePlanDetails = this.updatePlanDetails.bind(this);
     this.storePlan = this.storePlan.bind(this);
     this.toggleView = this.toggleView.bind(this);
     this.togglePlaceModal = this.togglePlaceModal.bind(this);
@@ -54,6 +59,13 @@ class PlanApp extends React.Component {
       page === constants.DISCOVER_MODE.VIEW
     ) {
       this.getInitialState(this.context.currentUser.userId, this.splitPath[2]);
+    }
+  }
+
+  componentWillUnmount() {
+    const urlParameters = [constants.GOOGLE_LIBRARIES.places];
+    if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
+      removeGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
     }
   }
 
@@ -81,6 +93,20 @@ class PlanApp extends React.Component {
     }
   }
 
+  fetchPlaces(plan) {
+    // const { google } = mapProps;
+    const placesService = new window.google.maps.places.PlacesService(
+      document.createElement("div")
+    );
+    plan.placeIds.forEach(placeId => {
+      const placeRequest = {
+        fields: constants.PLACES_API_FIELDS,
+        placeId: placeId
+      };
+      placesService.getDetails(placeRequest, this.setInitialState);
+    });
+  }
+
   setInitialState(placeResults, status) {
     if (status === window.google.maps.places.PlacesServiceStatus.OK) {
       const place = {
@@ -103,20 +129,6 @@ class PlanApp extends React.Component {
     } else {
       console.log(`There was an error fetching place details data: ${status}`);
     }
-  }
-
-  fetchPlaces(plan) {
-    // const { google } = mapProps;
-    const placesService = new window.google.maps.places.PlacesService(
-      document.createElement("div")
-    );
-    plan.placeIds.forEach(placeId => {
-      const placeRequest = {
-        fields: constants.PLACES_API_FIELDS,
-        placeId: placeId
-      };
-      placesService.getDetails(placeRequest, this.setInitialState);
-    });
   }
 
   addPlace(placeResults, input) {
@@ -150,11 +162,21 @@ class PlanApp extends React.Component {
   }
 
   // Add or update a plan
-  setPlanDetails(plan) {
+  addPlanDetails(plan) {
     const trimmedPlan = trimObjectFieldValues(plan);
     this.setState({
       plan: {
         planId: uuidv4(),
+        ...trimmedPlan
+      }
+    });
+  }
+
+  updatePlanDetails(plan) {
+    const trimmedPlan = trimObjectFieldValues(plan);
+    this.setState({
+      plan: {
+        planId: this.state.plan.planId,
         ...trimmedPlan
       }
     });
@@ -173,12 +195,10 @@ class PlanApp extends React.Component {
       plan.placeIds = this.state.places.map(place => place.placeId);
       try {
         await addPlan(this.context.currentUser.userId, plan);
-        this.props.history.push(
-          `/users/${this.context.currentUser.displayName}`
-        );
       } catch (error) {
         console.log(`Error in saving plan information: ${error.message}`);
       }
+      this.props.history.push(`/users/${this.context.currentUser.displayName}`);
     }
   }
 
@@ -190,10 +210,10 @@ class PlanApp extends React.Component {
       plan.placeIds = this.state.places.map(place => place.placeId);
       try {
         await updatePlan(this.context.currentUser.userId, plan);
-        this.props.history.push(`/users/${this.context.currentUser.userId}`);
       } catch (error) {
         console.log(`Error in updating plan information: ${error.message}`);
       }
+      this.props.history.push(`/users/${this.context.currentUser.displayName}`);
     }
   }
 
@@ -232,7 +252,11 @@ class PlanApp extends React.Component {
             <CreatePlan
               addPlace={this.addPlace}
               deletePlace={placeId => this.deletePlace(placeId)}
-              setPlanDetails={plan => this.setPlanDetails(plan)}
+              setPlanDetails={plan =>
+                this.state.discoverMode === constants.DISCOVER_MODE.CREATE
+                  ? this.addPlanDetails(plan)
+                  : this.updatePlanDetails(plan)
+              }
               updatePlan={this.updatePlan}
               storePlan={this.storePlan}
               toggleView={this.toggleView}
