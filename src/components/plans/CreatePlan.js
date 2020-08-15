@@ -25,7 +25,7 @@ const CreatePlan = props => {
     return (
       <PlanDetailsForm
         toggleView={props.toggleView}
-        setPlanDetails={props.setPlanDetails}
+        handleFormSubmission={props.setPlanDetails}
         plan={props.plan}
       />
     );
