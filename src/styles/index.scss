@@ -1140,27 +1140,9 @@
   }
 }
 
-.sort-results {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-
-  .pipe {
-    display: inline-block;
-    margin-left: 0.3rem;
-  }
-
-  label {
-    font-family: "Open Sans", Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    font-size: 0.95rem;
-    line-height: 1.7;
-  }
-
-  .select-list {
-    font-size: 0.9rem;
-  }
+.pipe {
+  display: inline-block;
+  margin-left: 0.3rem;
 }
 
 .select-list {
