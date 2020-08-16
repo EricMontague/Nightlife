@@ -63,7 +63,7 @@ class PlanApp extends React.Component {
   }
 
   componentWillUnmount() {
-    const urlParameters = [constants.GOOGLE_LIBRARIES.places];
+    const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
     if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
       removeGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
     }
@@ -118,8 +118,8 @@ class PlanApp extends React.Component {
         openingHours: placeResults.opening_hours,
         icon: placeResults.icon,
         photos: placeResults.photos,
-        priceLevel: placeResults.price_level,
-        rating: placeResults.rating,
+        priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
+        rating: placeResults.rating || constants.DEFAULT_RATING,
         website: placeResults.website
       };
 
@@ -134,7 +134,7 @@ class PlanApp extends React.Component {
   addPlace(placeResults, input) {
     // Clear input
     input.value = "";
-
+    console.log(placeResults);
     this.setState({
       places: [
         ...this.state.places,
@@ -147,8 +147,8 @@ class PlanApp extends React.Component {
           openingHours: placeResults.opening_hours,
           icon: placeResults.icon,
           photos: placeResults.photos,
-          priceLevel: placeResults.price_level,
-          rating: placeResults.rating,
+          priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
+          rating: placeResults.rating || constants.DEFAULT_RATING,
           website: placeResults.website
         }
       ]
@@ -242,6 +242,7 @@ class PlanApp extends React.Component {
     // } else {
 
     const sortedPlaces = this.sortPlaces(this.state.places);
+    console.log(sortedPlaces);
     return (
       <>
         <div className="discover-container">
