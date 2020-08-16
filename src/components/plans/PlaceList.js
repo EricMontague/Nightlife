@@ -9,6 +9,7 @@ const PlaceList = props => {
         return (
           <Place
             key={index}
+            position={index + 1}
             place={place}
             handleDeleteClick={props.handleDeleteClick}
             discoverMode={props.discoverMode}
