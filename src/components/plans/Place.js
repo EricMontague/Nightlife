@@ -13,8 +13,16 @@ const Place = props => {
   return (
     <div className="place-card">
       <div className="place-card-body">
-        <h4 className="place-card-title">{props.place.name}</h4>
-        <Rating stars={props.place.rating} />
+        <h4 className="place-card-title">
+          {props.position + ". " + props.place.name}
+        </h4>
+        <Rating
+          stars={
+            props.place.rating === constants.DEFAULT_RATING
+              ? 0
+              : props.place.rating
+          }
+        />
         <p>{addressLine}</p>
       </div>
       <div className="place-card-footer">
