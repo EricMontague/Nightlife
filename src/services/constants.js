@@ -22,7 +22,9 @@ const constants = Object.freeze({
   SORT_BY_RATING_ASC: "Rating: low to high",
   SORT_BY_RATING_DESC: "Rating: high to low",
   SORT_BY_PRICE_LEVEL_ASC: "Price: low to high",
-  SORT_BY_PRICE_LEVEL_DESC: "Price: high to low"
+  SORT_BY_PRICE_LEVEL_DESC: "Price: high to low",
+  DEFAULT_PRICE_LEVEL: 0,
+  DEFAULT_RATING: Number.MIN_VALUE
 });
 
 export default constants;
