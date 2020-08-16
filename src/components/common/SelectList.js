@@ -42,8 +42,8 @@ class SelectList extends React.Component {
     if (!this.props.isVertical) {
       return (
         <div className={"flex-row align-center " + this.props.extraClasses}>
-          <label htmlFor={this.props.inputName}>{this.props.label}</label>
-          <span className="pipe">|</span>
+          <label htmlFor={this.props.inputName}>{this.props.labelName}</label>
+          <div className="pipe">|</div>
           <select
             name={this.props.inputName}
             id={this.props.inputname}
@@ -58,7 +58,7 @@ class SelectList extends React.Component {
     } else {
       return (
         <div>
-          <label htmlFor={this.props.inputName}>{this.props.label}</label>
+          <label htmlFor={this.props.inputName}>{this.props.labelName}</label>
           <select
             name={this.props.inputName}
             id={this.props.inputname}
