@@ -37,23 +37,17 @@ class ProfileApp extends React.Component {
   static contextType = AuthContext;
 
   componentDidMount() {
-    const placesLibrary = "&libraries=places";
-    const callback = "&callback=getInitialState";
-    const urlParameters = [
-      constants.GOOGLE_LIBRARIES.places,
-      this.getInitialState.name
-    ];
+    const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
     if (!hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
+      urlParameters.push("callback=" + this.getInitialState.name.slice(6));
       loadGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
     }
   }
 
   componentWillUnmount() {
     // Remove google maps script if present
-    const urlParameters = [constants.GOOGLE_LIBRARIES.places];
-    if (
-      hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)
-    ) {
+    const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
+    if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
       removeGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
     }
   }
