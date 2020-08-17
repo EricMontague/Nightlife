@@ -42,3 +42,25 @@ export const loadGoogleScript = (sourceAttributeValue, urlParameters) => {
   newScriptElement.type = "text/javascript";
   document.body.appendChild(newScriptElement);
 };
+
+export const reorderElements = (elements, sourceIndex, destinationIndex) => {
+  const length = elements.length;
+  if (
+    sourceIndex < 0 ||
+    sourceIndex >= length ||
+    destinationIndex < 0 ||
+    destinationIndex >= length
+  ) {
+    throw new Error("Array index out of bounds.");
+  }
+  const elementsCopy = elements.splice();
+  const targetElement = elementsCopy[sourceIndex];
+  while (destinationIndex < sourceIndex) {
+    elementsCopy[sourceIndex] = elementsCopy[sourceIndex - 1];
+    sourceIndex -= 1;
+  }
+  if (sourceIndex === destinationIndex) {
+    elementsCopy[sourceIndex] = targetElement;
+  }
+  return elementsCopy;
+};
