@@ -12,7 +12,8 @@ import PropTypes from "prop-types";
 import {
   trimObjectFieldValues,
   removeGoogleScript,
-  hasGoogleScript
+  hasGoogleScript,
+  reorderElements
 } from "../../services/helpers";
 
 class PlanApp extends React.Component {
@@ -47,6 +48,8 @@ class PlanApp extends React.Component {
     this.togglePlaceModal = this.togglePlaceModal.bind(this);
     this.changeSortOrder = this.changeSortOrder.bind(this);
     this.sortPlaces = this.sortPlaces.bind(this);
+    this.dragStartHandler = this.dragStartHandler.bind(this);
+    this.dragEndHandler = this.dragEndHandler.bind(this);
   }
 
   static contextType = AuthContext;
@@ -236,6 +239,33 @@ class PlanApp extends React.Component {
     return sortRunner(places, this.state.sortOrder);
   }
 
+  dragStartHandler() {
+    console.log("Dragging started!");
+  }
+
+  dragEndHandler(result) {
+    console.log("Dragging ended");
+    console.log(result);
+    const { destination, source } = result;
+
+    // dropped outside of list
+    if (!destination) {
+      return;
+    }
+
+    // reorder places array
+    const reorderedPlaces = reorderElements(
+      this.state.places,
+      source.index,
+      destination.index
+    );
+
+    // set state
+    this.setState({
+      places: reorderedPlaces
+    });
+  }
+
   render() {
     // if (!this.context.isLoggedIn) {
     //   return <Redirect to="/" />;
@@ -267,6 +297,8 @@ class PlanApp extends React.Component {
               plan={this.state.plan}
               discoverMode={this.state.discoverMode}
               changeSortOrder={this.changeSortOrder}
+              dragEndHandler={this.dragEndHandler}
+              dragStartHandler={this.dragStartHandler}
             />
           </div>
         </div>
