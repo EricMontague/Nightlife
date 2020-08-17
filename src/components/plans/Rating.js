@@ -30,4 +30,4 @@ Rating.propTypes = {
   stars: PropTypes.number.isRequired
 };
 
-export default Rating;
+export default React.memo(Rating);

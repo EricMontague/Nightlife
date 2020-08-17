@@ -83,4 +83,4 @@ Place.propTypes = {
   discoverMode: PropTypes.string.isRequired
 };
 
-export default Place;
+export default React.memo(Place);
