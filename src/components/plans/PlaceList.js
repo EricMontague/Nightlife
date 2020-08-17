@@ -1,5 +1,6 @@
 import React from "react";
 import Place from "./Place";
+import { Draggable } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
 
 const PlaceList = props => {
@@ -7,13 +8,22 @@ const PlaceList = props => {
     <div className="card-body mb-3">
       {props.places.map((place, index) => {
         return (
-          <Place
-            key={index}
-            position={index + 1}
-            place={place}
-            handleDeleteClick={props.handleDeleteClick}
-            discoverMode={props.discoverMode}
-          />
+          <Draggable key={place.id} draggableId={place.id} index={index}>
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                <Place
+                  position={index + 1}
+                  place={place}
+                  handleDeleteClick={props.handleDeleteClick}
+                  discoverMode={props.discoverMode}
+                />
+              </div>
+            )}
+          </Draggable>
         );
       })}
     </div>
@@ -64,4 +74,4 @@ PlaceList.propTypes = {
   handleDeleteClick: PropTypes.func.isRequired,
   discoverMode: PropTypes.string.isRequired
 };
-export default PlaceList;
+export default React.memo(PlaceList);
