@@ -3,6 +3,7 @@ import SelectList from "../common/SelectList";
 import PlaceList from "./PlaceList";
 import AutocompleteInputGroup from "./AutocompleteInputGroup";
 import constants from "../../services/constants";
+import {DragDropContext, Droppable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
@@ -75,11 +76,23 @@ class DiscoverView extends React.Component {
             />
           )}
         </div>
-        <PlaceList
-          places={this.props.places}
-          handleDeleteClick={this.props.handleDeleteClick}
-          discoverMode={this.props.discoverMode}
-        />
+        <DragDropContext onDragStart={this.props.dragStartHandler} onDragEnd={this.props.dragEndHandler}>
+          <Droppable droppableId={"droppable-1"}>
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+              <PlaceList
+              places={this.props.places}
+              handleDeleteClick={this.props.handleDeleteClick}
+              discoverMode={this.props.discoverMode}
+            />
+            </div>
+            )}
+        
+        </Droppable>
+        </DragDropContext>
         {this.props.discoverMode !== constants.DISCOVER_MODE.VIEW && (
           <>
             <button
@@ -156,7 +169,9 @@ DiscoverView.propTypes = {
     })
   ),
 
-  discoverMode: PropTypes.string.isRequired
+  discoverMode: PropTypes.string.isRequired,
+  dragStartHandler: PropTypes.func.isRequired,
+  dragEndHandler: PropTypes.func.isRequired
 };
 
 export default DiscoverView;
