@@ -19,6 +19,8 @@ const CreatePlan = props => {
         handleUpdateClick={props.updatePlan}
         places={props.places}
         discoverMode={props.discoverMode}
+        dragEndHandler={props.dragEndHandler}
+        dragStartHandler={props.dragStartHandler}
       />
     );
   } else {
@@ -89,7 +91,9 @@ CreatePlan.propTypes = {
     })
   ),
   discoverMode: PropTypes.string.isRequired,
-  changeSortOrder: PropTypes.func.isRequired
+  changeSortOrder: PropTypes.func.isRequired,
+  dragStartHandler: PropTypes.func.isRequired,
+  dragEndHandler: PropTypes.func.isRequired
 };
 
 export default CreatePlan;
