@@ -44,7 +44,6 @@ export const loadGoogleScript = (sourceAttributeValue, urlParameters) => {
 };
 
 export const reorderElements = (elements, sourceIndex, destinationIndex) => {
-  console.log(elements);
   const length = elements.length;
   if (
     sourceIndex < 0 ||
@@ -63,6 +62,5 @@ export const reorderElements = (elements, sourceIndex, destinationIndex) => {
   if (sourceIndex === destinationIndex) {
     elementsCopy[sourceIndex] = targetElement;
   }
-  console.log(elementsCopy);
   return elementsCopy;
 };
