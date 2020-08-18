@@ -337,6 +337,7 @@
 }
 
 .link {
+  cursor: pointer !important;
   font-size: 0.9rem;
   color: darken($secondary-color, 5%);
 
@@ -655,6 +656,7 @@
 
   &-body {
     margin-bottom: 0.5rem;
+    cursor: grab;
 
     p {
       font-size: 0.95rem;
@@ -665,15 +667,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    p:first-child {
-      font-size: 0.9rem;
-      color: darken($secondary-color, 5%);
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
   }
 
   svg {
@@ -986,8 +979,8 @@
   &-image {
     display: flex;
     flex-direction: column;
-    max-height: 200px;
-    overflow: hidden;
+    // max-height: 200px;
+    // overflow: hidden;
     border-radius: 0.4rem;
     margin-bottom: 0.5rem;
   }
@@ -1158,6 +1151,10 @@
   &:focus {
     outline-color: $secondary-color;
   }
+}
+
+.dragging {
+  border: 1px solid $primary-color;
 }
 
 @import "media_queries";
