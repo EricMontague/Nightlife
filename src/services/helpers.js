@@ -44,6 +44,7 @@ export const loadGoogleScript = (sourceAttributeValue, urlParameters) => {
 };
 
 export const reorderElements = (elements, sourceIndex, destinationIndex) => {
+  console.log(elements);
   const length = elements.length;
   if (
     sourceIndex < 0 ||
@@ -53,7 +54,7 @@ export const reorderElements = (elements, sourceIndex, destinationIndex) => {
   ) {
     throw new Error("Array index out of bounds.");
   }
-  const elementsCopy = elements.splice();
+  const elementsCopy = elements.slice();
   const targetElement = elementsCopy[sourceIndex];
   while (destinationIndex < sourceIndex) {
     elementsCopy[sourceIndex] = elementsCopy[sourceIndex - 1];
@@ -62,5 +63,6 @@ export const reorderElements = (elements, sourceIndex, destinationIndex) => {
   if (sourceIndex === destinationIndex) {
     elementsCopy[sourceIndex] = targetElement;
   }
+  console.log(elementsCopy);
   return elementsCopy;
 };
