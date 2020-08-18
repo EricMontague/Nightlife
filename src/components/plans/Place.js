@@ -26,7 +26,7 @@ const Place = props => {
         <p>{addressLine}</p>
       </div>
       <div className="place-card-footer">
-        <p>View Details</p>
+        <span className="link">View Details</span>
         {props.discoverMode !== constants.DISCOVER_MODE.VIEW && (
           <FontAwesomeIcon
             icon={["fa", "trash-alt"]}
