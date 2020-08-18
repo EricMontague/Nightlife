@@ -8,8 +8,12 @@ const PlaceList = props => {
     <div className="card-body mb-3">
       {props.places.map((place, index) => {
         return (
-          <Draggable key={place.id} draggableId={place.id} index={index}>
-            {(provided, snapshot) => (
+          <Draggable
+            key={place.placeId}
+            draggableId={place.placeId}
+            index={index}
+          >
+            {provided => (
               <div
                 ref={provided.innerRef}
                 {...provided.draggableProps}
