@@ -1,5 +1,6 @@
 import React from "react";
 import { AuthContext } from "../../context/AuthProvider";
+import { Redirect } from "react-router-dom";
 import { addPlan, getPlan, updatePlan } from "../../services/firebase";
 import CreatePlan from "./CreatePlan";
 import PlaceDetailsModal from "./PlaceDetailsModal";
@@ -137,25 +138,27 @@ class PlanApp extends React.Component {
   addPlace(placeResults, input) {
     // Clear input
     input.value = "";
-    console.log(placeResults);
-    this.setState({
-      places: [
-        ...this.state.places,
-        {
-          placeId: placeResults.place_id,
-          name: placeResults.name,
-          businessStatus: placeResults.business_status,
-          formattedAddress: placeResults.formatted_address,
-          location: placeResults.geometry.location,
-          openingHours: placeResults.opening_hours,
-          icon: placeResults.icon,
-          photos: placeResults.photos,
-          priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
-          rating: placeResults.rating || constants.DEFAULT_RATING,
-          website: placeResults.website
-        }
-      ]
+    const newPlace = {
+      placeId: placeResults.place_id,
+      name: placeResults.name,
+      businessStatus: placeResults.business_status,
+      formattedAddress: placeResults.formatted_address,
+      location: placeResults.geometry.location,
+      openingHours: placeResults.opening_hours,
+      icon: placeResults.icon,
+      photos: placeResults.photos,
+      priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
+      rating: placeResults.rating || constants.DEFAULT_RATING,
+      website: placeResults.website
+    };
+    const existingPlace = this.state.places.find(place => {
+      return place.placeId === newPlace.placeId;
     });
+    if (!existingPlace) {
+      this.setState({
+        places: [...this.state.places, newPlace]
+      });
+    }
   }
 
   deletePlace(placeId) {
@@ -245,11 +248,11 @@ class PlanApp extends React.Component {
 
   dragEndHandler(result) {
     console.log("Dragging ended");
-    console.log(result);
     const { destination, source } = result;
 
     // dropped outside of list
     if (!destination) {
+      console.log("Not destination");
       return;
     }
 
@@ -267,12 +270,12 @@ class PlanApp extends React.Component {
   }
 
   render() {
-    // if (!this.context.isLoggedIn) {
-    //   return <Redirect to="/" />;
-    // } else {
+    if (!this.context.isLoggedIn) {
+      return <Redirect to="/" />;
+    }
 
     const sortedPlaces = this.sortPlaces(this.state.places);
-    console.log(sortedPlaces);
+
     return (
       <>
         <div className="discover-container">
