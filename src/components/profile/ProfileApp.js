@@ -72,11 +72,15 @@ class ProfileApp extends React.Component {
   }
 
   setInitialState(plan) {
+    const photoOptions = {
+      maxHeight: constants.GOOGLE_IMAGE_HEIGHT,
+      maxWidth: constants.GOOGLE_IMAGE_WIDTH
+    };
     const handlePlaceResults = (placeResults, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         const updatedPlan = {
           ...plan,
-          image: placeResults.photos[0].getUrl()
+          image: placeResults.photos[0].getUrl(photoOptions)
         };
         this.setState({ plans: [...this.state.plans, updatedPlan] });
       } else {
