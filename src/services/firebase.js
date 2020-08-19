@@ -57,7 +57,6 @@ export const getUserDocument = async userId => {
 };
 
 export const storeUserDocument = async user => {
-  console.log("storeUserDocument called!");
   if (!user) {
     throw new Error("Please provide a user");
   }
