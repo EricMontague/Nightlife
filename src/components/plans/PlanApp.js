@@ -16,6 +16,7 @@ import {
   hasGoogleScript,
   reorderElements
 } from "../../services/helpers";
+import Poller from "../../services/polling";
 
 class PlanApp extends React.Component {
   constructor(props) {
@@ -36,6 +37,7 @@ class PlanApp extends React.Component {
       },
       places: []
     };
+    this.getInitialState = this.getInitialState.bind(this);
     this.fetchPlan = this.fetchPlan.bind(this);
     this.fetchPlaces = this.fetchPlaces.bind(this);
     this.setInitialState = this.setInitialState.bind(this);
@@ -62,7 +64,9 @@ class PlanApp extends React.Component {
       page === constants.DISCOVER_MODE.EDIT ||
       page === constants.DISCOVER_MODE.VIEW
     ) {
-      this.getInitialState(this.context.currentUser.userId, this.splitPath[2]);
+      const planId = this.splitPath[2];
+      const poller = new Poller(this.getInitialState, [planId], 2000, 3, this);
+      poller.start();
     }
   }
 
@@ -73,15 +77,17 @@ class PlanApp extends React.Component {
     }
   }
 
-  async getInitialState(userId, planId) {
+  async getInitialState(planId) {
     try {
+      const userId = this.context.currentUser.userId;
       const plan = await this.fetchPlan(userId, planId);
+      console.log(plan);
       this.setState({
         plan
       });
       this.fetchPlaces(plan);
     } catch (error) {
-      console.log(
+      throw new Error(
         `An error occurred when setting the initial State: ${error.message}`
       );
     }
