@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 import { auth, getUserDocument } from "../services/firebase";
+import Poller from "../services/polling";
+import { disablePointerEvents, enablePointerEvents } from "../services/helpers";
 import PropTypes from "prop-types";
 
 export const AuthContext = React.createContext(null);
@@ -13,6 +15,7 @@ class AuthProvider extends React.Component {
     super(props);
     this.state = { currentUser: null, isLoggedIn: false };
     this.loadUser = this.loadUser.bind(this);
+    document.body.classList.add("no-pointer-events");
   }
 
   componentDidMount() {
@@ -20,21 +23,24 @@ class AuthProvider extends React.Component {
       // user logging out
       if (!userAuth) {
         this.setState({ currentUser: null, isLoggedIn: false });
-      } else if (userAuth.displayName) {
-        // user signs in with google
-        this.setState({
-          currentUser: {
-            userId: userAuth.uid,
-            displayName: userAuth.displayName,
-            email: userAuth.email,
-            photoURL: userAuth.photoURL
-          },
-          isLoggedIn: true
-        });
-      } else if (userAuth && !userAuth.displayName) {
-        // user signs in with email and password
-        this.retries = 5;
-        this.intervalId = setInterval(this.loadUser, 1000, userAuth.uid);
+      } else {
+        if (userAuth.displayName) {
+          // user signs in with google
+          this.setState({
+            currentUser: {
+              userId: userAuth.uid,
+              displayName: userAuth.displayName,
+              email: userAuth.email,
+              photoURL: userAuth.photoURL
+            },
+            isLoggedIn: true
+          });
+          enablePointerEvents();
+        } else if (userAuth && !userAuth.displayName) {
+          // user signs in with email and password
+          const poller = new Poller(this.loadUser, [userAuth.uid], 1000, 5);
+          poller.start();
+        }
       }
     });
   }
@@ -44,11 +50,9 @@ class AuthProvider extends React.Component {
   }
 
   async loadUser(userId) {
-    if (this.retries === 1) {
-      clearInterval(this.intervalId);
-    }
     try {
       const currentUser = await getUserDocument(userId);
+      enablePointerEvents();
       this.setState({
         currentUser: {
           userId: currentUser.id,
@@ -58,10 +62,8 @@ class AuthProvider extends React.Component {
         },
         isLoggedIn: true
       });
-      clearInterval(this.intervalId);
     } catch (error) {
-      console.log(`Error logging the user in: ${error.message}`);
-      this.retries -= 1;
+      throw new Error(`Error logging the user in: ${error.message}`);
     }
   }
 
