@@ -64,3 +64,11 @@ export const reorderElements = (elements, sourceIndex, destinationIndex) => {
   }
   return elementsCopy;
 };
+
+export const disablePointerEvents = () => {
+  document.body.classList.add("no-pointer-events");
+};
+
+export const enablePointerEvents = () => {
+  document.body.classList.remove("no-pointer-events");
+};
