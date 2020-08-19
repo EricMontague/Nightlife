@@ -19,6 +19,8 @@ const constants = Object.freeze({
   },
   GOOGLE_MAPS_SCRIPT_URL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GCP_API_KEY}`,
   GOOGLE_LIBRARIES: { places: "places" },
+  GOOGLE_IMAGE_HEIGHT: 400,
+  GOOGLE_IMAGE_WIDTH: 400,
   SORT_BY_RATING_ASC: "Rating: low to high",
   SORT_BY_RATING_DESC: "Rating: high to low",
   SORT_BY_PRICE_LEVEL_ASC: "Price: low to high",
