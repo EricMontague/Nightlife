@@ -38,8 +38,8 @@ class AuthProvider extends React.Component {
           enablePointerEvents();
         } else if (userAuth && !userAuth.displayName) {
           // user signs in with email and password
-          const poller = new Poller(this.loadUser, [userAuth.uid], 1000, 5);
-          poller.start();
+          const poller = new Poller(1000, 5);
+          poller.start(this.loadUser, [userAuth.uid]);
         }
       }
     });
