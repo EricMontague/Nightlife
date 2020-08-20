@@ -1,29 +1,26 @@
 class Poller {
-  constructor(func, parameters, timeDelay, retries, self = null) {
-    this.func = func;
-    this.parameters = parameters;
+  constructor(timeDelay, retries) {
     this.timeDelay = timeDelay;
     this.retries = retries;
     this.intervalId = null;
-    this.self = self;
   }
 
-  start() {
+  start(func, parameters) {
     this.intervalId = setInterval(
       this.callFunction.bind(this),
       this.timeDelay,
-      ...this.parameters
+      func,
+      parameters
     );
     console.log(this.intervalId);
   }
 
-  callFunction() {
-    console.log(this.self);
+  async callFunction(func, parameters) {
     let wasSuccessful = true;
     try {
-      this.func.call(this.self);
+      await func(...parameters);
     } catch (error) {
-      console.log("An error occurred while polling.");
+      console.log(`An error occurred while polling: ${error.message}`);
       wasSuccessful = false;
       this.retries -= 1;
     }
