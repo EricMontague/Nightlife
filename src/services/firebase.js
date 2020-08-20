@@ -133,15 +133,9 @@ export const updatePlan = async (userId, updatedPlan) => {
     throw new Error(error.message);
   }
 
-  console.log("Returned user plans: ");
-  console.log(userDocument.plans);
-
   userDocument.plans = userDocument.plans.map(plan => {
     return plan.planId === updatedPlan.planId ? updatedPlan : plan;
   });
-
-  console.log("Updated user plans: ");
-  console.log(userDocument.plans);
 
   try {
     await firestore.doc(`users/${userId}`).update(userDocument);
