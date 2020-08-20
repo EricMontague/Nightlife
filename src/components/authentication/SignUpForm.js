@@ -64,7 +64,6 @@ class SignUpForm extends React.Component {
       }
     } else {
       // No error
-      console.log("No Error found");
       if (event.target.value) {
         event.target.classList.remove("input-without-error");
         event.target.nextElementSibling.classList.remove("label-without-error");
