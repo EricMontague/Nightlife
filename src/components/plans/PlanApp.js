@@ -65,8 +65,8 @@ class PlanApp extends React.Component {
       page === constants.DISCOVER_MODE.VIEW
     ) {
       const planId = this.splitPath[2];
-      const poller = new Poller(this.getInitialState, [planId], 2000, 3, this);
-      poller.start();
+      const poller = new Poller(3000, 3);
+      poller.start(this.getInitialState, [planId]);
     }
   }
 
