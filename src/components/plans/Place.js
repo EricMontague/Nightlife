@@ -26,7 +26,7 @@ const Place = props => {
         <p>{addressLine}</p>
       </div>
       <div className="place-card-footer">
-        <span className="link">View Details</span>
+        <span className="link" onClick={() => props.toggleModal(props.place)}>View Details</span>
         {props.discoverMode !== constants.DISCOVER_MODE.VIEW && (
           <FontAwesomeIcon
             icon={["fa", "trash-alt"]}
@@ -39,7 +39,7 @@ const Place = props => {
 };
 
 Place.propTypes = {
-  places: PropTypes.arrayOf(
+  place: 
     PropTypes.shape({
       placeId: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
@@ -77,8 +77,8 @@ Place.propTypes = {
       priceLevel: PropTypes.number,
       rating: PropTypes.number,
       website: PropTypes.string
-    })
-  ),
+    }),
+    toggleModal: PropTypes.func.isRequired,
   handleDeleteClick: PropTypes.func.isRequired,
   discoverMode: PropTypes.string.isRequired
 };

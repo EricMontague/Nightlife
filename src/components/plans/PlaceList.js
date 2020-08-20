@@ -75,6 +75,7 @@ PlaceList.propTypes = {
       website: PropTypes.string
     })
   ),
+  toggleModal: PropTypes.func.isRequired,
   handleDeleteClick: PropTypes.func.isRequired,
   discoverMode: PropTypes.string.isRequired
 };
