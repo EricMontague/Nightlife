@@ -47,11 +47,6 @@ const PlanDetailsModal = props => {
                 Close
               </button>
             </div>
-            {/* <div className="modal-footer-right">
-              <Link to={`/plans/${props.plan.planId}/view`} className="link">
-                View Plan Details
-              </Link>
-            </div> */}
           </div>
         </div>
       </div>
