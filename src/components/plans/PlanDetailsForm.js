@@ -10,7 +10,6 @@ import {
   validateDateTime
 } from "../../services/validators";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import PropTypes from "prop-types";
 
 class PlanDetailsForm extends React.Component {
