@@ -58,9 +58,9 @@ class AuthApp extends React.Component {
         email: user.email,
         password: user.password,
         displayName: user.firstName + " " + user.lastName,
+        photoURL: "",
         plans: []
       });
-      console.log(`New user registered: ${user.firstName} ${user.lastName}`);
       // this.props.history.push("/");
     } catch (error) {
       console.log(
