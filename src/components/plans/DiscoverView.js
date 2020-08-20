@@ -84,6 +84,7 @@ class DiscoverView extends React.Component {
             {provided => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 <PlaceList
+                  toggleModal={this.props.toggleModal}
                   places={this.props.places}
                   handleDeleteClick={this.props.handleDeleteClick}
                   discoverMode={this.props.discoverMode}
@@ -128,6 +129,7 @@ DiscoverView.propTypes = {
   handleBackClick: PropTypes.func.isRequired,
   handleSelectListChange: PropTypes.func.isRequired,
   handleUpdateClick: PropTypes.func.isRequired,
+  toggleModal: PropTypes.func.isRequired,
   places: PropTypes.arrayOf(
     PropTypes.shape({
       placeId: PropTypes.string.isRequired,

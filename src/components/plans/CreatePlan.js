@@ -21,6 +21,7 @@ const CreatePlan = props => {
         discoverMode={props.discoverMode}
         dragEndHandler={props.dragEndHandler}
         dragStartHandler={props.dragStartHandler}
+        toggleModal={props.toggleModal}
       />
     );
   } else {
