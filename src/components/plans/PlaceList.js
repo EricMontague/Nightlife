@@ -24,6 +24,7 @@ const PlaceList = props => {
                   place={place}
                   handleDeleteClick={props.handleDeleteClick}
                   discoverMode={props.discoverMode}
+                  toggleModal={props.toggleModal}
                 />
               </div>
             )}
