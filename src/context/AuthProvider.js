@@ -15,7 +15,7 @@ class AuthProvider extends React.Component {
     super(props);
     this.state = { currentUser: null, isLoggedIn: false };
     this.loadUser = this.loadUser.bind(this);
-    document.body.classList.add("no-pointer-events");
+    disablePointerEvents();
   }
 
   componentDidMount() {
