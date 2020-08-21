@@ -1,37 +1,52 @@
 import React from "react";
 import Rating from "./Rating";
 import constants from "../../services/constants";
+import BusinessHours from "./BusinessHours";
 import PropTypes from "prop-types";
 
 const PlaceDetailsModal = props => {
+  console.log(props.place);
   let addressLine =
     "$".repeat(props.place.priceLevel) + " | " + props.place.formattedAddress;
+  if (!props.place.priceLevel) {
+    addressLine = props.place.formattedAddress;
+  }
+
   return (
-    <div className="modal">
+    <div className="modal overflow-auto">
       <div className="modal-container-centered">
         <div className="modal-content modal-content-md animation-slide-down">
           <div className="modal-header">
-            <div className="modal-image">
-              <img src={props.place.photos[0].getUrl()} alt={props.plan.name} />
+            <div className="modal-image mb-2">
+              <img
+                src={props.place.photos[0].getUrl()}
+                alt={props.place.name}
+              />
             </div>
-            <img src={props.place.icon} alt="" />
             <h3 className="modal-title">{props.place.name}</h3>
-            <p className="py-1">{addressLine}</p>
+            <p>{addressLine}</p>
             <Rating
               stars={
                 props.place.rating === constants.DEFAULT_RATING
                   ? 0
                   : props.place.rating
               }
+              size={"lg"}
             />
-          </div>
-          <div className="modal-body">
-            <p>Open Now: {props.place.openingHours.isOpen()}</p>
-            <p>Business Hours:</p>
-            <p>{props.place.openingHours.weekday_text}</p>
-            <a href={props.place.website} target="_blank" className="link">
+            <a
+              href={props.place.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link mt-1"
+            >
               Visit Website
             </a>
+          </div>
+          <div className="modal-body">
+            <BusinessHours
+              isOpen={props.place.openingHours.isOpen}
+              businessHours={props.place.openingHours.weekday_text}
+            />
           </div>
           <div className="modal-footer">
             <div className="modal-footer-left">
@@ -55,6 +70,50 @@ const PlaceDetailsModal = props => {
       </div>
     </div>
   );
+};
+
+PlaceDetailsModal.propTypes = {
+  place: PropTypes.shape({
+    placeId: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    businessStatus: PropTypes.string.isRequired,
+    formattedAddress: PropTypes.string.isRequired,
+    location: PropTypes.objectOf(PropTypes.func.isRequired),
+    openingHours: PropTypes.shape({
+      isOpen: PropTypes.func.isRequired,
+      periods: PropTypes.arrayOf(
+        PropTypes.shape({
+          close: PropTypes.shape({
+            day: PropTypes.number.isRequired,
+            time: PropTypes.string.isRequired,
+            hours: PropTypes.number.isRequired,
+            minutes: PropTypes.number.isRequired
+          }),
+          open: PropTypes.shape({
+            day: PropTypes.number.isRequired,
+            time: PropTypes.string.isRequired,
+            hours: PropTypes.number.isRequired,
+            minutes: PropTypes.number.isRequired
+          })
+        })
+      )
+    }),
+    icon: PropTypes.string.isRequired,
+    photos: PropTypes.arrayOf(
+      PropTypes.shape({
+        getUrl: PropTypes.func.isRequired,
+        height: PropTypes.number.isRequired,
+        html_attributions: PropTypes.arrayOf(PropTypes.string.isRequired),
+        width: PropTypes.number.isRequired
+      })
+    ),
+    priceLevel: PropTypes.number,
+    rating: PropTypes.number,
+    website: PropTypes.string
+  }),
+  toggleModal: PropTypes.func.isRequired,
+  handleDeleteClick: PropTypes.func.isRequired,
+  discoverMode: PropTypes.string.isRequired
 };
 
 export default PlaceDetailsModal;
