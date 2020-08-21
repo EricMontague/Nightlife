@@ -234,6 +234,7 @@ class PlanApp extends React.Component {
   }
 
   togglePlaceModal(place) {
+    document.body.classList.toggle("no-scroll-y");
     this.setState({
       isPlaceModalVisible: !this.state.isPlaceModalVisible,
       selectedPlace: this.state.selectedPlace ? null : place
@@ -300,7 +301,7 @@ class PlanApp extends React.Component {
               updatePlan={this.updatePlan}
               storePlan={this.storePlan}
               toggleView={this.toggleView}
-              toggleModal={place => this.togglePlaceModal(place)}
+              toggleModal={this.togglePlaceModal}
               places={sortedPlaces}
               isDiscoverView={this.state.isDiscoverView}
               plan={this.state.plan}
