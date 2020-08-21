@@ -4,7 +4,6 @@ const constants = Object.freeze({
     "formatted_address", // basic billing
     "geometry.location", // basic billing
     "business_status", // basic billing
-    "icon", // basic billing
     "name", // basic billing
     "opening_hours", // contact billing
     "website", // contact billing
