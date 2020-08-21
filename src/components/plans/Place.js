@@ -22,11 +22,14 @@ const Place = props => {
               ? 0
               : props.place.rating
           }
+          size={""}
         />
         <p>{addressLine}</p>
       </div>
       <div className="place-card-footer">
-        <span className="link" onClick={() => props.toggleModal(props.place)}>View Details</span>
+        <span className="link" onClick={() => props.toggleModal(props.place)}>
+          View Details
+        </span>
         {props.discoverMode !== constants.DISCOVER_MODE.VIEW && (
           <FontAwesomeIcon
             icon={["fa", "trash-alt"]}
@@ -39,46 +42,45 @@ const Place = props => {
 };
 
 Place.propTypes = {
-  place: 
-    PropTypes.shape({
-      placeId: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      businessStatus: PropTypes.string.isRequired,
-      formattedAddress: PropTypes.string.isRequired,
-      location: PropTypes.objectOf(PropTypes.func.isRequired),
-      openingHours: PropTypes.shape({
-        isOpen: PropTypes.func.isRequired,
-        periods: PropTypes.arrayOf(
-          PropTypes.shape({
-            close: PropTypes.shape({
-              day: PropTypes.number.isRequired,
-              time: PropTypes.string.isRequired,
-              hours: PropTypes.number.isRequired,
-              minutes: PropTypes.number.isRequired
-            }),
-            open: PropTypes.shape({
-              day: PropTypes.number.isRequired,
-              time: PropTypes.string.isRequired,
-              hours: PropTypes.number.isRequired,
-              minutes: PropTypes.number.isRequired
-            })
-          })
-        )
-      }),
-      icon: PropTypes.string.isRequired,
-      photos: PropTypes.arrayOf(
+  place: PropTypes.shape({
+    placeId: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    businessStatus: PropTypes.string.isRequired,
+    formattedAddress: PropTypes.string.isRequired,
+    location: PropTypes.objectOf(PropTypes.func.isRequired),
+    openingHours: PropTypes.shape({
+      isOpen: PropTypes.func.isRequired,
+      periods: PropTypes.arrayOf(
         PropTypes.shape({
-          getUrl: PropTypes.func.isRequired,
-          height: PropTypes.number.isRequired,
-          html_attributions: PropTypes.arrayOf(PropTypes.string.isRequired),
-          width: PropTypes.number.isRequired
+          close: PropTypes.shape({
+            day: PropTypes.number.isRequired,
+            time: PropTypes.string.isRequired,
+            hours: PropTypes.number.isRequired,
+            minutes: PropTypes.number.isRequired
+          }),
+          open: PropTypes.shape({
+            day: PropTypes.number.isRequired,
+            time: PropTypes.string.isRequired,
+            hours: PropTypes.number.isRequired,
+            minutes: PropTypes.number.isRequired
+          })
         })
-      ),
-      priceLevel: PropTypes.number,
-      rating: PropTypes.number,
-      website: PropTypes.string
+      )
     }),
-    toggleModal: PropTypes.func.isRequired,
+    icon: PropTypes.string.isRequired,
+    photos: PropTypes.arrayOf(
+      PropTypes.shape({
+        getUrl: PropTypes.func.isRequired,
+        height: PropTypes.number.isRequired,
+        html_attributions: PropTypes.arrayOf(PropTypes.string.isRequired),
+        width: PropTypes.number.isRequired
+      })
+    ),
+    priceLevel: PropTypes.number,
+    rating: PropTypes.number,
+    website: PropTypes.string
+  }),
+  toggleModal: PropTypes.func.isRequired,
   handleDeleteClick: PropTypes.func.isRequired,
   discoverMode: PropTypes.string.isRequired
 };
