@@ -7,7 +7,9 @@ const Rating = props => {
     const starList = [];
     if (props.stars) {
       for (let star = 0; star < parseInt(props.stars); star++) {
-        starList.push(<FontAwesomeIcon key={star} icon={["fa", "star"]} />);
+        starList.push(
+          <FontAwesomeIcon key={star} icon={["fa", "star"]} size={props.size} />
+        );
       }
       // handle ratings that are floats
       if (props.stars % 1 !== 0) {
@@ -15,6 +17,7 @@ const Rating = props => {
           <FontAwesomeIcon
             key={starList.length}
             icon={["fa", "star-half-alt"]}
+            size={props.size}
           />
         );
       }
@@ -27,7 +30,8 @@ const Rating = props => {
 };
 
 Rating.propTypes = {
-  stars: PropTypes.number.isRequired
+  stars: PropTypes.number.isRequired,
+  starSize: PropTypes.string.isRequired
 };
 
 export default React.memo(Rating);
