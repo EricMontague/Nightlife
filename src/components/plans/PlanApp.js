@@ -14,7 +14,9 @@ import {
   trimObjectFieldValues,
   removeGoogleScript,
   hasGoogleScript,
-  reorderElements
+  reorderElements,
+  toggleScrollY,
+  enableScrollY
 } from "../../services/helpers";
 import Poller from "../../services/polling";
 
@@ -71,6 +73,7 @@ class PlanApp extends React.Component {
   }
 
   componentWillUnmount() {
+    enableScrollY();
     const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
     if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
       removeGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
@@ -81,7 +84,6 @@ class PlanApp extends React.Component {
     try {
       const userId = this.context.currentUser.userId;
       const plan = await this.fetchPlan(userId, planId);
-      console.log(plan);
       this.setState({
         plan
       });
@@ -126,7 +128,6 @@ class PlanApp extends React.Component {
         formattedAddress: placeResults.formatted_address,
         location: placeResults.geometry.location,
         openingHours: placeResults.opening_hours,
-        icon: placeResults.icon,
         photos: placeResults.photos,
         priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
         rating: placeResults.rating || constants.DEFAULT_RATING,
@@ -151,7 +152,6 @@ class PlanApp extends React.Component {
       formattedAddress: placeResults.formatted_address,
       location: placeResults.geometry.location,
       openingHours: placeResults.opening_hours,
-      icon: placeResults.icon,
       photos: placeResults.photos,
       priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
       rating: placeResults.rating || constants.DEFAULT_RATING,
@@ -234,7 +234,7 @@ class PlanApp extends React.Component {
   }
 
   togglePlaceModal(place) {
-    document.body.classList.toggle("no-scroll-y");
+    toggleScrollY();
     this.setState({
       isPlaceModalVisible: !this.state.isPlaceModalVisible,
       selectedPlace: this.state.selectedPlace ? null : place
