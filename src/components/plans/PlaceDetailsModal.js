@@ -1,21 +1,36 @@
-import React from "react";
+import React, { useRef } from "react";
 import Rating from "./Rating";
+import useOnClickOutside from "../../hooks/useOnClickOutside";
 import constants from "../../services/constants";
 import BusinessHours from "./BusinessHours";
 import PropTypes from "prop-types";
 
 const PlaceDetailsModal = props => {
-  console.log(props.place);
+  const modalRef = useRef();
+
   let addressLine =
     "$".repeat(props.place.priceLevel) + " | " + props.place.formattedAddress;
   if (!props.place.priceLevel) {
     addressLine = props.place.formattedAddress;
   }
 
+  const closeModal = event => {
+    modalRef.current.classList.replace(
+      "animation-slide-down",
+      "animation-slide-up"
+    );
+    setTimeout(() => props.toggleModal(props.plan), 400);
+  };
+
+  useOnClickOutside(modalRef, closeModal);
+
   return (
     <div className="modal overflow-auto">
       <div className="modal-container-centered">
-        <div className="modal-content modal-content-md animation-slide-down">
+        <div
+          className="modal-content modal-content-md animation-slide-down"
+          ref={modalRef}
+        >
           <div className="modal-header">
             <div className="modal-image mb-2">
               <img
@@ -31,7 +46,7 @@ const PlaceDetailsModal = props => {
                   ? 0
                   : props.place.rating
               }
-              size={"lg"}
+              starSize={"lg"}
             />
             <a
               href={props.place.website}
@@ -44,7 +59,6 @@ const PlaceDetailsModal = props => {
           </div>
           <div className="modal-body">
             <BusinessHours
-              isOpen={props.place.openingHours.isOpen}
               businessHours={props.place.openingHours.weekday_text}
             />
           </div>
@@ -54,13 +68,7 @@ const PlaceDetailsModal = props => {
                 type="button"
                 className="btn btn-light btn-shadow"
                 // Need to look into react-transition-group instead of this hack
-                onClick={event => {
-                  event.target.parentElement.parentElement.classList.replace(
-                    "animation-slide-down",
-                    "animation-slide-up"
-                  );
-                  setTimeout(() => props.toggleModal(props.plan), 400);
-                }}
+                onClick={closeModal}
               >
                 Close
               </button>
@@ -98,7 +106,6 @@ PlaceDetailsModal.propTypes = {
         })
       )
     }),
-    icon: PropTypes.string.isRequired,
     photos: PropTypes.arrayOf(
       PropTypes.shape({
         getUrl: PropTypes.func.isRequired,
@@ -111,9 +118,7 @@ PlaceDetailsModal.propTypes = {
     rating: PropTypes.number,
     website: PropTypes.string
   }),
-  toggleModal: PropTypes.func.isRequired,
-  handleDeleteClick: PropTypes.func.isRequired,
-  discoverMode: PropTypes.string.isRequired
+  toggleModal: PropTypes.func.isRequired
 };
 
 export default PlaceDetailsModal;
