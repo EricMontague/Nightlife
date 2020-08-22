@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
+import useOnClickOutside from "../../hooks/useOnClickOutside";
 import { formatDateTime } from "../../services/dateTimeHelpers";
 import PropTypes from "prop-types";
 
 const PlanDetailsModal = props => {
+  const modalRef = useRef();
+
+  const closeModal = event => {
+    modalRef.current.classList.replace(
+      "animation-slide-down",
+      "animation-slide-up"
+    );
+    setTimeout(() => props.toggleModal(props.plan), 400);
+  };
+
+  useOnClickOutside(modalRef, closeModal);
   return (
     <div className="modal">
       <div className="modal-container-centered">
-        <div className="modal-content modal-content-md animation-slide-down">
+        <div
+          className="modal-content modal-content-md animation-slide-down"
+          ref={modalRef}
+        >
           <div className="modal-header">
             <div className="modal-image">
               <img src={props.plan.image} alt={props.plan.title} />
@@ -23,26 +38,23 @@ const PlanDetailsModal = props => {
           </div>
           <div className="modal-body">
             <p className="py-1">{props.plan.description}</p>
-            <Link to={`/plans/${props.plan.planId}/view`} className="link">
+            <Link
+              to={`/plans/${props.plan.planId}/view`}
+              className="link flex-start"
+            >
               View Plan Details
             </Link>
           </div>
           <div className="modal-footer">
             <div className="modal-footer-left">
-              <button type="button" className="btn btn-secondary btn-shadow">
+              <button type="button" className="btn btn-secondary">
                 Edit
               </button>
               <button
                 type="button"
-                className="btn btn-light btn-shadow"
+                className="btn btn-light"
                 // Need to look into react-transition-group instead of this hack
-                onClick={event => {
-                  event.target.parentElement.parentElement.classList.replace(
-                    "animation-slide-down",
-                    "animation-slide-up"
-                  );
-                  setTimeout(() => props.toggleModal(props.plan), 400);
-                }}
+                onClick={closeModal}
               >
                 Close
               </button>

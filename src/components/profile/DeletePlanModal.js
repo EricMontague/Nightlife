@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
+import useOnClickOutside from "../../hooks/useOnClickOutside";
 import PropTypes from "prop-types";
 
 const DeletePlanModal = props => {
+  const modalRef = useRef();
+
   const handleDeleteBtnClick = event => {
     event.target.parentElement.parentElement.classList.replace(
       "animation-slide-down",
@@ -14,17 +17,19 @@ const DeletePlanModal = props => {
   };
 
   const handleCancelBtnClick = event => {
-    event.target.parentElement.parentElement.classList.replace(
-      "animation-slide-down",
-      "animation-slide-up"
-    );
+    modalRef.current.classList.replace("animation-slide-down", "animation-slide-up");
     setTimeout(() => props.toggleModal(props.plan), 400);
   };
 
+  useOnClickOutside(modalRef, handleCancelBtnClick);
+
   return (
     <div className="modal">
-      <div className="modal-container-centered">
-        <div className="modal-content modal-content-sm animation-slide-down">
+      <div className="modal-container-centered h-100">
+        <div
+          className="modal-content modal-content-sm animation-slide-down"
+          ref={modalRef}
+        >
           <div className="modal-header">
             <h3 className="modal-title text-center">Delete Plan?</h3>
           </div>
