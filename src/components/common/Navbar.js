@@ -23,7 +23,11 @@ const Navbar = () => {
           </div>
           {isDesktop && (
             <ul className="main-menu">
-              <NavLinks currentUser={currentUser} isLoggedIn={isLoggedIn} />
+              <NavLinks
+                currentUser={currentUser}
+                isLoggedIn={isLoggedIn}
+                isDropdownOpen={isOpen}
+              />
             </ul>
           )}
           {!isDesktop && (
