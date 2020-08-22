@@ -60,7 +60,7 @@
   max-width: $website-width;
   margin: auto;
   padding: 0 2.4rem;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .centered-page-layout {
@@ -477,6 +477,10 @@
     display: flex;
     flex-direction: column;
     flex-basis: 100%;
+  }
+
+  &-start {
+    align-self: flex-start !important;
   }
 }
 
@@ -1163,6 +1167,7 @@
   cursor: pointer;
   border: none;
   border-radius: 0.4rem;
+  background: #fff;
   font-family: "Open Sans", Arial, Helvetica, sans-serif;
 
   &:hover {
