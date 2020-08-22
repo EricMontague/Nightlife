@@ -26,7 +26,6 @@ class SignUpForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
-    this.clear = this.clear.bind(this);
     this.validateOnSubmit = this.validateOnSubmit.bind(this);
   }
 
@@ -37,7 +36,6 @@ class SignUpForm extends React.Component {
         this.props.createUserWithEmailAndPasswordHandler({
           ...this.state.fields
         });
-        this.clear();
       }
     });
   }
@@ -68,7 +66,6 @@ class SignUpForm extends React.Component {
         event.target.classList.remove("input-without-error");
         event.target.nextElementSibling.classList.remove("label-without-error");
       } else {
-        console.log("Remove");
         event.target.classList.remove("input-without-error");
         event.target.nextElementSibling.classList.remove(
           "label-without-error",
@@ -88,14 +85,6 @@ class SignUpForm extends React.Component {
       event.target.nextElementSibling.classList.add("label-without-error");
     }
     event.target.nextElementSibling.classList.add("label-selected");
-  }
-
-  clear() {
-    this.setState({
-      fields: { firstName: "", lastName: "", email: "", password: "" },
-      errors: { firstName: "", lastName: "", email: "", password: "" },
-      hasError: false
-    });
   }
 
   async validateOnSubmit() {

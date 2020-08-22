@@ -24,7 +24,6 @@ class SignInForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
-    this.clear = this.clear.bind(this);
     this.validateOnSubmit = this.validateOnSubmit.bind(this);
   }
 
@@ -32,12 +31,10 @@ class SignInForm extends React.Component {
     event.preventDefault();
     this.validateOnSubmit().then(() => {
       if (!this.state.hasError) {
-        console.log("Valid submission");
         this.props.signInWithEmailAndPassword(
           this.state.fields["email"],
           this.state.fields["password"]
         );
-        this.clear();
       }
     });
   }
@@ -88,14 +85,6 @@ class SignInForm extends React.Component {
       event.target.nextElementSibling.classList.add("label-without-error");
     }
     event.target.nextElementSibling.classList.add("label-selected");
-  }
-
-  clear() {
-    this.setState({
-      fields: { firstName: "", lastName: "", email: "", password: "" },
-      errors: { firstName: "", lastName: "", email: "", password: "" },
-      hasError: false
-    });
   }
 
   async validateOnSubmit() {
