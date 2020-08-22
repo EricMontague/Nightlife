@@ -15,7 +15,6 @@ class AuthProvider extends React.Component {
     super(props);
     this.state = { currentUser: null, isLoggedIn: false };
     this.loadUser = this.loadUser.bind(this);
-    disablePointerEvents();
   }
 
   componentDidMount() {
@@ -25,6 +24,7 @@ class AuthProvider extends React.Component {
         this.setState({ currentUser: null, isLoggedIn: false });
       } else {
         if (userAuth.displayName) {
+          disablePointerEvents();
           // user signs in with google
           this.setState({
             currentUser: {
@@ -37,6 +37,7 @@ class AuthProvider extends React.Component {
           });
           enablePointerEvents();
         } else if (userAuth && !userAuth.displayName) {
+          disablePointerEvents();
           // user signs in with email and password
           const poller = new Poller(1000, 5);
           poller.start(this.loadUser, [userAuth.uid]);
