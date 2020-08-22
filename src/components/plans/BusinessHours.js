@@ -15,8 +15,7 @@ const BusinessHours = props => {
 };
 
 BusinessHours.propTypes = {
-  businessHours: PropTypes.arrayOf(PropTypes.string.isRequired),
-  isOpen: PropTypes.func.isRequired
+  businessHours: PropTypes.arrayOf(PropTypes.string.isRequired)
 };
 
 export default BusinessHours;

@@ -8,7 +8,11 @@ const Rating = props => {
     if (props.stars) {
       for (let star = 0; star < parseInt(props.stars); star++) {
         starList.push(
-          <FontAwesomeIcon key={star} icon={["fa", "star"]} size={props.size} />
+          <FontAwesomeIcon
+            key={star}
+            icon={["fa", "star"]}
+            size={props.starSize}
+          />
         );
       }
       // handle ratings that are floats
@@ -17,7 +21,7 @@ const Rating = props => {
           <FontAwesomeIcon
             key={starList.length}
             icon={["fa", "star-half-alt"]}
-            size={props.size}
+            size={props.starSize}
           />
         );
       }
