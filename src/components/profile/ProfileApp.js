@@ -4,7 +4,9 @@ import { getPlans, deletePlan } from "../../services/firebase";
 import {
   hasGoogleScript,
   removeGoogleScript,
-  loadGoogleScript
+  loadGoogleScript,
+  toggleScrollY,
+  enableScrollY
 } from "../../services/helpers";
 import { Redirect } from "react-router-dom";
 import ProfileHeader from "./ProfileHeader";
@@ -45,6 +47,7 @@ class ProfileApp extends React.Component {
   }
 
   componentWillUnmount() {
+    enableScrollY();
     // Remove google maps script if present
     const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
     if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
@@ -123,7 +126,7 @@ class ProfileApp extends React.Component {
   }
 
   togglePlanDetailsModal(plan) {
-    document.body.classList.toggle("no-scroll-y");
+    toggleScrollY();
     this.setState({
       isPlanDetailsModalVisible: !this.state.isPlanDetailsModalVisible,
       selectedPlan: this.state.selectedPlan ? null : plan
@@ -131,7 +134,7 @@ class ProfileApp extends React.Component {
   }
 
   toggleDeletePlanModal(plan) {
-    document.body.classList.toggle("no-scroll-y");
+    toggleScrollY();
     this.setState({
       isDeletePlanModalVisible: !this.state.isDeletePlanModalVisible,
       selectedPlan: this.state.selectedPlan ? null : plan
