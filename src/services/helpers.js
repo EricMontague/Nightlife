@@ -72,3 +72,19 @@ export const disablePointerEvents = () => {
 export const enablePointerEvents = () => {
   document.body.classList.remove("no-pointer-events");
 };
+
+export const toggleScrollY = () => {
+  document.body.classList.toggle("no-scroll-y");
+};
+
+export const enableScrollY = () => {
+  document.body.classList.remove("no-scroll-y");
+};
+
+export const disableScrollY = () => {
+  document.body.classList.add("no-scroll-y");
+};
+
+export const setDocumentTitle = title => {
+  document.title = title;
+};
