@@ -22,7 +22,7 @@ const Place = props => {
               ? 0
               : props.place.rating
           }
-          size={""}
+          starSize={"1x"}
         />
         <p>{addressLine}</p>
       </div>
@@ -67,7 +67,6 @@ Place.propTypes = {
         })
       )
     }),
-    icon: PropTypes.string.isRequired,
     photos: PropTypes.arrayOf(
       PropTypes.shape({
         getUrl: PropTypes.func.isRequired,

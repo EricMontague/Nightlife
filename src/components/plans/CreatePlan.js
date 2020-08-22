@@ -77,7 +77,6 @@ CreatePlan.propTypes = {
           })
         )
       }),
-      icon: PropTypes.string.isRequired,
       photos: PropTypes.arrayOf(
         PropTypes.shape({
           getUrl: PropTypes.func.isRequired,
