@@ -94,12 +94,12 @@ class AuthApp extends React.Component {
             <div className="card-body">
               <Switch>
                 <Route exact path="/">
-                  <DocumentTitle title="Home">
+                  <DocumentTitle title="Home | Nightlife">
                     <Home signInWithGoogle={signInWithGoogle} />
                   </DocumentTitle>
                 </Route>
                 <Route exact path="/signin">
-                  <DocumentTitle title="Sign In">
+                  <DocumentTitle title="Sign In | Nightlife">
                     <SignInForm
                       signInWithGoogle={signInWithGoogle}
                       signInWithEmailAndPassword={(email, password) =>
@@ -109,7 +109,7 @@ class AuthApp extends React.Component {
                   </DocumentTitle>
                 </Route>
                 <Route exact path="/signup">
-                  <DocumentTitle title="Sign Up">
+                  <DocumentTitle title="Sign Up | Nightlife">
                     <SignUpForm
                       signInWithGoogle={signInWithGoogle}
                       createUserWithEmailAndPasswordHandler={user =>

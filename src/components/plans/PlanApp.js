@@ -307,7 +307,7 @@ class PlanApp extends React.Component {
     return (
       <DocumentTitle
         title={`${this.state.discoverMode[0].toUpperCase() +
-          this.state.discoverMode.slice(1)} Plan`}
+          this.state.discoverMode.slice(1)} Plan | Nightlife`}
       >
         <>
           <div className="discover-container">

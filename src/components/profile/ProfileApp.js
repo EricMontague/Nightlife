@@ -151,7 +151,9 @@ class ProfileApp extends React.Component {
       return <Redirect to="/" />;
     } else {
       return (
-        <DocumentTitle title={this.context.currentUser.displayName}>
+        <DocumentTitle
+          title={`${this.context.currentUser.displayName} | Nightlife`}
+        >
           <div>
             <ProfileHeader
               isLoggedIn={this.context.isLoggedIn}
