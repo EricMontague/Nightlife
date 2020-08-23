@@ -20,6 +20,7 @@ const constants = Object.freeze({
   GOOGLE_LIBRARIES: { places: "places" },
   GOOGLE_IMAGE_HEIGHT: 400,
   GOOGLE_IMAGE_WIDTH: 400,
+  GOOGLE_PLACE_TYPES: ["establishment"],
   SORT_BY_RATING_ASC: "Rating: low to high",
   SORT_BY_RATING_DESC: "Rating: high to low",
   SORT_BY_PRICE_LEVEL_ASC: "Price: low to high",
