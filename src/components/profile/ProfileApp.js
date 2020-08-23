@@ -8,12 +8,14 @@ import {
   toggleScrollY,
   enableScrollY
 } from "../../services/helpers";
+import defaultPlacePhoto from "../../assets/default_place_image.png";
 import { Redirect } from "react-router-dom";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
 import PlanDetailsModal from "./PlanDetailsModal";
 import DeletePlanModal from "./DeletePlanModal";
 import constants from "../../services/constants";
+import DocumentTitle from "../common/DocumentTitle";
 
 class ProfileApp extends React.Component {
   constructor() {
@@ -81,9 +83,12 @@ class ProfileApp extends React.Component {
     };
     const handlePlaceResults = (placeResults, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        const photoUrl = placeResults.photos
+          ? placeResults.photos[0].getUrl(photoOptions)
+          : defaultPlacePhoto;
         const updatedPlan = {
           ...plan,
-          image: placeResults.photos[0].getUrl(photoOptions)
+          image: photoUrl
         };
         this.setState({ plans: [...this.state.plans, updatedPlan] });
       } else {
@@ -146,30 +151,32 @@ class ProfileApp extends React.Component {
       return <Redirect to="/" />;
     } else {
       return (
-        <div>
-          <ProfileHeader
-            isLoggedIn={this.context.isLoggedIn}
-            currentUser={this.context.currentUser}
-          />
-          <ProfileContent
-            plans={this.state.plans}
-            toggleDeletePlanModal={plan => this.toggleDeletePlanModal(plan)}
-            togglePlanDetailsModal={plan => this.togglePlanDetailsModal(plan)}
-          />
-          {this.state.isPlanDetailsModalVisible && (
-            <PlanDetailsModal
-              plan={this.state.selectedPlan}
-              toggleModal={plan => this.togglePlanDetailsModal(plan)}
+        <DocumentTitle title={this.context.currentUser.displayName}>
+          <div>
+            <ProfileHeader
+              isLoggedIn={this.context.isLoggedIn}
+              currentUser={this.context.currentUser}
             />
-          )}
-          {this.state.isDeletePlanModalVisible && (
-            <DeletePlanModal
-              toggleModal={plan => this.toggleDeletePlanModal(plan)}
-              handleDeleteClick={planId => this.deletePlan(planId)}
-              plan={this.state.selectedPlan}
+            <ProfileContent
+              plans={this.state.plans}
+              toggleDeletePlanModal={plan => this.toggleDeletePlanModal(plan)}
+              togglePlanDetailsModal={plan => this.togglePlanDetailsModal(plan)}
             />
-          )}
-        </div>
+            {this.state.isPlanDetailsModalVisible && (
+              <PlanDetailsModal
+                plan={this.state.selectedPlan}
+                toggleModal={plan => this.togglePlanDetailsModal(plan)}
+              />
+            )}
+            {this.state.isDeletePlanModalVisible && (
+              <DeletePlanModal
+                toggleModal={plan => this.toggleDeletePlanModal(plan)}
+                handleDeleteClick={planId => this.deletePlan(planId)}
+                plan={this.state.selectedPlan}
+              />
+            )}
+          </div>
+        </DocumentTitle>
       );
     }
   }
