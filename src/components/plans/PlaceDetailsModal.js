@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import defaultPlacePhoto from "../../assets/default_place_image.png";
 import Rating from "./Rating";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 import constants from "../../services/constants";
@@ -34,7 +35,11 @@ const PlaceDetailsModal = props => {
           <div className="modal-header">
             <div className="modal-image mb-2">
               <img
-                src={props.place.photos[0].getUrl()}
+                src={
+                  props.place.photos.length > 0
+                    ? props.place.photos[0].getUrl()
+                    : defaultPlacePhoto
+                }
                 alt={props.place.name}
               />
             </div>
@@ -59,7 +64,11 @@ const PlaceDetailsModal = props => {
           </div>
           <div className="modal-body">
             <BusinessHours
-              businessHours={props.place.openingHours.weekday_text}
+              businessHours={
+                props.place.openingHours
+                  ? props.place.openingHours.weekday_text
+                  : []
+              }
             />
           </div>
           <div className="modal-footer">
