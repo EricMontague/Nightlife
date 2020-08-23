@@ -19,6 +19,7 @@ import {
   enableScrollY
 } from "../../services/helpers";
 import Poller from "../../services/polling";
+import DocumentTitle from "../common/DocumentTitle";
 
 class PlanApp extends React.Component {
   constructor(props) {
@@ -69,6 +70,28 @@ class PlanApp extends React.Component {
       const planId = this.splitPath[2];
       const poller = new Poller(3000, 3);
       poller.start(this.getInitialState, [planId]);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.splitPath = this.props.location.pathname.split("/");
+    const mode = this.splitPath[this.splitPath.length - 1];
+    if (prevState.discoverMode !== mode) {
+      this.setState({
+        isPlaceModalVisible: false,
+        isDiscoverView: false,
+        discoverMode: mode,
+        selectedPlace: null,
+        sortOrder: "",
+        plan: {
+          planId: "",
+          title: "",
+          description: "",
+          date: formatDate(new Date()),
+          time: new Date().toTimeString().slice(0, 5)
+        },
+        places: []
+      });
     }
   }
 
@@ -128,10 +151,10 @@ class PlanApp extends React.Component {
         formattedAddress: placeResults.formatted_address,
         location: placeResults.geometry.location,
         openingHours: placeResults.opening_hours,
-        photos: placeResults.photos,
+        photos: placeResults.photos || [],
         priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
         rating: placeResults.rating || constants.DEFAULT_RATING,
-        website: placeResults.website
+        website: placeResults.website || ""
       };
 
       this.setState({
@@ -152,10 +175,10 @@ class PlanApp extends React.Component {
       formattedAddress: placeResults.formatted_address,
       location: placeResults.geometry.location,
       openingHours: placeResults.opening_hours,
-      photos: placeResults.photos,
+      photos: placeResults.photos || [],
       priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
       rating: placeResults.rating || constants.DEFAULT_RATING,
-      website: placeResults.website
+      website: placeResults.website || ""
     };
     const existingPlace = this.state.places.find(place => {
       return place.placeId === newPlace.placeId;
@@ -254,12 +277,10 @@ class PlanApp extends React.Component {
   }
 
   dragEndHandler(result) {
-    console.log("Dragging ended");
     const { destination, source } = result;
 
     // dropped outside of list
     if (!destination) {
-      console.log("Not destination");
       return;
     }
 
@@ -284,41 +305,46 @@ class PlanApp extends React.Component {
     const sortedPlaces = this.sortPlaces(this.state.places);
 
     return (
-      <>
-        <div className="discover-container">
-          <div className="google-map">
-            <Map toggleModal={place => this.togglePlaceModal(place)} />
+      <DocumentTitle
+        title={`${this.state.discoverMode[0].toUpperCase() +
+          this.state.discoverMode.slice(1)} Plan`}
+      >
+        <>
+          <div className="discover-container">
+            <div className="google-map">
+              <Map toggleModal={place => this.togglePlaceModal(place)} />
+            </div>
+            <div className="user-actions">
+              <CreatePlan
+                addPlace={this.addPlace}
+                deletePlace={placeId => this.deletePlace(placeId)}
+                setPlanDetails={plan =>
+                  this.state.discoverMode === constants.DISCOVER_MODE.CREATE
+                    ? this.addPlanDetails(plan)
+                    : this.updatePlanDetails(plan)
+                }
+                updatePlan={this.updatePlan}
+                storePlan={this.storePlan}
+                toggleView={this.toggleView}
+                toggleModal={this.togglePlaceModal}
+                places={sortedPlaces}
+                isDiscoverView={this.state.isDiscoverView}
+                plan={this.state.plan}
+                discoverMode={this.state.discoverMode}
+                changeSortOrder={this.changeSortOrder}
+                dragEndHandler={this.dragEndHandler}
+                dragStartHandler={this.dragStartHandler}
+              />
+            </div>
           </div>
-          <div className="user-actions">
-            <CreatePlan
-              addPlace={this.addPlace}
-              deletePlace={placeId => this.deletePlace(placeId)}
-              setPlanDetails={plan =>
-                this.state.discoverMode === constants.DISCOVER_MODE.CREATE
-                  ? this.addPlanDetails(plan)
-                  : this.updatePlanDetails(plan)
-              }
-              updatePlan={this.updatePlan}
-              storePlan={this.storePlan}
-              toggleView={this.toggleView}
-              toggleModal={this.togglePlaceModal}
-              places={sortedPlaces}
-              isDiscoverView={this.state.isDiscoverView}
-              plan={this.state.plan}
-              discoverMode={this.state.discoverMode}
-              changeSortOrder={this.changeSortOrder}
-              dragEndHandler={this.dragEndHandler}
-              dragStartHandler={this.dragStartHandler}
+          {this.state.isPlaceModalVisible && (
+            <PlaceDetailsModal
+              place={this.state.selectedPlace}
+              toggleModal={place => this.togglePlaceModal(place)}
             />
-          </div>
-        </div>
-        {this.state.isPlaceModalVisible && (
-          <PlaceDetailsModal
-            place={this.state.selectedPlace}
-            toggleModal={place => this.togglePlaceModal(place)}
-          />
-        )}
-      </>
+          )}
+        </>
+      </DocumentTitle>
     );
   }
 }
