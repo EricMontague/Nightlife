@@ -84,7 +84,3 @@ export const enableScrollY = () => {
 export const disableScrollY = () => {
   document.body.classList.add("no-scroll-y");
 };
-
-export const setDocumentTitle = title => {
-  document.title = title;
-};
