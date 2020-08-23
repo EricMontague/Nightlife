@@ -68,7 +68,7 @@ class DiscoverView extends React.Component {
               handlePlaceSelected={this.props.handlePlaceSelected}
               handleFocus={this.handleFocus}
               handleBlur={this.handleBlur}
-              types={["establishment"]}
+              types={constants.GOOGLE_PLACE_TYPES}
               fields={constants.PLACES_API_FIELDS}
               autocompleteClassName="autocomplete"
               inputName="search"
