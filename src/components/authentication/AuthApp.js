@@ -9,6 +9,7 @@ import {
   getRedirectSignInResult,
   storeUserDocument
 } from "../../services/firebase";
+import DocumentTitle from "../common/DocumentTitle";
 import { AuthContext } from "../../context/AuthProvider";
 import { Redirect, Switch, Route } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -93,23 +94,29 @@ class AuthApp extends React.Component {
             <div className="card-body">
               <Switch>
                 <Route exact path="/">
-                  <Home signInWithGoogle={signInWithGoogle} />
+                  <DocumentTitle title="Home">
+                    <Home signInWithGoogle={signInWithGoogle} />
+                  </DocumentTitle>
                 </Route>
                 <Route exact path="/signin">
-                  <SignInForm
-                    signInWithGoogle={signInWithGoogle}
-                    signInWithEmailAndPassword={(email, password) =>
-                      this.loginUser(email, password)
-                    }
-                  />
+                  <DocumentTitle title="Sign In">
+                    <SignInForm
+                      signInWithGoogle={signInWithGoogle}
+                      signInWithEmailAndPassword={(email, password) =>
+                        this.loginUser(email, password)
+                      }
+                    />
+                  </DocumentTitle>
                 </Route>
                 <Route exact path="/signup">
-                  <SignUpForm
-                    signInWithGoogle={signInWithGoogle}
-                    createUserWithEmailAndPasswordHandler={user =>
-                      this.registerUser(user)
-                    }
-                  />
+                  <DocumentTitle title="Sign Up">
+                    <SignUpForm
+                      signInWithGoogle={signInWithGoogle}
+                      createUserWithEmailAndPasswordHandler={user =>
+                        this.registerUser(user)
+                      }
+                    />
+                  </DocumentTitle>
                 </Route>
               </Switch>
             </div>
