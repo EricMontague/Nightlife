@@ -8,15 +8,17 @@ import Map from "./Map";
 import { v4 as uuidv4 } from "uuid";
 import { formatDate } from "../../services/dateTimeHelpers";
 import constants from "../../services/constants";
-import sortRunner from "../../algorithms/sortPlaces";
+import sortRunner from "../../algorithms/sorting";
 import PropTypes from "prop-types";
 import {
   trimObjectFieldValues,
   removeGoogleScript,
   hasGoogleScript,
   reorderElements,
-  toggleScrollY,
-  enableScrollY
+  enableScrollY,
+  disableScrollY,
+  enableNavigation,
+  disableNavigation
 } from "../../services/helpers";
 import Poller from "../../services/polling";
 import DocumentTitle from "../common/DocumentTitle";
@@ -257,7 +259,6 @@ class PlanApp extends React.Component {
   }
 
   togglePlaceModal(place) {
-    toggleScrollY();
     this.setState({
       isPlaceModalVisible: !this.state.isPlaceModalVisible,
       selectedPlace: this.state.selectedPlace ? null : place
@@ -300,6 +301,14 @@ class PlanApp extends React.Component {
   render() {
     if (!this.context.isLoggedIn) {
       return <Redirect to="/" />;
+    }
+
+    if (this.state.isPlaceModalVisible) {
+      disableScrollY();
+      disableNavigation();
+    } else {
+      enableScrollY();
+      enableNavigation();
     }
 
     const sortedPlaces = this.sortPlaces(this.state.places);
