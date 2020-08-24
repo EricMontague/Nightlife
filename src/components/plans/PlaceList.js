@@ -1,9 +1,17 @@
 import React from "react";
 import Place from "./Place";
+import constants from "../../services/constants";
 import { Draggable } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
 
 const PlaceList = props => {
+  const isDragDisabled = props.discoverMode === constants.DISCOVER_MODE.VIEW;
+
+  let extraClassNames = { placeCardBody: "" };
+  if (isDragDisabled) {
+    extraClassNames = { placeCardBody: " cursor-pointer" };
+  }
+
   return (
     <div className="card-body mb-3">
       {props.places.map((place, index) => {
@@ -12,6 +20,7 @@ const PlaceList = props => {
             key={place.placeId}
             draggableId={place.placeId}
             index={index}
+            isDragDisabled={isDragDisabled}
           >
             {provided => (
               <div
@@ -25,6 +34,7 @@ const PlaceList = props => {
                   handleDeleteClick={props.handleDeleteClick}
                   discoverMode={props.discoverMode}
                   toggleModal={props.toggleModal}
+                  extraClassNames={extraClassNames}
                 />
               </div>
             )}
