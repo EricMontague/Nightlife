@@ -1,4 +1,5 @@
 import constants from "../services/constants";
+import { convertToDatetime } from "../services/dateTimeHelpers";
 
 // Ratings will be floats from 0.0 to 5.0, inclusive
 const sortByRating = (places, reverse) => {
@@ -15,15 +16,52 @@ const sortByRating = (places, reverse) => {
 // Price levels will be integers from 0 to 4, inclusive
 const sortByPriceLevel = (places, reverse) => {
   if (reverse) {
-    console.log("sortByPriceLevel reversed");
     return places.sort((placeA, placeB) => {
       return (placeA.priceLevel - placeB.priceLevel) * -1;
     });
   }
-  console.log("sortByPriceLevel NOT reversed");
   return places.sort((placeA, placeB) => {
     return placeA.priceLevel - placeB.priceLevel;
   });
+};
+
+// Used to sort plans
+export const sortByDatetime = (plans, reverse) => {
+  if (reverse) {
+    return plans.sort((planA, planB) => {
+      return (
+        (convertToDatetime(planA.date, planA.time) -
+          convertToDatetime(planB.date, planB.time)) *
+        -1
+      );
+    });
+  }
+  return plans.sort((planA, planB) => {
+    return (
+      convertToDatetime(planA.date, planA.time) -
+      convertToDatetime(planB.date, planB.time)
+    );
+  });
+};
+
+// Chose Insertion Sort as the size of the array will
+// Always be small
+export const sortPlacesByKey = (places, key) => {
+  if (!places || places.length == 0 || !key || !places[0].hasOwnProperty(key)) {
+    return places;
+  }
+  for (let i = 1; i < places.length; i++) {
+    let place = places[i];
+    let j = i;
+
+    while (j > 0 && place[[key]] < places[j - 1][[key]]) {
+      places[j] = places[j - 1];
+      places[j].sortOrder += 1;
+      j -= 1;
+    }
+    places[j] = place;
+    place.sortOrder = j;
+  }
 };
 
 const sortRunner = (places, sortOrder) => {
