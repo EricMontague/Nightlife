@@ -43,8 +43,8 @@ export const loadGoogleScript = (sourceAttributeValue, urlParameters) => {
   document.body.appendChild(newScriptElement);
 };
 
-export const reorderElements = (elements, sourceIndex, destinationIndex) => {
-  const length = elements.length;
+export const reorderPlaces = (places, sourceIndex, destinationIndex) => {
+  const length = places.length;
   if (
     sourceIndex < 0 ||
     sourceIndex >= length ||
@@ -53,28 +53,32 @@ export const reorderElements = (elements, sourceIndex, destinationIndex) => {
   ) {
     throw new Error("Array index out of bounds.");
   }
-  const elementsCopy = elements.slice();
-  const targetElement = elementsCopy[sourceIndex];
+  const placesCopy = places.slice();
+  const target = placesCopy[sourceIndex];
   while (destinationIndex < sourceIndex) {
-    elementsCopy[sourceIndex] = elementsCopy[sourceIndex - 1];
+    placesCopy[sourceIndex] = placesCopy[sourceIndex - 1];
     sourceIndex -= 1;
   }
   if (sourceIndex === destinationIndex) {
-    elementsCopy[sourceIndex] = targetElement;
+    placesCopy[sourceIndex] = target;
   }
-  return elementsCopy;
+  return placesCopy;
 };
 
 export const disablePointerEvents = () => {
   document.body.classList.add("no-pointer-events");
 };
 
+export const disableNavigation = () => {
+  document.querySelector(".navbar").classList.add("no-pointer-events");
+};
+
 export const enablePointerEvents = () => {
   document.body.classList.remove("no-pointer-events");
 };
 
-export const toggleScrollY = () => {
-  document.body.classList.toggle("no-scroll-y");
+export const enableNavigation = () => {
+  document.querySelector(".navbar").classList.remove("no-pointer-events");
 };
 
 export const enableScrollY = () => {
