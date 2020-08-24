@@ -1,9 +1,6 @@
 @import "variables";
 @import "base";
 @import "App";
-@import "functions";
-@import "mixins";
-@import "functions";
 
 .navbar {
   position: sticky;
@@ -934,20 +931,10 @@
   bottom: 0;
   left: 0;
   outline: 0;
+  overflow: auto;
+  padding: 2rem 3rem;
+  background: rgba(36, 41, 46, 0.1);
   z-index: 9996;
-
-  &:before {
-    position: absolute;
-    content: "";
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 175vh;
-    background: $dark-color;
-    opacity: 0.1;
-    z-index: -1;
-  }
 
   &.closed {
     display: none;
@@ -1121,6 +1108,10 @@
 
 .no-pointer-events {
   pointer-events: none;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
 }
 
 .discover-container {
