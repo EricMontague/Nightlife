@@ -1,7 +1,0 @@
-// CSS Grid
-
-@mixin grid-col($columns, $gap) {
-  display: grid;
-  grid-template-columns: repeat($columns);
-  gap: $gap;
-}
