@@ -26,7 +26,7 @@ const PlaceDetailsModal = props => {
   useOnClickOutside(modalRef, closeModal);
 
   return (
-    <div className="modal overflow-auto">
+    <div className="modal">
       <div className="modal-container-centered">
         <div
           className="modal-content modal-content-md animation-slide-down"
@@ -53,14 +53,16 @@ const PlaceDetailsModal = props => {
               }
               starSize={"lg"}
             />
-            <a
-              href={props.place.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link mt-1"
-            >
-              Visit Website
-            </a>
+            {props.place.website && (
+              <a
+                href={props.place.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link flex-start mt-1"
+              >
+                Visit Website
+              </a>
+            )}
           </div>
           <div className="modal-body">
             <BusinessHours
