@@ -5,9 +5,12 @@ import {
   hasGoogleScript,
   removeGoogleScript,
   loadGoogleScript,
-  toggleScrollY,
-  enableScrollY
+  disableScrollY,
+  enableScrollY,
+  disableNavigation,
+  enableNavigation
 } from "../../services/helpers";
+import { sortByDatetime } from "../../algorithms/sorting";
 import defaultPlacePhoto from "../../assets/default_place_image.png";
 import { Redirect } from "react-router-dom";
 import ProfileHeader from "./ProfileHeader";
@@ -76,6 +79,19 @@ class ProfileApp extends React.Component {
     }
   }
 
+  fetchPlanPhotos(plans) {
+    const placesService = new window.google.maps.places.PlacesService(
+      document.createElement("div")
+    );
+    plans.forEach(plan => {
+      const placeRequest = {
+        fields: ["photo"],
+        placeId: plan.placeIds[0]
+      };
+      placesService.getDetails(placeRequest, this.setInitialState(plan));
+    });
+  }
+
   setInitialState(plan) {
     const photoOptions = {
       maxHeight: constants.GOOGLE_IMAGE_HEIGHT,
@@ -100,19 +116,6 @@ class ProfileApp extends React.Component {
     return handlePlaceResults;
   }
 
-  fetchPlanPhotos(plans) {
-    const placesService = new window.google.maps.places.PlacesService(
-      document.createElement("div")
-    );
-    plans.forEach(plan => {
-      const placeRequest = {
-        fields: ["photo"],
-        placeId: plan.placeIds[0]
-      };
-      placesService.getDetails(placeRequest, this.setInitialState(plan));
-    });
-  }
-
   async deletePlan(planId) {
     let deleted = false;
     try {
@@ -131,7 +134,6 @@ class ProfileApp extends React.Component {
   }
 
   togglePlanDetailsModal(plan) {
-    toggleScrollY();
     this.setState({
       isPlanDetailsModalVisible: !this.state.isPlanDetailsModalVisible,
       selectedPlan: this.state.selectedPlan ? null : plan
@@ -139,7 +141,6 @@ class ProfileApp extends React.Component {
   }
 
   toggleDeletePlanModal(plan) {
-    toggleScrollY();
     this.setState({
       isDeletePlanModalVisible: !this.state.isDeletePlanModalVisible,
       selectedPlan: this.state.selectedPlan ? null : plan
@@ -149,38 +150,51 @@ class ProfileApp extends React.Component {
   render() {
     if (!this.context.isLoggedIn) {
       return <Redirect to="/" />;
-    } else {
-      return (
-        <DocumentTitle
-          title={`${this.context.currentUser.displayName} | Nightlife`}
-        >
-          <div>
-            <ProfileHeader
-              isLoggedIn={this.context.isLoggedIn}
-              currentUser={this.context.currentUser}
-            />
-            <ProfileContent
-              plans={this.state.plans}
-              toggleDeletePlanModal={plan => this.toggleDeletePlanModal(plan)}
-              togglePlanDetailsModal={plan => this.togglePlanDetailsModal(plan)}
-            />
-            {this.state.isPlanDetailsModalVisible && (
-              <PlanDetailsModal
-                plan={this.state.selectedPlan}
-                toggleModal={plan => this.togglePlanDetailsModal(plan)}
-              />
-            )}
-            {this.state.isDeletePlanModalVisible && (
-              <DeletePlanModal
-                toggleModal={plan => this.toggleDeletePlanModal(plan)}
-                handleDeleteClick={planId => this.deletePlan(planId)}
-                plan={this.state.selectedPlan}
-              />
-            )}
-          </div>
-        </DocumentTitle>
-      );
     }
+
+    if (
+      this.state.isPlanDetailsModalVisible ||
+      this.state.isDeletePlanModalVisible
+    ) {
+      disableScrollY();
+      disableNavigation();
+    } else {
+      enableScrollY();
+      enableNavigation();
+    }
+
+    const sortedPlans = sortByDatetime(this.state.plans, true);
+
+    return (
+      <DocumentTitle
+        title={`${this.context.currentUser.displayName} | Nightlife`}
+      >
+        <div>
+          <ProfileHeader
+            isLoggedIn={this.context.isLoggedIn}
+            currentUser={this.context.currentUser}
+          />
+          <ProfileContent
+            plans={sortedPlans}
+            toggleDeletePlanModal={plan => this.toggleDeletePlanModal(plan)}
+            togglePlanDetailsModal={plan => this.togglePlanDetailsModal(plan)}
+          />
+          {this.state.isPlanDetailsModalVisible && (
+            <PlanDetailsModal
+              plan={this.state.selectedPlan}
+              toggleModal={plan => this.togglePlanDetailsModal(plan)}
+            />
+          )}
+          {this.state.isDeletePlanModalVisible && (
+            <DeletePlanModal
+              toggleModal={plan => this.toggleDeletePlanModal(plan)}
+              handleDeleteClick={planId => this.deletePlan(planId)}
+              plan={this.state.selectedPlan}
+            />
+          )}
+        </div>
+      </DocumentTitle>
+    );
   }
 }
 
