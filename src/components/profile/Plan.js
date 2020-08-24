@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { formatDateTime } from "../../services/dateTimeHelpers";
+import { convertDatetimeToString } from "../../services/dateTimeHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
@@ -14,7 +14,9 @@ const Plan = props => {
         <h3 className="plan-card-title">{props.plan.title}</h3>
         <div className="flex-row align-items space-between">
           <p className="text-medium font-size-sm">
-            {formatDateTime(new Date(props.plan.date + " " + props.plan.time))}
+            {convertDatetimeToString(
+              new Date(props.plan.date + " " + props.plan.time)
+            )}
           </p>
         </div>
         <p className="py-1">{props.plan.description}</p>
