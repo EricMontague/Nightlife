@@ -12,7 +12,7 @@ const Place = props => {
   }
   return (
     <div className="place-card">
-      <div className="place-card-body">
+      <div className={"place-card-body" + props.extraClassNames.placeCardBody}>
         <h4 className="place-card-title">
           {props.position + ". " + props.place.name}
         </h4>
@@ -81,7 +81,8 @@ Place.propTypes = {
   }),
   toggleModal: PropTypes.func.isRequired,
   handleDeleteClick: PropTypes.func.isRequired,
-  discoverMode: PropTypes.string.isRequired
+  discoverMode: PropTypes.string.isRequired,
+  extraClassNames: PropTypes.objectOf(PropTypes.string.isRequired)
 };
 
 export default React.memo(Place);
