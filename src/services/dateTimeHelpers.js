@@ -26,8 +26,8 @@ const formatTime = (hours, minutes) => {
   return formattedHours.toString() + ":" + minutes.toString() + " " + period;
 };
 
-// returns datetime in the format of Tue, July 28, 2020
-export const formatDateTime = date => {
+// returns datetime in the format of Tue, July 28, 2020, expects a date object
+export const convertDatetimeToString = date => {
   const dayName = days[date.getDay()];
   const monthName = months[date.getMonth()];
   const formattedTime = formatTime(date.getHours(), date.getMinutes());
@@ -58,4 +58,9 @@ export const formatDate = date => {
     dateNumber = dateNumber.toString();
   }
   return year + "-" + month + "-" + dateNumber;
+};
+
+// Expects date and time to be strings
+export const convertToDatetime = (date, time) => {
+  return new Date(`${date} ${time}`);
 };
