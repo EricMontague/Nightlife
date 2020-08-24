@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
-import { formatDateTime } from "../../services/dateTimeHelpers";
+import { convertDatetimeToString } from "../../services/dateTimeHelpers";
 import PropTypes from "prop-types";
 
 const PlanDetailsModal = props => {
@@ -30,7 +30,7 @@ const PlanDetailsModal = props => {
             <h3 className="modal-title">{props.plan.title}</h3>
             <div className="flex-row align-items space-between">
               <p className="text-medium font-size-sm">
-                {formatDateTime(
+                {convertDatetimeToString(
                   new Date(props.plan.date + " " + props.plan.time)
                 )}
               </p>
