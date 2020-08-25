@@ -29,7 +29,7 @@ const PlaceList = props => {
                 {...provided.dragHandleProps}
               >
                 <Place
-                  position={index + 1}
+                  position={place.sortKey + 1}
                   place={place}
                   handleDeleteClick={props.handleDeleteClick}
                   discoverMode={props.discoverMode}
