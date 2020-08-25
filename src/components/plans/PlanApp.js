@@ -203,8 +203,21 @@ class PlanApp extends React.Component {
   }
 
   deletePlace(placeId) {
+    const newPlaces = [];
+    let found = false;
+    const places = this.state.places.slice();
+    for (let index = 0; index < places.length; index++) {
+      if (places[index].placeId === placeId) {
+        found = true;
+        continue;
+      }
+      if (found) {
+        places[index].sortKey -= 1;
+      }
+      newPlaces.push(places[index]);
+    }
     this.setState({
-      places: this.state.places.filter(place => place.placeId !== placeId)
+      places: newPlaces
     });
   }
 
