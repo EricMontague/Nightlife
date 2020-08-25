@@ -84,11 +84,13 @@ class ProfileApp extends React.Component {
       document.createElement("div")
     );
     plans.forEach(plan => {
-      const placeRequest = {
-        fields: ["photo"],
-        placeId: plan.placeIds[0]
-      };
-      placesService.getDetails(placeRequest, this.setInitialState(plan));
+      if (plan.places.length > 0) {
+        const placeRequest = {
+          fields: ["photo"],
+          placeId: plan.places[0].placeId
+        };
+        placesService.getDetails(placeRequest, this.setInitialState(plan));
+      }
     });
   }
 
