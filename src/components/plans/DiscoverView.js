@@ -76,10 +76,7 @@ class DiscoverView extends React.Component {
             />
           )}
         </div>
-        <DragDropContext
-          onDragStart={this.props.dragStartHandler}
-          onDragEnd={this.props.dragEndHandler}
-        >
+        <DragDropContext onDragEnd={this.props.dragEndHandler}>
           <Droppable droppableId={"droppable-1"}>
             {provided => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -171,7 +168,6 @@ DiscoverView.propTypes = {
   ),
 
   discoverMode: PropTypes.string.isRequired,
-  dragStartHandler: PropTypes.func.isRequired,
   dragEndHandler: PropTypes.func.isRequired
 };
 

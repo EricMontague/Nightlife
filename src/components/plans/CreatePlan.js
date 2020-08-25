@@ -20,7 +20,6 @@ const CreatePlan = props => {
         places={props.places}
         discoverMode={props.discoverMode}
         dragEndHandler={props.dragEndHandler}
-        dragStartHandler={props.dragStartHandler}
         toggleModal={props.toggleModal}
       />
     );
@@ -92,7 +91,6 @@ CreatePlan.propTypes = {
   ),
   discoverMode: PropTypes.string.isRequired,
   changeSortOrder: PropTypes.func.isRequired,
-  dragStartHandler: PropTypes.func.isRequired,
   dragEndHandler: PropTypes.func.isRequired
 };
 
