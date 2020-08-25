@@ -44,24 +44,10 @@ export const sortByDatetime = (plans, reverse) => {
   });
 };
 
-// Chose Insertion Sort as the size of the array will
-// Always be small
-export const sortPlacesByKey = (places, key) => {
-  if (!places || places.length == 0 || !key || !places[0].hasOwnProperty(key)) {
-    return places;
-  }
-  for (let i = 1; i < places.length; i++) {
-    let place = places[i];
-    let j = i;
-
-    while (j > 0 && place[[key]] < places[j - 1][[key]]) {
-      places[j] = places[j - 1];
-      places[j].sortOrder += 1;
-      j -= 1;
-    }
-    places[j] = place;
-    place.sortOrder = j;
-  }
+const sortByKey = places => {
+  return places.sort((placeA, placeB) => {
+    return placeA.sortKey - placeB.sortKey;
+  });
 };
 
 const sortRunner = (places, sortOrder) => {
@@ -77,15 +63,13 @@ const sortRunner = (places, sortOrder) => {
       break;
     case constants.SORT_BY_PRICE_LEVEL_ASC:
       newPlaces = sortByPriceLevel(places, reverse);
-      console.log(constants.SORT_BY_PRICE_LEVEL_ASC);
       break;
     case constants.SORT_BY_PRICE_LEVEL_DESC:
-      console.log(constants.SORT_BY_PRICE_LEVEL_DESC);
       reverse = true;
       newPlaces = sortByPriceLevel(places, reverse);
       break;
     default:
-      newPlaces = places;
+      newPlaces = sortByKey(places);
   }
   return newPlaces;
 };
