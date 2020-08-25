@@ -14,7 +14,7 @@ import {
   trimObjectFieldValues,
   removeGoogleScript,
   hasGoogleScript,
-  reorderElements,
+  reorderPlaces,
   enableScrollY,
   disableScrollY,
   enableNavigation,
@@ -52,11 +52,11 @@ class PlanApp extends React.Component {
     this.addPlanDetails = this.addPlanDetails.bind(this);
     this.updatePlanDetails = this.updatePlanDetails.bind(this);
     this.storePlan = this.storePlan.bind(this);
+    this.addSortKey = this.addSortKey.bind(this);
     this.toggleView = this.toggleView.bind(this);
     this.togglePlaceModal = this.togglePlaceModal.bind(this);
     this.changeSortOrder = this.changeSortOrder.bind(this);
     this.sortPlaces = this.sortPlaces.bind(this);
-    this.dragStartHandler = this.dragStartHandler.bind(this);
     this.dragEndHandler = this.dragEndHandler.bind(this);
   }
 
@@ -135,36 +135,45 @@ class PlanApp extends React.Component {
     const placesService = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
-    plan.placeIds.forEach(placeId => {
+    plan.places.forEach(place => {
       const placeRequest = {
         fields: constants.PLACES_API_FIELDS,
-        placeId: placeId
+        placeId: place.placeId
       };
-      placesService.getDetails(placeRequest, this.setInitialState);
+      placesService.getDetails(
+        placeRequest,
+        this.setInitialState(place.sortKey)
+      );
     });
   }
 
-  setInitialState(placeResults, status) {
-    if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-      const place = {
-        placeId: placeResults.place_id,
-        name: placeResults.name,
-        businessStatus: placeResults.business_status,
-        formattedAddress: placeResults.formatted_address,
-        location: placeResults.geometry.location,
-        openingHours: placeResults.opening_hours,
-        photos: placeResults.photos || [],
-        priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
-        rating: placeResults.rating || constants.DEFAULT_RATING,
-        website: placeResults.website || ""
-      };
+  setInitialState(sortKey) {
+    const handlePlaceResults = (placeResults, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        const place = {
+          placeId: placeResults.place_id,
+          name: placeResults.name,
+          businessStatus: placeResults.business_status,
+          formattedAddress: placeResults.formatted_address,
+          location: placeResults.geometry.location,
+          openingHours: placeResults.opening_hours,
+          photos: placeResults.photos || [],
+          priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
+          rating: placeResults.rating || constants.DEFAULT_RATING,
+          website: placeResults.website || "",
+          sortKey: sortKey
+        };
 
-      this.setState({
-        places: [...this.state.places, place]
-      });
-    } else {
-      console.log(`There was an error fetching place details data: ${status}`);
-    }
+        this.setState({
+          places: [...this.state.places, place]
+        });
+      } else {
+        console.log(
+          `There was an error fetching place details data: ${status}`
+        );
+      }
+    };
+    return handlePlaceResults;
   }
 
   addPlace(placeResults, input) {
@@ -180,7 +189,8 @@ class PlanApp extends React.Component {
       photos: placeResults.photos || [],
       priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
       rating: placeResults.rating || constants.DEFAULT_RATING,
-      website: placeResults.website || ""
+      website: placeResults.website || "",
+      sortKey: this.state.places.length
     };
     const existingPlace = this.state.places.find(place => {
       return place.placeId === newPlace.placeId;
@@ -229,7 +239,7 @@ class PlanApp extends React.Component {
       console.log("Please choose at least one place.");
     } else {
       const plan = { ...this.state.plan };
-      plan.placeIds = this.state.places.map(place => place.placeId);
+      plan.places = this.addSortKey(this.state.places);
       try {
         await addPlan(this.context.currentUser.userId, plan);
       } catch (error) {
@@ -244,7 +254,7 @@ class PlanApp extends React.Component {
       console.log("Please choose at least one place.");
     } else {
       const plan = { ...this.state.plan };
-      plan.placeIds = this.state.places.map(place => place.placeId);
+      plan.places = this.addSortKey(this.state.places);
       try {
         await updatePlan(this.context.currentUser.userId, plan);
       } catch (error) {
@@ -252,6 +262,14 @@ class PlanApp extends React.Component {
       }
       this.props.history.push(`/users/${this.context.currentUser.displayName}`);
     }
+  }
+
+  // Needed so that I can get places out of firebase in the same order
+  // They were in when I inserted them
+  addSortKey(places) {
+    return places.map((place, index) => {
+      return { placeId: place.placeId, sortKey: index };
+    });
   }
 
   toggleView() {
@@ -273,10 +291,6 @@ class PlanApp extends React.Component {
     return sortRunner(places, this.state.sortOrder);
   }
 
-  dragStartHandler() {
-    console.log("Dragging started!");
-  }
-
   dragEndHandler(result) {
     const { destination, source } = result;
 
@@ -286,7 +300,7 @@ class PlanApp extends React.Component {
     }
 
     // reorder places array
-    const reorderedPlaces = reorderElements(
+    const reorderedPlaces = reorderPlaces(
       this.state.places,
       source.index,
       destination.index
@@ -294,7 +308,8 @@ class PlanApp extends React.Component {
 
     // set state
     this.setState({
-      places: reorderedPlaces
+      places: reorderedPlaces,
+      sortOrder: constants.SORT_BY_USER_INPUT
     });
   }
 
@@ -342,7 +357,6 @@ class PlanApp extends React.Component {
                 discoverMode={this.state.discoverMode}
                 changeSortOrder={this.changeSortOrder}
                 dragEndHandler={this.dragEndHandler}
-                dragStartHandler={this.dragStartHandler}
               />
             </div>
           </div>
