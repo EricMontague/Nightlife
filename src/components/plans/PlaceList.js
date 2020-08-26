@@ -11,10 +11,15 @@ const PlaceList = props => {
   if (isDragDisabled) {
     extraClassNames = { placeCardBody: " cursor-pointer" };
   }
+  console.log(props.mousedOverPlaceId);
 
   return (
     <div className="card-body mb-3">
       {props.places.map((place, index) => {
+        const placeCardClassName = { placeCard: "" };
+        if (props.mousedOverPlaceId === place.placeId) {
+          placeCardClassName.placeCard = " selected";
+        }
         return (
           <Draggable
             key={place.placeId}
@@ -34,7 +39,10 @@ const PlaceList = props => {
                   handleDeleteClick={props.handleDeleteClick}
                   discoverMode={props.discoverMode}
                   toggleModal={props.toggleModal}
-                  extraClassNames={extraClassNames}
+                  extraClassNames={{
+                    ...extraClassNames,
+                    ...placeCardClassName
+                  }}
                 />
               </div>
             )}
@@ -87,6 +95,7 @@ PlaceList.propTypes = {
   ),
   toggleModal: PropTypes.func.isRequired,
   handleDeleteClick: PropTypes.func.isRequired,
-  discoverMode: PropTypes.string.isRequired
+  discoverMode: PropTypes.string.isRequired,
+  mousedOverPlaceId: PropTypes.string.isRequired
 };
 export default React.memo(PlaceList);
