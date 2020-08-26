@@ -85,6 +85,7 @@ class DiscoverView extends React.Component {
                   places={this.props.places}
                   handleDeleteClick={this.props.handleDeleteClick}
                   discoverMode={this.props.discoverMode}
+                  mousedOverPlaceId={this.props.mousedOverPlaceId}
                 />
                 {provided.placeholder}
               </div>
@@ -168,7 +169,8 @@ DiscoverView.propTypes = {
   ),
 
   discoverMode: PropTypes.string.isRequired,
-  dragEndHandler: PropTypes.func.isRequired
+  dragEndHandler: PropTypes.func.isRequired,
+  mousedOverPlaceId: PropTypes.string.isRequired
 };
 
 export default DiscoverView;

@@ -21,6 +21,7 @@ const CreatePlan = props => {
         discoverMode={props.discoverMode}
         dragEndHandler={props.dragEndHandler}
         toggleModal={props.toggleModal}
+        mousedOverPlaceId={props.mousedOverPlaceId}
       />
     );
   } else {
@@ -91,7 +92,8 @@ CreatePlan.propTypes = {
   ),
   discoverMode: PropTypes.string.isRequired,
   changeSortOrder: PropTypes.func.isRequired,
-  dragEndHandler: PropTypes.func.isRequired
+  dragEndHandler: PropTypes.func.isRequired,
+  mousedOverPlaceId: PropTypes.string.isRequired
 };
 
 export default CreatePlan;
