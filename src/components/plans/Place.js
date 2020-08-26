@@ -11,7 +11,7 @@ const Place = props => {
     addressLine = props.place.formattedAddress;
   }
   return (
-    <div className="place-card">
+    <div className={"place-card" + props.extraClassNames.placeCard}>
       <div className={"place-card-body" + props.extraClassNames.placeCardBody}>
         <h4 className="place-card-title">
           {props.position + ". " + props.place.name}
