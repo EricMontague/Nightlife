@@ -32,6 +32,7 @@ class PlanApp extends React.Component {
       isDiscoverView: false,
       discoverMode: this.splitPath[this.splitPath.length - 1],
       selectedPlace: null,
+      mousedOverPlaceId: "",
       sortOrder: "",
       plan: {
         planId: "",
@@ -58,6 +59,8 @@ class PlanApp extends React.Component {
     this.changeSortOrder = this.changeSortOrder.bind(this);
     this.sortPlaces = this.sortPlaces.bind(this);
     this.dragEndHandler = this.dragEndHandler.bind(this);
+    this.handleMarkerMouseover = this.handleMarkerMouseover.bind(this);
+    this.handleMarkerMouseout = this.handleMarkerMouseout.bind(this);
   }
 
   static contextType = AuthContext;
@@ -326,6 +329,20 @@ class PlanApp extends React.Component {
     });
   }
 
+  handleMarkerMouseover(placeId) {
+    console.log("handleMarkerMouseover called");
+    this.setState({
+      mousedOverPlaceId: placeId
+    });
+  }
+
+  handleMarkerMouseout() {
+    console.log("handleMarkermouseout called");
+    this.setState({
+      mousedOverPlaceId: ""
+    });
+  }
+
   render() {
     if (!this.context.isLoggedIn) {
       return <Redirect to="/" />;
@@ -349,7 +366,14 @@ class PlanApp extends React.Component {
         <>
           <div className="discover-container">
             <div className="google-map">
-              <Map toggleModal={place => this.togglePlaceModal(place)} />
+              {sortedPlaces.length > 0 && (
+                <Map
+                  toggleModal={place => this.togglePlaceModal(place)}
+                  places={sortedPlaces}
+                  handleMouseover={this.handleMarkerMouseover}
+                  handleMouseout={this.handleMarkerMouseout}
+                />
+              )}
             </div>
             <div className="user-actions">
               <CreatePlan
@@ -370,6 +394,7 @@ class PlanApp extends React.Component {
                 discoverMode={this.state.discoverMode}
                 changeSortOrder={this.changeSortOrder}
                 dragEndHandler={this.dragEndHandler}
+                mousedOverPlaceId={this.state.mousedOverPlaceId}
               />
             </div>
           </div>
