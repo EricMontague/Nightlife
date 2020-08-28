@@ -11,7 +11,6 @@ const PlaceList = props => {
   if (isDragDisabled) {
     extraClassNames = { placeCardBody: " cursor-pointer" };
   }
-  console.log(props.mousedOverPlaceId);
 
   return (
     <div className="card-body mb-3">

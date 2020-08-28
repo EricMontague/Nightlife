@@ -330,14 +330,12 @@ class PlanApp extends React.Component {
   }
 
   handleMarkerMouseover(placeId) {
-    console.log("handleMarkerMouseover called");
     this.setState({
       mousedOverPlaceId: placeId
     });
   }
 
   handleMarkerMouseout() {
-    console.log("handleMarkermouseout called");
     this.setState({
       mousedOverPlaceId: ""
     });
