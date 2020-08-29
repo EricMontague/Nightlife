@@ -368,6 +368,7 @@ class PlanApp extends React.Component {
                 <Map
                   toggleModal={place => this.togglePlaceModal(place)}
                   places={sortedPlaces}
+                  shouldRenderMarkers={this.state.isDiscoverView}
                   handleMouseover={this.handleMarkerMouseover}
                   handleMouseout={this.handleMarkerMouseout}
                 />
