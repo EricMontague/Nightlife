@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import constants from "../../services/constants";
+import { calculateCenter } from "../../services/helpers";
+import CustomMarker from "./CustomMarker";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
 
 export class MapContainer extends React.Component {
@@ -9,17 +12,22 @@ export class MapContainer extends React.Component {
       selectedPlace: null,
       activeMarker: null
     };
+    this.bounds = new this.props.google.maps.LatLngBounds();
     this.onMouseoverMarker = this.onMouseoverMarker.bind(this);
     this.setSelectedPlace = this.setSelectedPlace.bind(this);
     this.setActiveMarker = this.setActiveMarker.bind(this);
     this.handleWindowOpen = this.handleWindowOpen.bind(this);
     this.handleWindowClose = this.handleWindowClose.bind(this);
     this.handleLinkClick = this.handleLinkClick.bind(this);
+    this.getCenter = this.getCenter.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     // Until an infowindow is opened, this component should update
-    if (this.state.selectedPlace == null && this.state.activeMarker === null) {
+    if (
+      (this.state.selectedPlace == null && this.state.activeMarker === null) ||
+      this.props.places.length !== nextProps.places.length
+    ) {
       return true;
     }
     // The component should only update if a user moves their cursor over a different
@@ -79,19 +87,32 @@ export class MapContainer extends React.Component {
     return innerHandler;
   }
 
+  getCenter() {
+    const places = this.props.places;
+    if (places.length > 0) {
+      return calculateCenter(places);
+    }
+    return {
+      lat: constants.DEFAULT_GOOGLE_MAPS_LAT,
+      lng: constants.DEFAULT_GOOGLE_MAPS_LNG
+    };
+  }
+
   render() {
     let infoWindowId = "";
     if (this.state.selectedPlace !== null) {
       infoWindowId =
         this.state.selectedPlace.placeId + this.state.selectedPlace.name;
     }
+    const { lat, lng } = this.getCenter();
+    console.log(lat, lng);
 
     return (
       <Map
         google={this.props.google}
         center={{
-          lat: this.props.places[0].location.lat(),
-          lng: this.props.places[0].location.lng()
+          lat,
+          lng
         }}
         zoom={10}
       >
@@ -99,7 +120,7 @@ export class MapContainer extends React.Component {
           this.props.places.map(place => {
             const { placeId, name, location } = place;
             return (
-              <Marker
+              <CustomMarker
                 key={placeId}
                 title={name}
                 name={name}
@@ -109,6 +130,7 @@ export class MapContainer extends React.Component {
                 }}
                 onMouseover={this.onMouseoverMarker(place)}
                 onMouseout={this.props.handleMouseout}
+                bounds={this.bounds}
                 map={this.props.map}
                 google={this.props.google}
                 mapCenter={this.props.mapCenter}
@@ -134,44 +156,3 @@ export class MapContainer extends React.Component {
 export default GoogleApiWrapper({
   apiKey: process.env.REACT_APP_GCP_API_KEY
 })(MapContainer);
-
-/* <CustomMarker
-          key={this.props.places[0].placeId}
-          title={this.props.places[0].name}
-          name={this.props.places[0].name}
-          position={{
-            lat: this.props.places[0].location.lat(),
-            lng: this.props.places[0].location.lng()
-          }}
-          onMouseover={this.onMouseoverMarker(this.props.places[0].placeId)}
-          onMouseout={this.onMouseoutMarker}
-        />
-
-        <InfoWindow
-          visible={this.state.activeMarker !== null}
-          marker={this.state.activeMarker}
-          onOpen={event => {
-            this.handleWindowOpen(this.props, event);
-          }}
-          onClose={this.handleWindowClose}
-        >
-          <div
-            id={this.props.places[0].placeId + this.props.places[0].name}
-          ></div>
-        </InfoWindow> */
-
-// return (
-//   <MarkerGroup
-//     key={place.placeId}
-//     place={place}
-//     handleMouseover={this.onMouseoverMarker(place.placeId)}
-//     handleMouseout={this.onMouseoutMarker}
-//     handleLinkClick={this.handleLinkClick}
-//     handleWindowOpen={this.handleWindowOpen}
-//     handleWindowClose={this.handleWindowClose}
-//     activeMarker={this.state.activeMarker}
-//     map={this.props.map}
-//     google={this.props.google}
-//     mapCenter={this.props.mapCenter}
-//   />
-// );
