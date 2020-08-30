@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 const ProfileContent = props => {
   if (props.plans.length === 0) {
     return (
-      <div className="container text-center pb-3">
+      <div className="container text-center pb-3 centered-page-layout flex-col h-50vh">
         <h3 className="mb-2 font-size-md">
           Looks like you still need to make some plans!
         </h3>
