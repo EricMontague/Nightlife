@@ -61,7 +61,7 @@
 
   .font-size {
     &-md {
-      font-size: 1.7rem;
+      font-size: 1.7rem !important;
     }
   }
 
@@ -101,5 +101,13 @@
 
   .dropdown-menu {
     width: 10rem;
+  }
+}
+
+@media screen and (max-height: 900px) {
+  .font-size {
+    &-md {
+      font-size: 1.7rem !important;
+    }
   }
 }

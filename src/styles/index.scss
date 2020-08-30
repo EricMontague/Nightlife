@@ -70,7 +70,11 @@
 // Sizes
 .h {
   &-100vh {
-    height: 100vh;
+    height: 100vh !important;
+  }
+
+  &-50vh {
+    height: 50vh !important;
   }
 
   &-100 {
@@ -80,7 +84,7 @@
 
 .w {
   &-100vw {
-    width: 100vw;
+    width: 100vw !important;
   }
 
   &-100 {
@@ -368,9 +372,9 @@
   &-medium {
     color: $medium-color;
   }
-  
+
   &-overflow-ellipsis {
-    text-overflow: "ellipsis"
+    text-overflow: "ellipsis";
   }
 }
 
@@ -380,11 +384,11 @@
 
 .font-size {
   &-sm {
-    font-size: 0.8rem;
+    font-size: 0.8rem !important;
   }
 
   &-md {
-    font-size: 2rem;
+    font-size: 2rem !important;
   }
 }
 
