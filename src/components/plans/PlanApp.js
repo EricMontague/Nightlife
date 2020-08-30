@@ -364,15 +364,13 @@ class PlanApp extends React.Component {
         <>
           <div className="discover-container">
             <div className="google-map">
-              {sortedPlaces.length > 0 && (
-                <Map
-                  toggleModal={place => this.togglePlaceModal(place)}
-                  places={sortedPlaces}
-                  shouldRenderMarkers={this.state.isDiscoverView}
-                  handleMouseover={this.handleMarkerMouseover}
-                  handleMouseout={this.handleMarkerMouseout}
-                />
-              )}
+              <Map
+                toggleModal={place => this.togglePlaceModal(place)}
+                places={sortedPlaces}
+                shouldRenderMarkers={this.state.isDiscoverView}
+                handleMouseover={this.handleMarkerMouseover}
+                handleMouseout={this.handleMarkerMouseout}
+              />
             </div>
             <div className="user-actions">
               <CreatePlan
