@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import constants from "../../services/constants";
 import { calculateCenter } from "../../services/helpers";
-import CustomMarker from "./CustomMarker";
+// import CustomMarker from "./CustomMarker";
+// import Map from "./CustomMap";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
 
 export class MapContainer extends React.Component {
@@ -10,16 +11,30 @@ export class MapContainer extends React.Component {
     super(props);
     this.state = {
       selectedPlace: null,
-      activeMarker: null
+      activeMarker: null,
+      center: {
+        lat: constants.DEFAULT_GOOGLE_MAPS_LAT,
+        lng: constants.DEFAULT_GOOGLE_MAPS_LNG
+      }
     };
     this.bounds = new this.props.google.maps.LatLngBounds();
+    this.adjustCenter = this.adjustCenter.bind(this);
     this.onMouseoverMarker = this.onMouseoverMarker.bind(this);
     this.setSelectedPlace = this.setSelectedPlace.bind(this);
     this.setActiveMarker = this.setActiveMarker.bind(this);
     this.handleWindowOpen = this.handleWindowOpen.bind(this);
     this.handleWindowClose = this.handleWindowClose.bind(this);
     this.handleLinkClick = this.handleLinkClick.bind(this);
-    this.getCenter = this.getCenter.bind(this);
+  }
+
+  componentDidMount() {
+    this.adjustCenter();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.places.length !== this.props.places.length) {
+      this.adjustCenter();
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -36,6 +51,19 @@ export class MapContainer extends React.Component {
       nextState.selectedPlace !== this.state.selectedPlace ||
       nextState.activeMarker !== this.state.activeMarker
     );
+  }
+
+  adjustCenter() {
+    const places = this.props.places;
+    let center = {
+      lat: constants.DEFAULT_GOOGLE_MAPS_LAT,
+      lng: constants.DEFAULT_GOOGLE_MAPS_LNG
+    };
+
+    if (places.length > 0) {
+      center = calculateCenter(places);
+    }
+    this.setState({ center });
   }
 
   onMouseoverMarker(place) {
@@ -87,40 +115,28 @@ export class MapContainer extends React.Component {
     return innerHandler;
   }
 
-  getCenter() {
-    const places = this.props.places;
-    if (places.length > 0) {
-      return calculateCenter(places);
-    }
-    return {
-      lat: constants.DEFAULT_GOOGLE_MAPS_LAT,
-      lng: constants.DEFAULT_GOOGLE_MAPS_LNG
-    };
-  }
-
   render() {
     let infoWindowId = "";
     if (this.state.selectedPlace !== null) {
       infoWindowId =
         this.state.selectedPlace.placeId + this.state.selectedPlace.name;
     }
-    const { lat, lng } = this.getCenter();
-    console.log(lat, lng);
 
     return (
       <Map
         google={this.props.google}
         center={{
-          lat,
-          lng
+          lat: this.state.center.lat,
+          lng: this.state.center.lng
         }}
         zoom={10}
+        bounds={this.bounds}
       >
         {this.props.shouldRenderMarkers &&
           this.props.places.map(place => {
             const { placeId, name, location } = place;
             return (
-              <CustomMarker
+              <Marker
                 key={placeId}
                 title={name}
                 name={name}
