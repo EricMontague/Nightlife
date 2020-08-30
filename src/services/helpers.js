@@ -113,3 +113,50 @@ export const enableScrollY = () => {
 export const disableScrollY = () => {
   document.body.classList.add("no-scroll-y");
 };
+
+const getLatitudes = places => {
+  const initialLatitude = places[0].location.lat();
+  let minLatitude = initialLatitude;
+  let maxLatitude = initialLatitude;
+  places.forEach(place => {
+    const latitude = place.location.lat();
+    if (latitude > maxLatitude) {
+      maxLatitude = latitude;
+    }
+    if (latitude < minLatitude) {
+      minLatitude = latitude;
+    }
+  });
+  return {
+    minLatitude,
+    maxLatitude
+  };
+};
+
+const getLongitudes = places => {
+  const initialLongitude = places[0].location.lng();
+  let minLongitude = initialLongitude;
+  let maxLongitude = initialLongitude;
+  places.forEach(place => {
+    const longitude = place.location.lng();
+    if (longitude > maxLongitude) {
+      maxLongitude = longitude;
+    }
+    if (longitude < minLongitude) {
+      minLongitude = longitude;
+    }
+  });
+  return {
+    minLongitude,
+    maxLongitude
+  };
+};
+
+export const calculateCenter = places => {
+  const { minLatitude, maxLatitude } = getLatitudes(places);
+  const { minLongitude, maxLongitude } = getLongitudes(places);
+  return {
+    lat: (maxLatitude + minLatitude) / 2.0,
+    lng: (maxLongitude + minLongitude) / 2.0
+  };
+};
