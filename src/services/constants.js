@@ -21,6 +21,8 @@ const constants = Object.freeze({
   GOOGLE_IMAGE_HEIGHT: 400,
   GOOGLE_IMAGE_WIDTH: 400,
   GOOGLE_PLACE_TYPES: ["establishment"],
+  DEFAULT_GOOGLE_MAPS_LAT: 40.7118,
+  DEFAULT_GOOGLE_MAPS_LNG: -74.0131,
   SORT_BY_RATING_ASC: "Rating: low to high",
   SORT_BY_RATING_DESC: "Rating: high to low",
   SORT_BY_PRICE_LEVEL_ASC: "Price: low to high",
