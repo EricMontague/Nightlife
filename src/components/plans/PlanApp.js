@@ -199,6 +199,7 @@ class PlanApp extends React.Component {
       return place.placeId === newPlace.placeId;
     });
     if (!existingPlace) {
+      console.log(this);
       this.setState({
         places: [...this.state.places, newPlace]
       });
@@ -367,7 +368,10 @@ class PlanApp extends React.Component {
               <Map
                 toggleModal={place => this.togglePlaceModal(place)}
                 places={sortedPlaces}
-                shouldRenderMarkers={this.state.isDiscoverView}
+                shouldRenderMarkers={
+                  this.state.isDiscoverView ||
+                  this.state.discoverMode === constants.DISCOVER_MODE.VIEW
+                }
                 handleMouseover={this.handleMarkerMouseover}
                 handleMouseout={this.handleMarkerMouseout}
               />
