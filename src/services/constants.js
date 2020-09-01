@@ -3,7 +3,6 @@ const constants = Object.freeze({
     "place_id", // basic billing
     "formatted_address", // basic billing
     "geometry.location", // basic billing
-    "business_status", // basic billing
     "name", // basic billing
     "opening_hours", // contact billing
     "website", // contact billing
