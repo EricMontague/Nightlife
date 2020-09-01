@@ -10,7 +10,7 @@
   right: 0;
   color: #fff;
   background: $dark-color;
-  z-index: 9997;
+  z-index: 9996;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 
@@ -397,6 +397,28 @@
   padding-bottom: 1rem;
   margin-bottom: 2rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+// Alerts
+
+.alert {
+  position: fixed;
+  top: 3.8rem;
+  
+  padding: 0.75rem 1.5rem;
+  
+  width: 80%;
+  z-index: 9997;
+
+  &.danger {
+    background: darken($primary-color, 5%);
+    color: #fff;
+  }
+
+  &.success {
+    background: green;
+    color: #fff;
+  }
 }
 
 // Backgrounds
@@ -946,7 +968,7 @@
   overflow: auto;
   padding: 2rem 3rem;
   background: rgba(36, 41, 46, 0.1);
-  z-index: 9996;
+  z-index: 9995;
 
   &.closed {
     display: none;
