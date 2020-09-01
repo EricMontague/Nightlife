@@ -132,7 +132,6 @@ DiscoverView.propTypes = {
     PropTypes.shape({
       placeId: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      businessStatus: PropTypes.string.isRequired,
       formattedAddress: PropTypes.string.isRequired,
       location: PropTypes.objectOf(PropTypes.func.isRequired),
       openingHours: PropTypes.shape({
