@@ -2,8 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import constants from "../../services/constants";
 import { calculateCenter } from "../../services/helpers";
-// import CustomMarker from "./CustomMarker";
-// import Map from "./CustomMap";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
 
 export class MapContainer extends React.Component {
