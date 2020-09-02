@@ -7,14 +7,13 @@ class AlertProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisible: false,
       message: "Showing the first message",
       alertClassName: "danger"
     };
     this.alertRef = React.createRef();
     this.setMessage = this.setMessage.bind(this);
     this.show = this.show.bind(this);
-    this.clear = this.clear.bind(this);
+    this.close = this.close.bind(this);
   }
 
   setMessage(message, alertClassName) {
@@ -25,15 +24,12 @@ class AlertProvider extends React.Component {
   }
 
   show() {
-    this.setState({
-      isVisible: true
-    });
-    this.clear();
+    this.close();
     this.alertRef.current.classList.add("show");
-    setTimeout(this.clear, 3000);
+    setTimeout(this.close, 3000);
   }
 
-  clear() {
+  close() {
     this.alertRef.current.classList.remove("show");
   }
 
@@ -42,11 +38,13 @@ class AlertProvider extends React.Component {
       <AlertContext.Provider
         value={{ show: this.show, setMessage: this.setMessage }}
       >
-        <div
-          className={"alert " + this.state.alertClassName}
-          ref={this.alertRef}
-        >
-          <p>{this.state.message}</p>
+        <div className="alert" ref={this.alertRef}>
+          <div className={"alert-content " + this.state.alertClassName}>
+            <p>{this.state.message}</p>
+            <button className="close-btn" onClick={this.close}>
+              &times;
+            </button>
+          </div>
         </div>
 
         {this.props.children}
