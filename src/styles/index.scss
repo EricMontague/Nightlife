@@ -184,6 +184,34 @@
   }
 }
 
+.close-btn {
+  position: relative;
+  cursor: pointer;
+  color: #fff;
+  border: none;
+  outline: none;
+  padding: 0 0.3rem;
+  background: transparent;
+  font-size: 1.5rem;
+
+  &::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  &:active::before {
+    border: 1px solid #fff;
+  }
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
 // borders
 .border-bottom {
   border-bottom: 1px solid#bbb8b8 !important;
@@ -404,20 +432,35 @@
 .alert {
   position: fixed;
   top: 3.8rem;
-  
-  padding: 0.75rem 1.5rem;
-  
-  width: 80%;
+  left: 0;
+  right: 0;
+  transition: transform, opacity 0.3 ease;
+  transform: translateY(-30px);
+  opacity: 0;
   z-index: 9997;
 
-  &.danger {
-    background: darken($primary-color, 5%);
-    color: #fff;
+  &-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    &.danger {
+      background: darken($primary-color, 5%);
+      color: #fff;
+    }
+
+    &.success {
+      background: $dark-green-color;
+      color: #fff;
+    }
   }
 
-  &.success {
-    background: green;
-    color: #fff;
+  &.show {
+    transform: translateY(0px);
+    opacity: 1;
   }
 }
 
