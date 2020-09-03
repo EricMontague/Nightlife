@@ -1,11 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import UserInfo from "./UserInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signOutUser } from "../../services/firebase";
 import PropTypes from "prop-types";
 
 const NavLinks = props => {
+  const location = useLocation();
   const handleLinkClick = () => {
     if (props.isDropdownOpen) {
       props.handleClick();
@@ -26,12 +27,15 @@ const NavLinks = props => {
             />
           </Link>
         </li>
-        <li>
-          <Link to="/plans/create" onClick={handleLinkClick}>
-            <FontAwesomeIcon icon={["fas", "plus-circle"]} />
-            Create List
-          </Link>
-        </li>
+        {location.pathname !== "/plans/create" && (
+          <li>
+            <Link to="/plans/create" onClick={handleLinkClick}>
+              <FontAwesomeIcon icon={["fas", "plus-circle"]} />
+              Create List
+            </Link>
+          </li>
+        )}
+
         <li>
           <a
             href="/logout"
