@@ -199,7 +199,6 @@ class PlanApp extends React.Component {
       return place.placeId === newPlace.placeId;
     });
     if (!existingPlace) {
-      console.log(this);
       this.setState({
         places: [...this.state.places, newPlace]
       });
