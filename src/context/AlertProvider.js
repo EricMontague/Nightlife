@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const AlertContext = React.createContext();
+export const AlertContext = React.createContext();
 
 class AlertProvider extends React.Component {
   constructor(props) {
