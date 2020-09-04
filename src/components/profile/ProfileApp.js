@@ -45,20 +45,27 @@ class ProfileApp extends React.Component {
   static contextType = AuthContext;
 
   componentDidMount() {
+    console.log("Profile App mount");
     const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
     if (!hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
       urlParameters.push("callback=" + this.getInitialState.name.slice(6));
       loadGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
+    } else {
+      this.getInitialState();
     }
   }
 
   componentWillUnmount() {
+    console.log("Profile App unmount");
     enableScrollY();
+    // Commented these lines of code out to prevent a bug that was causing the
+    // removeGoogleScript function to remove both map scripts when switching
+    // the Create Plan page. Needs further manual testing
     // Remove google maps script if present
-    const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
-    if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
-      removeGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
-    }
+    // const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
+    // if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
+    //   removeGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
+    // }
   }
 
   async getInitialState() {
