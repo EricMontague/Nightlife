@@ -66,6 +66,7 @@ class PlanApp extends React.Component {
   static contextType = AuthContext;
 
   componentDidMount() {
+    console.log("PlanApp mount");
     // User is on the editting page
     const page = this.splitPath[this.splitPath.length - 1];
     if (
@@ -79,6 +80,7 @@ class PlanApp extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log("PlanApp update");
     this.splitPath = this.props.location.pathname.split("/");
     const mode = this.splitPath[this.splitPath.length - 1];
     if (prevState.discoverMode !== mode) {
@@ -101,6 +103,7 @@ class PlanApp extends React.Component {
   }
 
   componentWillUnmount() {
+    console.log("PlanApp unmount");
     enableScrollY();
     const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
     if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {

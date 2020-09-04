@@ -11,6 +11,7 @@ export const hasGoogleScript = (sourceAttributeValue, urlParameters) => {
   const scriptNodes = document.querySelectorAll(
     `script[src^="${sourceAttributeValue}"]`
   );
+  console.log(scriptNodes);
   scriptNodes.forEach(scriptNode => {
     urlParameters.forEach(parameter => {
       if (scriptNode.src.includes(parameter)) {
@@ -26,6 +27,7 @@ export const removeGoogleScript = (sourceAttributeValue, urlParameters) => {
   const scriptNode = document.querySelector(
     `script[src^="${sourceAttributeValue}"]`
   );
+  console.log(scriptNode.src);
   for (let index = 0; index < numParameters; index++) {
     if (scriptNode.src.includes(urlParameters[index])) {
       numParameters -= 1;
