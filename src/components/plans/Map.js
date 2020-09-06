@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import constants from "../../services/constants";
-import { calculateCenter } from "../../services/helpers";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
+import constants from "../../utils/constants";
+import { calculateCenter } from "../../utils/googleMapsHelpers";
 
 export class MapContainer extends React.Component {
   constructor(props) {
@@ -166,6 +166,51 @@ export class MapContainer extends React.Component {
     );
   }
 }
+
+MapContainer.propTypes = {
+  toggleModal: PropTypes.func.isRequired,
+  places: PropTypes.arrayOf(
+    PropTypes.shape({
+      placeId: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      formattedAddress: PropTypes.string.isRequired,
+      location: PropTypes.objectOf(PropTypes.func.isRequired),
+      openingHours: PropTypes.shape({
+        isOpen: PropTypes.func.isRequired,
+        periods: PropTypes.arrayOf(
+          PropTypes.shape({
+            close: PropTypes.shape({
+              day: PropTypes.number.isRequired,
+              time: PropTypes.string.isRequired,
+              hours: PropTypes.number.isRequired,
+              minutes: PropTypes.number.isRequired
+            }),
+            open: PropTypes.shape({
+              day: PropTypes.number.isRequired,
+              time: PropTypes.string.isRequired,
+              hours: PropTypes.number.isRequired,
+              minutes: PropTypes.number.isRequired
+            })
+          })
+        )
+      }),
+      photos: PropTypes.arrayOf(
+        PropTypes.shape({
+          getUrl: PropTypes.func.isRequired,
+          height: PropTypes.number.isRequired,
+          html_attributions: PropTypes.arrayOf(PropTypes.string.isRequired),
+          width: PropTypes.number.isRequired
+        })
+      ),
+      priceLevel: PropTypes.number,
+      rating: PropTypes.number,
+      website: PropTypes.string
+    })
+  ),
+  shouldRenderMarkers: PropTypes.bool.isRequired,
+  handleMouseover: PropTypes.func.isRequired,
+  handleMouseout: PropTypes.func.isRequired
+};
 
 export default GoogleApiWrapper({
   apiKey: process.env.REACT_APP_GCP_API_KEY
