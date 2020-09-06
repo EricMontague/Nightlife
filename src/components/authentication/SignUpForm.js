@@ -1,12 +1,12 @@
 import React from "react";
-import InputGroup from "../common/InputGroup";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import InputGroup from "../forms/InputGroup";
 import {
   required,
   validateLength,
   validateEmail
-} from "../../services/formValidators";
-import PropTypes from "prop-types";
+} from "../../utils/formValidators";
 
 class SignUpForm extends React.Component {
   constructor(props) {

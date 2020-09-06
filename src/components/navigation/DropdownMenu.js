@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import NavLinks from "./NavLinks";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
-import { disableScrollY, enableScrollY } from "../../utils/helpers";
+import { disableScrollY, enableScrollY } from "../../utils/commonHelpers";
 
 const DropdownMenu = props => {
   if (props.isOpen) {

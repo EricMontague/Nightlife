@@ -1,8 +1,8 @@
 import React from "react";
-import Place from "./Place";
-import constants from "../../services/constants";
-import { Draggable } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
+import { Draggable } from "react-beautiful-dnd";
+import Place from "./Place";
+import constants from "../../utils/constants";
 
 const PlaceList = props => {
   const isDragDisabled = props.discoverMode === constants.DISCOVER_MODE.VIEW;

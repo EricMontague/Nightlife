@@ -10,9 +10,9 @@ import {
   signInWithGoogle,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  getRedirectSignInResult,
-  storeUserDocument
+  getRedirectSignInResult
 } from "../../firebase/firebaseApp";
+import { storeUserDocument } from "../../firebase/users";
 
 class AuthApp extends React.Component {
   constructor(props) {

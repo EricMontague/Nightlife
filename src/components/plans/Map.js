@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
 import constants from "../../utils/constants";
 import { calculateCenter } from "../../utils/googleMapsHelpers";
