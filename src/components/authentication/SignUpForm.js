@@ -5,7 +5,7 @@ import {
   required,
   validateLength,
   validateEmail
-} from "../../services/validators";
+} from "../../services/formValidators";
 import PropTypes from "prop-types";
 
 class SignUpForm extends React.Component {

@@ -1,18 +1,18 @@
 import React from "react";
+import { Redirect, Switch, Route } from "react-router-dom";
+import PropTypes from "prop-types";
+import { AuthContext } from "../../providers/AuthProvider";
 import Home from "./Home";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
+import DocumentTitle from "../navigation/DocumentTitle";
 import {
   signInWithGoogle,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   getRedirectSignInResult,
   storeUserDocument
-} from "../../services/firebase";
-import DocumentTitle from "../common/DocumentTitle";
-import { AuthContext } from "../../context/AuthProvider";
-import { Redirect, Switch, Route } from "react-router-dom";
-import PropTypes from "prop-types";
+} from "../../firebase/firebaseApp";
 
 class AuthApp extends React.Component {
   constructor(props) {
