@@ -2,11 +2,11 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AlertProvider from "./providers/AlertProvider";
 import AuthProvider from "./providers/AuthProvider";
-import Navbar from "./components/common/Navbar";
+import Navbar from "./components/navigation/Navbar";
 import AuthApp from "./components/authentication/AuthApp";
 import ProfileApp from "./components/profile/ProfileApp";
 import PlanApp from "./components/plans/PlanApp";
-import NotFound from "./components/common/NotFound";
+import NotFound from "./components/errors/NotFound";
 
 const App = () => {
   return (
