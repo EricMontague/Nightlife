@@ -1,25 +1,27 @@
 import React from "react";
-import { AlertContext } from "../../context/AlertProvider";
-import { AuthContext } from "../../context/AuthProvider";
-import { getPlans, deletePlan } from "../../services/firebase";
-import {
-  hasGoogleScript,
-  removeGoogleScript,
-  loadGoogleScript,
-  disableScrollY,
-  enableScrollY,
-  disableNavigation,
-  enableNavigation
-} from "../../services/helpers";
-import { sortByDatetime } from "../../algorithms/sorting";
-import defaultPlacePhoto from "../../assets/default_place_image.png";
 import { Redirect } from "react-router-dom";
+import { AlertContext } from "../../providers/AlertProvider";
+import { AuthContext } from "../../providers/AuthProvider";
+import DocumentTitle from "../navigation/DocumentTitle";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
 import PlanDetailsModal from "./PlanDetailsModal";
 import DeletePlanModal from "./DeletePlanModal";
-import constants from "../../services/constants";
-import DocumentTitle from "../common/DocumentTitle";
+import { getPlans, deletePlan } from "../../firebase/plans";
+import {
+  disableScrollY,
+  enableScrollY,
+  disableNavigation,
+  enableNavigation
+} from "../../utils/commonHelpers";
+import {
+  hasGoogleScript,
+  removeGoogleScript,
+  loadGoogleScript
+} from "../../utils/googleMapsHelpers";
+import constants from "../../utils/constants";
+import { sortByDatetime } from "../../algorithms/sorting";
+import defaultPlacePhoto from "../../assets/default_place_image.png";
 
 class ProfileApp extends React.Component {
   constructor() {

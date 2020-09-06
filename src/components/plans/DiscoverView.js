@@ -1,11 +1,11 @@
 import React from "react";
-import SelectList from "../common/SelectList";
+import PropTypes from "prop-types";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import SelectList from "../forms/SelectList";
 import PlaceList from "./PlaceList";
 import AutocompleteInputGroup from "./AutocompleteInputGroup";
-import constants from "../../services/constants";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import constants from "../../utils/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PropTypes from "prop-types";
 
 class DiscoverView extends React.Component {
   constructor(props) {

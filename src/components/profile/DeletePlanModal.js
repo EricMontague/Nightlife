@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import useOnClickOutside from "../../hooks/useOnClickOutside";
 import PropTypes from "prop-types";
+import useOnClickOutside from "../../hooks/useOnClickOutside";
 
 const DeletePlanModal = props => {
   const modalRef = useRef();
@@ -17,7 +17,10 @@ const DeletePlanModal = props => {
   };
 
   const handleCancelBtnClick = event => {
-    modalRef.current.classList.replace("animation-slide-down", "animation-slide-up");
+    modalRef.current.classList.replace(
+      "animation-slide-down",
+      "animation-slide-up"
+    );
     setTimeout(() => props.toggleModal(props.plan), 400);
   };
 

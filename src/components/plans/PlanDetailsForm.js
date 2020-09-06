@@ -1,16 +1,16 @@
 import React from "react";
-import InputGroup from "../common/InputGroup";
-import TextAreaGroup from "../common/TextAreaGroup";
-import DatePicker from "../common/DatePicker";
-import TimePicker from "../common/TimePicker";
+import PropTypes from "prop-types";
+import InputGroup from "../forms/InputGroup";
+import TextAreaGroup from "../forms/TextAreaGroup";
+import DatePicker from "../forms/DatePicker";
+import TimePicker from "../forms/TimePicker";
 import {
   required,
   validateLength,
   validateDateRange,
   validateDateTime
-} from "../../services/validators";
+} from "../../utils/formValidators";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PropTypes from "prop-types";
 
 class PlanDetailsForm extends React.Component {
   constructor(props) {

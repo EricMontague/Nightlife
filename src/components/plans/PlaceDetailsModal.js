@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
-import defaultPlacePhoto from "../../assets/default_place_image.png";
+import PropTypes from "prop-types";
+import BusinessHours from "./BusinessHours";
 import Rating from "./Rating";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
-import constants from "../../services/constants";
-import BusinessHours from "./BusinessHours";
-import PropTypes from "prop-types";
+import constants from "../../utils/constants";
+import defaultPlacePhoto from "../../assets/default_place_image.png";
 
 const PlaceDetailsModal = props => {
   const modalRef = useRef();

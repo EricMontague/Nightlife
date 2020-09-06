@@ -1,8 +1,8 @@
 import React from "react";
-import constants from "../../services/constants";
+import PropTypes from "prop-types";
 import DiscoverView from "./DiscoverView";
 import PlanDetailsForm from "./PlanDetailsForm";
-import PropTypes from "prop-types";
+import constants from "../../utils/constants";
 
 const CreatePlan = props => {
   if (

@@ -1,8 +1,8 @@
 import React from "react";
-import Rating from "./Rating";
-import constants from "../../services/constants";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
+import Rating from "./Rating";
+import constants from "../../utils/constants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Place = props => {
   let addressLine =

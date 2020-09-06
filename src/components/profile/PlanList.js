@@ -1,6 +1,6 @@
 import React from "react";
-import Plan from "./Plan";
 import PropTypes from "prop-types";
+import Plan from "./Plan";
 
 const PlanList = props => {
   return (

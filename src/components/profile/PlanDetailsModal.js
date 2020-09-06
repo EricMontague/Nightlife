@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
-import useOnClickOutside from "../../hooks/useOnClickOutside";
-import { convertDatetimeToString } from "../../services/dateTimeHelpers";
 import PropTypes from "prop-types";
+import useOnClickOutside from "../../hooks/useOnClickOutside";
+import { convertDatetimeToString } from "../../utils/dateTimeHelpers";
 
 const PlanDetailsModal = props => {
   const modalRef = useRef();

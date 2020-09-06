@@ -1,27 +1,29 @@
 import React from "react";
-import { AuthContext } from "../../context/AuthProvider";
 import { Redirect } from "react-router-dom";
-import { addPlan, getPlan, updatePlan } from "../../services/firebase";
+import PropTypes from "prop-types";
+import { v4 as uuidv4 } from "uuid";
+import { AuthContext } from "../../providers/AuthProvider";
 import CreatePlan from "./CreatePlan";
 import PlaceDetailsModal from "./PlaceDetailsModal";
 import Map from "./Map";
-import { v4 as uuidv4 } from "uuid";
-import { formatDate } from "../../services/dateTimeHelpers";
-import constants from "../../services/constants";
-import sortRunner from "../../algorithms/sorting";
-import PropTypes from "prop-types";
+import DocumentTitle from "../navigation/DocumentTitle";
+import { addPlan, getPlan, updatePlan } from "../../firebase/plans";
+import { formatDate } from "../../utils/dateTimeHelpers";
+import constants from "../../utils/constants";
 import {
   trimObjectFieldValues,
-  removeGoogleScript,
-  hasGoogleScript,
-  reorderPlaces,
   enableScrollY,
   disableScrollY,
   enableNavigation,
   disableNavigation
-} from "../../services/helpers";
-import Poller from "../../services/polling";
-import DocumentTitle from "../common/DocumentTitle";
+} from "../../utils/commonHelpers";
+import {
+  removeGoogleScript,
+  hasGoogleScript
+} from "../../utils/googleMapsHelpers";
+import Poller from "../../utils/polling";
+import { reorderPlaces } from "../../algorithms/reorder";
+import sortRunner from "../../algorithms/sorting";
 
 class PlanApp extends React.Component {
   constructor(props) {

@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { convertDatetimeToString } from "../../services/dateTimeHelpers";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
+import { convertDatetimeToString } from "../../utils/dateTimeHelpers";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Plan = props => {
   return (
