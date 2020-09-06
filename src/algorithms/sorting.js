@@ -1,5 +1,5 @@
-import constants from "../services/constants";
-import { convertToDatetime } from "../services/dateTimeHelpers";
+import constants from "../utils/constants";
+import { convertToDatetime } from "../utils/dateTimeHelpers";
 
 // Ratings will be floats from 0.0 to 5.0, inclusive
 const sortByRating = (places, reverse) => {
