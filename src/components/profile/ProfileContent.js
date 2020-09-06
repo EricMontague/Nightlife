@@ -1,7 +1,7 @@
 import React from "react";
-import PlanList from "./PlanList";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import PlanList from "./PlanList";
 
 const ProfileContent = props => {
   if (props.plans.length === 0) {

@@ -1,6 +1,6 @@
 import React from "react";
-import UserInfo from "../common/UserInfo";
 import PropTypes from "prop-types";
+import UserInfo from "../users/UserInfo";
 
 const ProfileHeader = props => {
   return (
