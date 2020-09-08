@@ -28,7 +28,7 @@ const addPlace = (places, newPlace) => {
   return places;
 };
 
-const placeListReducer = (state, action) => {
+const placeListReducer = (state = { places: [], sortOrder: "" }, action) => {
   switch (action.type) {
     case action.type === actionTypes.ADD_PLACE:
       return {

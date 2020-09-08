@@ -19,7 +19,16 @@ const updatePlan = (currentPlan, newPlan) => {
   };
 };
 
-const planReducer = (state, action) => {
+const planReducer = (
+  state = {
+    planId: "",
+    title: "",
+    description: "",
+    date: formatDate(new Date()),
+    time: new Date().toTimeString().slice(0, 5)
+  },
+  action
+) => {
   switch (action.type) {
     case action.type === actionTypes.plan.CREATE_PLAN:
       return {

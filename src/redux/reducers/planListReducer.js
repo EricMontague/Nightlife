@@ -6,7 +6,7 @@ const deletePlan = (plans, planId) => {
   });
 };
 
-const planListReducer = (state, action) => {
+const planListReducer = (state = { selectedPlan: null, plans: [] }, action) => {
   switch (action.type) {
     case action.type === actionTypes.planList.GET_PLANS:
       return {
