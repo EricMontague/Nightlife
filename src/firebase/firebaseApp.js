@@ -18,25 +18,4 @@ firebase.initializeApp(firebaseConfig);
 // Instantiate core classes
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
-const provider = new firebase.auth.GoogleAuthProvider();
-
-// Authentication functions for firebase
-export const signInWithGoogle = () => {
-  return auth.signInWithRedirect(provider);
-};
-
-export const getRedirectSignInResult = async () => {
-  return auth.getRedirectResult();
-};
-
-export const signInWithEmailAndPassword = async (email, password) => {
-  return auth.signInWithEmailAndPassword(email, password);
-};
-
-export const signOutUser = async () => {
-  return auth.signOut();
-};
-
-export const createUserWithEmailAndPassword = async (email, password) => {
-  return auth.createUserWithEmailAndPassword(email, password);
-};
+export const provider = new firebase.auth.GoogleAuthProvider();
