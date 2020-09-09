@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AlertProvider from "./providers/AlertProvider";
 import AuthProvider from "./providers/AuthProvider";
@@ -7,40 +8,49 @@ import AuthApp from "./components/authentication/AuthApp";
 import ProfileApp from "./components/profile/ProfileApp";
 import PlanApp from "./components/plans/PlanApp";
 import NotFound from "./components/errors/NotFound";
+import withLoginRequired from "./higherOrderComponents/withLoginRequired";
+
+import { authStateListener } from "./redux/actions/authentication";
 
 const App = () => {
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state => state.isLoggedIn);
+  useEffect(() => {
+    const listener = dispatch(authStateListener());
+    console.log(listener);
+    // return () => {
+    //   listener.then(actualListener => actualListener());
+    // };
+  }, [dispatch]);
+
   return (
-    <AuthProvider>
-      <Router>
-        <Navbar />
-        <Switch>
-          <Route
-            exact
-            path={["/", "/signin", "/signup"]}
-            render={({ match, history }) => (
-              <AuthApp match={match} history={history} />
-            )}
-          />
-          <Route
-            exact
-            path="/users/:displayName"
-            render={() => <ProfileApp />}
-          />
-          <Route
-            exact
-            path={[
-              "/plans/create",
-              "/plans/:plan_id/view",
-              "/plans/:plan_id/edit"
-            ]}
-            render={({ match, history, location }) => (
-              <PlanApp match={match} history={history} location={location} />
-            )}
-          />
-          <Route exact path="*" render={() => <NotFound />} />
-        </Switch>
-      </Router>
-    </AuthProvider>
+    // <AuthProvider>
+    <Router>
+      <Navbar />
+      <Switch>
+        <Route
+          exact
+          path={["/", "/signin", "/signup"]}
+          render={({ match, history }) => (
+            <AuthApp match={match} history={history} />
+          )}
+        />
+        <Route exact path="/users/:displayName" render={() => <ProfileApp />} />
+        <Route
+          exact
+          path={[
+            "/plans/create",
+            "/plans/:plan_id/view",
+            "/plans/:plan_id/edit"
+          ]}
+          render={({ match, history, location }) => (
+            <PlanApp match={match} history={history} location={location} />
+          )}
+        />
+        <Route exact path="*" render={() => <NotFound />} />
+      </Switch>
+    </Router>
+    // </AuthProvider>
   );
 };
 
