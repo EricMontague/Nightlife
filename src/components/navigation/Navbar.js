@@ -1,6 +1,6 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useAuthContext } from "../../providers/AuthProvider";
 import NavLinks from "./NavLinks";
 import DropdownMenu from "./DropdownMenu";
 import useDeviceState from "../../hooks/useDeviceState";
@@ -8,7 +8,8 @@ import useDropdownState from "../../hooks/useDropdownState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Navbar = () => {
-  const { isLoggedIn, currentUser } = useAuthContext();
+  const isLoggedIn = useSelector(state => state.isLoggedIn);
+  const currentUser = useSelector(state => state.currentUser);
   const isDesktop = useDeviceState();
   const [isOpen, toggleMenu] = useDropdownState(false);
   return (
