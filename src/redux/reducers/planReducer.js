@@ -1,6 +1,7 @@
 import actionTypes from "../actions/types";
 import { v4 as uuidv4 } from "uuid";
-import trimObjectFieldValues from "../../utils/commonHelpers";
+import { trimObjectFieldValues } from "../../utils/commonHelpers";
+import { formatDate } from "../../utils/dateTimeHelpers";
 
 const addPlan = plan => {
   const trimmedPlan = trimObjectFieldValues(plan);
@@ -19,16 +20,15 @@ const updatePlan = (currentPlan, newPlan) => {
   };
 };
 
-const planReducer = (
-  state = {
-    planId: "",
-    title: "",
-    description: "",
-    date: formatDate(new Date()),
-    time: new Date().toTimeString().slice(0, 5)
-  },
-  action
-) => {
+const initialState = {
+  planId: "",
+  title: "",
+  description: "",
+  date: formatDate(new Date()),
+  time: new Date().toTimeString().slice(0, 5)
+};
+
+const planReducer = (state = initialState, action) => {
   switch (action.type) {
     case action.type === actionTypes.plan.CREATE_PLAN:
       return {

@@ -1,17 +1,16 @@
 import actionTypes from "../actions/types";
 import constants from "../../utils/constants";
 
-const googleMapsReducer = (
-  state = {
-    selectedPlace: null,
-    activeMarker: null,
-    center: {
-      lat: constants.DEFAULT_GOOGLE_MAPS_LAT,
-      lng: constants.DEFAULT_GOOGLE_MAPS_LNG
-    }
-  },
-  action
-) => {
+const initialState = {
+  selectedPlace: null,
+  activeMarker: null,
+  center: {
+    lat: constants.DEFAULT_GOOGLE_MAPS_LAT,
+    lng: constants.DEFAULT_GOOGLE_MAPS_LNG
+  }
+};
+
+const googleMapsReducer = (state = initialState, action) => {
   switch (action.type) {
     case action.type === actionTypes.googleMaps.SET_PLACE:
       return {

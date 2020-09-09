@@ -3,7 +3,6 @@ import actionTypes from "../actions/types";
 const deletePlace = (places, placeId) => {
   const newPlaces = [];
   let found = false;
-  const places = this.state.places.slice();
   for (let index = 0; index < places.length; index++) {
     if (places[index].placeId === placeId) {
       found = true;
@@ -28,7 +27,9 @@ const addPlace = (places, newPlace) => {
   return places;
 };
 
-const placeListReducer = (state = { places: [], sortOrder: "" }, action) => {
+const initialState = { places: [], sortOrder: "" };
+
+const placeListReducer = (state = initialState, action) => {
   switch (action.type) {
     case action.type === actionTypes.ADD_PLACE:
       return {
