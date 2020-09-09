@@ -4,35 +4,29 @@ import {
   enablePointerEvents
 } from "../../utils/commonHelpers";
 import Poller from "../../utils/polling";
-import { auth, provider } from "../../firebase/authentication";
+import { auth, provider } from "../../firebase/firebaseApp";
 import { storeUserDocument, getUserDocument } from "../../firebase/users";
 
 // Get user from firestore
 const fetchUser = async (userId, dispatch) => {
-  try {
-    const currentUser = await getUserDocument(userId);
-    enablePointerEvents();
-    dispatch({
-      type: actionTypes.auth.SIGN_IN,
-      currentUser: {
-        ...currentUser,
-        userId: currentUser.id
-      },
-      isLoggedIn: true
-    });
-  } catch (error) {
-    throw new Error(`Error logging the user in: ${error.message}`);
-  }
+  const currentUser = await getUserDocument(userId);
+  enablePointerEvents();
+  dispatch({
+    type: actionTypes.auth.SIGN_IN,
+    currentUser: {
+      ...currentUser,
+      userId: currentUser.id
+    }
+  });
 };
 
-export const updateAuthState = () => dispatch => {
-  auth.onAuthStateChanged(async userAuth => {
+export const authStateListener = () => dispatch => {
+  return auth.onAuthStateChanged(async userAuth => {
     // user logging out
     if (!userAuth) {
       dispatch({
         type: actionTypes.auth.SIGN_OUT,
-        currentUser: null,
-        isLoggedIn: false
+        currentUser: null
       });
     } else {
       if (userAuth.displayName) {
@@ -43,8 +37,7 @@ export const updateAuthState = () => dispatch => {
           currentUser: {
             ...userAuth,
             userId: userAuth.id
-          },
-          isLoggedIn: true
+          }
         });
         enablePointerEvents();
       } else if (userAuth && !userAuth.displayName) {
