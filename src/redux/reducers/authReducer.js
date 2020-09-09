@@ -1,23 +1,23 @@
 import actionTypes from "../actions/types";
 
-const authReducer = (
-  state = { isLoggedIn: false, currentUser: null },
-  action
-) => {
+const initialState = { isLoggedIn: false, currentUser: null };
+const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case action.type === actionTypes.auth.SIGN_IN:
+    case actionTypes.auth.SIGN_IN:
+      console.log("Signing in!");
+      console.log(state.currentUser === action.currentUser);
       return {
         isLoggedIn: true,
         currentUser: action.currentUser
       };
 
-    case action.type === actionTypes.auth.SIGN_OUT:
+    case actionTypes.auth.SIGN_OUT:
       return {
         isLoggedIn: false,
         currentUser: null
       };
 
-    case action.type === actionTypes.auth.DELETE_ACCOUNT:
+    case actionTypes.auth.DELETE_ACCOUNT:
       return {
         isLoggedIn: false,
         currentUser: null
