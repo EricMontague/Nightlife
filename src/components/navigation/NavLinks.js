@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import UserInfo from "../users/UserInfo";
-import { signOutUser } from "../../firebase/firebaseApp";
+import { signOut } from "../../redux/actions/authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const NavLinks = props => {
@@ -42,11 +42,7 @@ const NavLinks = props => {
             onClick={event => {
               event.preventDefault();
               handleLinkClick();
-              signOutUser()
-                .then(() => {
-                  console.log("Sign out successful!");
-                })
-                .catch(error => console.log(`Error on sign out: ${error}`));
+              signOut();
             }}
           >
             Logout
