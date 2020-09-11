@@ -4,13 +4,10 @@ const initialState = { isLoggedIn: false, currentUser: null };
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.auth.SIGN_IN:
-      console.log("Signing in!");
-      console.log(state.currentUser === action.currentUser);
       return {
         isLoggedIn: true,
-        currentUser: action.currentUser
+        currentUser: { ...action.currentUser }
       };
-
     case actionTypes.auth.SIGN_OUT:
       return {
         isLoggedIn: false,
