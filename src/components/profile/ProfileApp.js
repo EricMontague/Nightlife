@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { AlertContext } from "../../providers/AlertProvider";
-import { AuthContext } from "../../providers/AuthProvider";
 import DocumentTitle from "../navigation/DocumentTitle";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
 import PlanDetailsModal from "./PlanDetailsModal";
 import DeletePlanModal from "./DeletePlanModal";
+import useModalState from "../../hooks/useModalState";
 import { getPlans, deletePlan } from "../../firebase/plans";
 import {
   disableScrollY,
@@ -24,6 +25,73 @@ import { sortByDatetime } from "../../algorithms/sorting";
 import defaultPlacePhoto from "../../assets/default_place_image.png";
 
 const ProfileApp = props => {
+  // Declare hooks
+  const dispatch = useDispatch();
+  const selectedPlan = useSelector(state => state.planListReducer.selectedPlan);
+  const plans = useSelector(state => state.planListReducer.plans);
+  const [isPlanDetailsModalVisible, togglePlanDetailsModal] = useModalState();
+  const [isDeletePlanModalVisible, toggleDeletePlanModal] = useModalState();
+
+  // Declare callbacks
+  const deletePlanHandler = useCallback(async planId => {
+    let deleted = false;
+    try {
+      await deletePlan(this.context.currentUser.userId, planId); // firebase function
+      deleted = true;
+    } catch (error) {
+      console.log(`Error in deleting the plan: ${error.message}`);
+    }
+    if (deleted) {
+      this.setState({
+        plans: this.state.plans.filter(plan => {
+          return plan.planId !== planId;
+        })
+      });
+    }
+  });
+
+  if (isPlanDetailsModalVisible || isDeletePlanModalVisible) {
+    disableScrollY();
+    disableNavigation();
+  } else {
+    enableScrollY();
+    enableNavigation();
+  }
+
+  const reverse = true;
+  const sortedPlans = sortByDatetime(plans, reverse);
+
+  return (
+    <DocumentTitle title={`${props.currentUser.displayName} | Nightlife`}>
+      <div>
+        <ProfileHeader
+          isLoggedIn={props.isLoggedIn}
+          currentUser={props.currentUser}
+        />
+        <ProfileContent
+          plans={sortedPlans}
+          toggleDeletePlanModal={plan => toggleDeletePlanModal(plan)}
+          togglePlanDetailsModal={plan => togglePlanDetailsModal(plan)}
+        />
+        {isPlanDetailsModalVisible && (
+          <PlanDetailsModal
+            plan={selectedPlan}
+            toggleModal={plan => togglePlanDetailsModal(plan)}
+          />
+        )}
+        {isDeletePlanModalVisible && (
+          <DeletePlanModal
+            toggleModal={plan => toggleDeletePlanModal(plan)}
+            handleDeleteClick={planId => deletePlanHandler(planId)}
+            plan={selectedPlan}
+          />
+        )}
+      </div>
+    </DocumentTitle>
+  );
+};
+
+class ProfileApp extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -44,10 +112,7 @@ const ProfileApp = props => {
     window.getInitialState = this.getInitialState; // necessary to properly setup the callback for the places API
   }
 
-  static contextType = AuthContext;
-
   componentDidMount() {
-    console.log("Profile App mount");
     const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
     if (!hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
       urlParameters.push("callback=" + this.getInitialState.name.slice(6));
@@ -160,10 +225,6 @@ const ProfileApp = props => {
   }
 
   render() {
-    if (!this.context.isLoggedIn) {
-      return <Redirect to="/" />;
-    }
-
     if (
       this.state.isPlanDetailsModalVisible ||
       this.state.isDeletePlanModalVisible
