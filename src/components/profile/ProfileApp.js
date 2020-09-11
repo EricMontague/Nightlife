@@ -23,7 +23,7 @@ import constants from "../../utils/constants";
 import { sortByDatetime } from "../../algorithms/sorting";
 import defaultPlacePhoto from "../../assets/default_place_image.png";
 
-class ProfileApp extends React.Component {
+const ProfileApp = props => {
   constructor() {
     super();
     this.state = {
