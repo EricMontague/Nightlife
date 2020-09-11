@@ -12,11 +12,8 @@ import {
   registerUser
 } from "../../redux/actions/authentication";
 
-const AuthApp = () => {
+const AuthApp = props => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
-  const currentUser = useSelector(state => state.authReducer.currentUser);
-  console.log(isLoggedIn, currentUser);
 
   const loginUser = useCallback(
     (email, password) => dispatch(signInWithEmailAndPassword(email, password)),
@@ -27,9 +24,11 @@ const AuthApp = () => {
     [dispatch]
   );
 
-  if (isLoggedIn) {
+  if (props.isLoggedIn) {
     return (
-      <Redirect to={`/users/${currentUser.displayName.replace(" ", "")}`} />
+      <Redirect
+        to={`/users/${props.currentUser.displayName.replace(" ", "")}`}
+      />
     );
   }
 
