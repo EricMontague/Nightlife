@@ -8,19 +8,16 @@ import AuthApp from "./components/authentication/AuthApp";
 import ProfileApp from "./components/profile/ProfileApp";
 import PlanApp from "./components/plans/PlanApp";
 import NotFound from "./components/errors/NotFound";
-import withLoginRequired from "./higherOrderComponents/withLoginRequired";
-
+import PrivateRoute from "./higherOrderComponents/PrivateRoute";
 import { authStateListener } from "./redux/actions/authentication";
 
 const App = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector(state => state.isLoggedIn);
   useEffect(() => {
     const listener = dispatch(authStateListener());
-    console.log(listener);
-    // return () => {
-    //   listener.then(actualListener => actualListener());
-    // };
+
+    // cleanup Google event listener
+    return () => listener();
   }, [dispatch]);
 
   return (
@@ -35,7 +32,11 @@ const App = () => {
             <AuthApp match={match} history={history} />
           )}
         />
-        <Route exact path="/users/:displayName" render={() => <ProfileApp />} />
+        <PrivateRoute
+          exact
+          path="/users/:displayName"
+          render={() => <ProfileApp />}
+        />
         <Route
           exact
           path={[
