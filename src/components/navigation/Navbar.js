@@ -8,8 +8,8 @@ import useDropdownState from "../../hooks/useDropdownState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Navbar = () => {
-  const isLoggedIn = useSelector(state => state.isLoggedIn);
-  const currentUser = useSelector(state => state.currentUser);
+  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
+  const currentUser = useSelector(state => state.authReducer.currentUser);
   const isDesktop = useDeviceState();
   const [isOpen, toggleMenu] = useDropdownState(false);
   return (
