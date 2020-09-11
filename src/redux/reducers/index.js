@@ -5,7 +5,7 @@ import planReducer from "./planReducer";
 import authReducer from "./authReducer";
 import googleMapsReducer from "./googleMapsReducer";
 
-const reducer = combineReducers({
+const rootReducer = combineReducers({
   placeListReducer,
   planListReducer,
   planReducer,
@@ -13,4 +13,4 @@ const reducer = combineReducers({
   googleMapsReducer
 });
 
-export default reducer;
+export default rootReducer;
