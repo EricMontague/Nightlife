@@ -23,6 +23,7 @@ class AuthProvider extends React.Component {
 
   componentDidMount() {
     this.authListener = auth.onAuthStateChanged(async userAuth => {
+      console.log(userAuth);
       // user logging out
       if (!userAuth) {
         this.setState({ currentUser: null, isLoggedIn: false });
@@ -73,10 +74,10 @@ class AuthProvider extends React.Component {
   }
 
   render() {
+    console.log(`Rendering: ${this.state.isLoggedIn}`);
     return (
       <AuthContext.Provider
         value={{
-          savePlan: plan => this.savePlan(plan),
           currentUser: this.state.currentUser,
           isLoggedIn: this.state.isLoggedIn
         }}
