@@ -14,14 +14,17 @@ const fetchUser = async (userId, dispatch) => {
   dispatch({
     type: actionTypes.auth.SIGN_IN,
     currentUser: {
-      ...currentUser,
+      displayName: currentUser.displayName,
+      email: currentUser.email,
+      photoURL: currentUser.photoURL,
       userId: currentUser.id
     }
   });
 };
 
 export const authStateListener = () => dispatch => {
-  return auth.onAuthStateChanged(async userAuth => {
+  const listener = auth.onAuthStateChanged(userAuth => {
+    console.log("listening");
     // user logging out
     if (!userAuth) {
       dispatch({
@@ -35,8 +38,10 @@ export const authStateListener = () => dispatch => {
         dispatch({
           type: actionTypes.auth.SIGN_IN,
           currentUser: {
-            ...userAuth,
-            userId: userAuth.id
+            displayName: userAuth.displayName,
+            email: userAuth.email,
+            photoURL: userAuth.photoURL,
+            userId: userAuth.uid
           }
         });
         enablePointerEvents();
@@ -48,6 +53,7 @@ export const authStateListener = () => dispatch => {
       }
     }
   });
+  return listener;
 };
 
 export const registerUser = user => async dispatch => {
@@ -93,7 +99,7 @@ export const signOut = () => dispatch => {
 };
 
 export const signInWithGoogle = () => dispatch => {
-  auth.signInWithGoogle(provider).then(() => {
+  auth.signInWithRedirect(provider).then(() => {
     auth
       .getRedirectResult()
       .then(result => {
