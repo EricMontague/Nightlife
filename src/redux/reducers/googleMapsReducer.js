@@ -12,17 +12,17 @@ const initialState = {
 
 const googleMapsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case action.type === actionTypes.googleMaps.SET_PLACE:
+    case actionTypes.googleMaps.SET_PLACE:
       return {
         ...state,
         selectedPlace: action.selectedPlace
       };
-    case action.type === actionTypes.googleMaps.SET_ACTIVE_MARKER:
+    case actionTypes.googleMaps.SET_ACTIVE_MARKER:
       return {
         ...state,
         activeMarker: action.activeMarker
       };
-    case action.type === actionTypes.googleMaps.SET_MAP_CENTER:
+    case aactionTypes.googleMaps.SET_MAP_CENTER:
       return {
         ...state,
         center: action.center

@@ -30,15 +30,15 @@ const initialState = {
 
 const planReducer = (state = initialState, action) => {
   switch (action.type) {
-    case action.type === actionTypes.plan.CREATE_PLAN:
+    case actionTypes.plan.CREATE_PLAN:
       return {
         plan: addPlan(action.plan)
       };
-    case action.type === actionTypes.plan.GET_PLAN:
+    case actionTypes.plan.GET_PLAN:
       return {
         plan: action.plan
       };
-    case action.type === actionTypes.plan.UPDATE_PLAN:
+    case actionTypes.plan.UPDATE_PLAN:
       return {
         plan: updatePlan(state.plan, action.updatedPlan)
       };

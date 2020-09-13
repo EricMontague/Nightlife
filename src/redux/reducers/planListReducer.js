@@ -10,19 +10,19 @@ const initialState = { selectedPlan: null, plans: [] };
 
 const planListReducer = (state = initialState, action) => {
   switch (action.type) {
-    case action.type === actionTypes.planList.GET_PLANS:
+    case actionTypes.planList.ADD_PLAN:
       return {
         selectedPlan: state.selectedPlan,
-        plans: action.plans
+        plans: [...state.plans, action.newPlan]
       };
 
-    case action.type === actionTypes.planList.SET_SELECTED_PLAN:
+    case actionTypes.planList.SET_SELECTED_PLAN:
       return {
         selectedPlan: action.selectedPlan,
-        plans: state.plans
+        plans: [...state.plans]
       };
 
-    case action.type === actionTypes.planList.DELETE_PLANS:
+    case actionTypes.planList.DELETE_PLANS:
       return {
         selectedPlan: state.selectedPlan,
         plans: deletePlan(state.plans, action.planId)
