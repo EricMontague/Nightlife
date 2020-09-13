@@ -2,15 +2,8 @@ import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import NavLinks from "./NavLinks";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
-import { disableScrollY, enableScrollY } from "../../utils/commonHelpers";
 
-const DropdownMenu = props => {
-  if (props.isOpen) {
-    disableScrollY();
-  } else {
-    enableScrollY();
-  }
-
+const MobileNavMenu = props => {
   const menuRef = useRef();
 
   // Necessary for when a user clicks a link to another page
@@ -49,11 +42,11 @@ const DropdownMenu = props => {
   );
 };
 
-DropdownMenu.propTypes = {
+MobileNavMenu.propTypes = {
   currentUser: PropTypes.objectOf(PropTypes.string.isRequired),
   isLoggedIn: PropTypes.bool.isRequired,
   toggleMenu: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired
 };
 
-export default DropdownMenu;
+export default MobileNavMenu;
