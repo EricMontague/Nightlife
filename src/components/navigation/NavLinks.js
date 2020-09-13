@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import UserInfo from "../users/UserInfo";
@@ -7,10 +8,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const NavLinks = props => {
   const location = useLocation();
+  const dispatch = useDispatch();
+
   const handleLinkClick = () => {
     if (props.isDropdownOpen) {
       props.handleClick();
     }
+  };
+
+  const handleSignOutClick = event => {
+    event.preventDefault();
+    handleLinkClick();
+    dispatch(signOut());
   };
 
   if (props.isLoggedIn) {
@@ -37,14 +46,7 @@ const NavLinks = props => {
         )}
 
         <li>
-          <a
-            href="/logout"
-            onClick={event => {
-              event.preventDefault();
-              handleLinkClick();
-              signOut();
-            }}
-          >
+          <a href="/logout" onClick={event => handleSignOutClick(event)}>
             Logout
           </a>
         </li>
