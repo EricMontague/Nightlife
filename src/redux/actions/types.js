@@ -16,6 +16,7 @@ const actionTypes = Object.freeze({
   },
   planList: {
     GET_PLANS: "GET_PLANS",
+    ADD_PLAN: "ADD_PLAN",
     SET_SELECTED_PLAN: "SET_SELECTED_PLAN",
     DELETE_PLAN: "DELETE_PLAN"
   },
