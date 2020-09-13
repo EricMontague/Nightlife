@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AlertProvider from "./providers/AlertProvider";
 import Navbar from "./components/navigation/Navbar";
@@ -12,6 +12,8 @@ import { authStateListener } from "./redux/actions/authentication";
 
 const App = () => {
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
+  const currentUser = useSelector(state => state.authReducer.currentUser);
 
   useEffect(() => {
     const listener = dispatch(authStateListener());
@@ -23,13 +25,18 @@ const App = () => {
   return (
     // <AuthProvider>
     <Router>
-      <Navbar />
+      <Navbar isLoggedIn={isLoggedIn} currentUser={currentUser} />
       <Switch>
         <Route
           exact
           path={["/", "/signin", "/signup"]}
           render={({ match, history }) => (
-            <AuthApp match={match} history={history} />
+            <AuthApp
+              match={match}
+              history={history}
+              isLoggedIn={isLoggedIn}
+              currentUser={currentUser}
+            />
           )}
         />
         <PrivateRoute exact path="/users/:displayName" component={ProfileApp} />
