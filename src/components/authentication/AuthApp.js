@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,14 +15,17 @@ import {
 const AuthApp = props => {
   const dispatch = useDispatch();
 
-  const loginUser = useCallback(
-    (email, password) => dispatch(signInWithEmailAndPassword(email, password)),
-    [dispatch]
-  );
-  const createUserWithEmailAndPasswordHandler = useCallback(
-    user => dispatch(registerUser(user)),
-    [dispatch]
-  );
+  const loginUser = (email, password) => {
+    dispatch(signInWithEmailAndPassword(email, password));
+  };
+
+  const createUserWithEmailAndPasswordHandler = user => {
+    dispatch(registerUser(user));
+  };
+
+  const signInWithGoogleHandler = () => {
+    dispatch(signInWithGoogle());
+  };
 
   if (props.isLoggedIn) {
     return (
@@ -39,13 +42,13 @@ const AuthApp = props => {
           <Switch>
             <Route exact path="/">
               <DocumentTitle title="Home | Nightlife">
-                <Home signInWithGoogle={signInWithGoogle} />
+                <Home signInWithGoogle={signInWithGoogleHandler} />
               </DocumentTitle>
             </Route>
             <Route exact path="/signin">
               <DocumentTitle title="Sign In | Nightlife">
                 <SignInForm
-                  signInWithGoogle={signInWithGoogle}
+                  signInWithGoogle={signInWithGoogleHandler}
                   signInWithEmailAndPassword={loginUser}
                 />
               </DocumentTitle>
@@ -53,7 +56,7 @@ const AuthApp = props => {
             <Route exact path="/signup">
               <DocumentTitle title="Sign Up | Nightlife">
                 <SignUpForm
-                  signInWithGoogle={signInWithGoogle}
+                  signInWithGoogle={signInWithGoogleHandler}
                   createUserWithEmailAndPasswordHandler={
                     createUserWithEmailAndPasswordHandler
                   }
