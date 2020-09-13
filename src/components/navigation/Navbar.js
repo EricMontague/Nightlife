@@ -1,17 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import NavLinks from "./NavLinks";
-import DropdownMenu from "./DropdownMenu";
+import MobileNavMenu from "./MobileNavMenu";
 import useDeviceState from "../../hooks/useDeviceState";
-import useDropdownState from "../../hooks/useDropdownState";
+import useMobileMenuState from "../../hooks/useMobileMenuState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Navbar = () => {
-  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
-  const currentUser = useSelector(state => state.authReducer.currentUser);
+const Navbar = props => {
   const isDesktop = useDeviceState();
-  const [isOpen, toggleMenu] = useDropdownState(false);
+  const [isOpen, toggleMenu] = useMobileMenuState(false);
   return (
     <>
       <nav className="navbar">
@@ -25,8 +23,8 @@ const Navbar = () => {
           {isDesktop && (
             <ul className="main-menu">
               <NavLinks
-                currentUser={currentUser}
-                isLoggedIn={isLoggedIn}
+                currentUser={props.currentUser}
+                isLoggedIn={props.isLoggedIn}
                 isDropdownOpen={isOpen}
               />
             </ul>
@@ -43,15 +41,20 @@ const Navbar = () => {
           )}
         </div>
       </nav>
-      <DropdownMenu
-        currentUser={currentUser}
-        isLoggedIn={isLoggedIn}
+      <MobileNavMenu
+        currentUser={props.currentUser}
+        isLoggedIn={props.isLoggedIn}
         isOpen={isOpen}
         isDesktop={isDesktop}
         toggleMenu={toggleMenu}
       />
     </>
   );
+};
+
+Navbar.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+  currentUser: PropTypes.objectOf(PropTypes.string.isRequired)
 };
 
 export default Navbar;
