@@ -29,13 +29,3 @@ export const enableScrollY = () => {
 export const disableScrollY = () => {
   document.body.classList.add("no-scroll-y");
 };
-
-export const toggleInteractivity = (conditions, allTrue) => {
-  if (isPlanDetailsModalVisible || isDeletePlanModalVisible) {
-    disableScrollY();
-    disableNavigation();
-  } else {
-    enableScrollY();
-    enableNavigation();
-  }
-};
