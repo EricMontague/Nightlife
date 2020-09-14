@@ -49,7 +49,6 @@ const storePlan = (plan, dispatch) => {
 };
 
 export const fetchPlansAndPhotos = userId => async dispatch => {
-  console.log("Fetching plans and photos");
   try {
     const plans = await fetchPlans(userId);
     fetchAllPlansPhotos(plans, dispatch);
@@ -60,10 +59,10 @@ export const fetchPlansAndPhotos = userId => async dispatch => {
   }
 };
 
-export const deleteUserPlan = planId => async dispatch => {
+export const deleteUserPlan = (userId, planId) => async dispatch => {
   let deleted = false;
   try {
-    await deletePlan(this.context.currentUser.userId, planId); // firebase function
+    await deletePlan(userId, planId); // firebase function
     deleted = true;
   } catch (error) {
     console.log(`Error in deleting the plan: ${error.message}`);
