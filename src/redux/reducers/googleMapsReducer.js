@@ -22,7 +22,7 @@ const googleMapsReducer = (state = initialState, action) => {
         ...state,
         activeMarker: action.activeMarker
       };
-    case aactionTypes.googleMaps.SET_MAP_CENTER:
+    case actionTypes.googleMaps.SET_MAP_CENTER:
       return {
         ...state,
         center: action.center
