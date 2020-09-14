@@ -27,21 +27,34 @@ const addPlace = (places, newPlace) => {
   return places;
 };
 
-const initialState = { places: [], sortOrder: "" };
+const initialState = { places: [], sortOrder: "", selectedPlace: null };
 
 const placeListReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.ADD_PLACE:
+    case actionTypes.placeList.ADD_PLACE:
       return {
         places: addPlace(state.places, action.newPlace),
         sortOrder: state.sortOrder
       };
-    case actionTypes.DELETE_PLACE:
+
+    case actionTypes.placeList.SET_SELECTED_PLACE:
+      return {
+        ...state,
+        selectedPlace: action.selectedPlace
+      };
+
+    case actionTypes.placeList.SET_PLACE_LIST:
+      return {
+        ...state,
+        places: [...action.places]
+      };
+
+    case actionTypes.placeList.DELETE_PLACE:
       return {
         places: deletePlace(state.places, action.placeId),
         sortOrder: state.sortOrder
       };
-    case actionTypes.SET_SORT_ORDER:
+    case actionTypes.placeList.SET_SORT_ORDER:
       return {
         places: state.places,
         sortOrder: action.sortOrder
