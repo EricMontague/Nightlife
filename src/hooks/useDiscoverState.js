@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 
 const useDiscoverState = initialState => {
   const [discoverState, setDiscoverState] = useState(initialState);
-  return discoverState, setDiscoverState;
+  return [discoverState, setDiscoverState];
 };
 
 export default useDiscoverState;
