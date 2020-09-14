@@ -12,6 +12,8 @@ const actionTypes = Object.freeze({
   placeList: {
     ADD_PLACE: "ADD_PLACE",
     DELETE_PLACE: "DELETE_PLACE",
+    SET_PLACE_LIST: "SET_PLACE_LIST",
+    SET_SELECTED_PLACE: "SET_SELECTED_PLACE",
     SET_SORT_ORDER: "SET_SORT_ORDER"
   },
   planList: {
