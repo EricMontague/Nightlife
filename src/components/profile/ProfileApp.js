@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertContext } from "../../providers/AlertProvider";
 import DocumentTitle from "../navigation/DocumentTitle";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";

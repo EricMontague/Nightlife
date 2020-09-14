@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from "react";
-import { Redirect } from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import CreatePlan from "./CreatePlan";
 import PlaceDetailsModal from "./PlaceDetailsModal";
@@ -8,123 +7,122 @@ import Map from "./Map";
 import DocumentTitle from "../navigation/DocumentTitle";
 import useModalState from "../../hooks/useModalState";
 import useDiscoverState from "../../hooks/useDiscoverState";
-import {addPlanDetails, updatePlanDetails} from "../../redux/actions/plan";
+import { addPlanDetails, updatePlanDetails } from "../../redux/actions/plan";
 import {
-  addPlace, 
-  deletePlace, 
-  fetchPlanAndPlaces, 
-  setSelectedPlace, 
+  addPlace,
+  deletePlace,
+  fetchPlanAndPlaces,
+  setSelectedPlace,
   setSortOrder,
   setPlaceList
 } from "../../redux/actions/placeList";
 import { addPlan, updatePlan } from "../../firebase/plans";
 import { formatDate } from "../../utils/dateTimeHelpers";
 import constants from "../../utils/constants";
-import { enableScrollY} from "../../utils/commonHelpers";
-import { removeGoogleScript, hasGoogleScript } from "../../utils/googleMapsHelpers";
+import { enableScrollY } from "../../utils/commonHelpers";
+import {
+  removeGoogleScript,
+  hasGoogleScript
+} from "../../utils/googleMapsHelpers";
 import Poller from "../../utils/polling";
 import { reorderPlaces } from "../../algorithms/reorder";
 import sortRunner from "../../algorithms/sorting";
 
-
 const PlanApp = props => {
-    // Variable declarations
-    splitPath = props.location.pathname.split("/");
+  // Variable declarations
+  const splitPath = props.location.pathname.split("/");
 
-    // Declare hooks
-    const dispatch = useDispatch();
-    const places = useSelector(state => state.placeListReducer.places);
-    const selectedPlace = useSelector(state => state.placeListReducer.selectedPlace);
-    const currentPlan = useSelector(state => state.planReducer.plan);
-    const sortOrder = useSelector(state => state.placeListReducer.sortOrder);
-    const [isPlaceModalVisiblesVisible, togglePlaceModal] = useModalState(false);
-    const [discoverState, setDiscoverState] = useDiscoverState({
-      isDiscoverView: false,
-      discoverMode: splitPath[this.splitPath.length - 1]
-    })
-    const [mousedOverPlaceId, setMousedOverPlaceId] = useState("");
+  // Declare hooks
+  const dispatch = useDispatch();
+  const places = useSelector(state => state.placeListReducer.places);
+  const selectedPlace = useSelector(
+    state => state.placeListReducer.selectedPlace
+  );
+  const currentPlan = useSelector(state => state.planReducer.plan);
+  const sortOrder = useSelector(state => state.placeListReducer.sortOrder);
+  const [isPlaceModalVisible, togglePlaceModal] = useModalState(false);
+  const [discoverState, setDiscoverState] = useDiscoverState({
+    isDiscoverView: false,
+    discoverMode: splitPath[splitPath.length - 1]
+  });
+  const [mousedOverPlaceId, setMousedOverPlaceId] = useState("");
 
-
-    // componentDidMount
-    useEffect(() => {
-      console.log("PlanApp mount");
-        // User is on the editting page
-        const page = splitPath[splitPath.length - 1];
-        if (
-          page === constants.DISCOVER_MODE.EDIT ||
-          page === constants.DISCOVER_MODE.VIEW
-        ) {
-          const planId = splitPath[2];
-          const poller = new Poller(3000, 3);
-          poller.start(fetchPlanAndPlaces, [currentUser.userId, planId]);
-        }
-
-        // Cleanup scripts
-        return () => {
-          console.log("PlanApp unmount");
-          enableScrollY();
-          const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
-          if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
-            removeGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
-          }
-        }
-        
-    }, []);
-
-
-    // componentDidUpdate
-    useEffect(() => {
-        console.log("PlanApp update");
-        this.splitPath = props.location.pathname.split("/");
-        const mode = splitPath[splitPath.length - 1];
-        if (discoverState.discoverMode !== mode) {
-          resetState();
-        }
-        
-      }, [])
-    
-     
-    const resetState = () => {
-      togglePlaceModal(false);
-      setDiscoverState({
-        isDiscoverView: false,
-        discoverMode: splitPath[this.splitPath.length - 1]
-      })
-      dispatch(setSelectedPlace(null));
-      dispatch(setSortOrder(""))
-      const defaultPlan = {
-        planId: "",
-        title: "",
-        description: "",
-        date: formatDate(new Date()),
-        time: new Date().toTimeString().slice(0, 5)
-      };
-      dispatch(addPlanDetails(defaultPlan))
-      dispatch(setPlaceList([]))
-    }
-  
-    // Declare callbacks
-    const addPlandDetailsHandler = plan => {
-      dispatch(addPlanDetails(plan));
+  // componentDidMount
+  useEffect(() => {
+    console.log("PlanApp mount");
+    // User is on the editting page
+    const page = splitPath[splitPath.length - 1];
+    if (
+      page === constants.DISCOVER_MODE.EDIT ||
+      page === constants.DISCOVER_MODE.VIEW
+    ) {
+      const planId = splitPath[2];
+      const poller = new Poller(3000, 3);
+      dispatch(fetchPlanAndPlaces(props.currentUser.userId, planId));
     }
 
-    const updatePlanDetailsHandler = plan => {
-      dispatch(updatePlanDetails(plan));
+    // Cleanup scripts
+    return () => {
+      console.log("PlanApp unmount");
+      enableScrollY();
+      const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
+      if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
+        removeGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
+      }
     };
+  }, []);
 
-    const addPlaceHandler = (placeResults, input) => {
-      dispatch(addPlace(placeResults, input));
+  // componentDidUpdate
+  useEffect(() => {
+    console.log("PlanApp update");
+    const mode = splitPath[splitPath.length - 1];
+    if (discoverState.discoverMode !== mode) {
+      console.log("reset");
+      resetState();
     }
+  }, []);
 
-    const deletePlaceHandler = placeId => {
-      dispatch(deletePlace(placeId));
-    }
+  const resetState = () => {
+    togglePlaceModal(false);
+    setDiscoverState({
+      isDiscoverView: false,
+      discoverMode: splitPath[splitPath.length - 1]
+    });
+    dispatch(setSelectedPlace(null));
+    dispatch(setSortOrder(""));
+    const defaultPlan = {
+      planId: "",
+      title: "",
+      description: "",
+      date: formatDate(new Date()),
+      time: new Date().toTimeString().slice(0, 5)
+    };
+    dispatch(addPlanDetails(defaultPlan));
+    dispatch(setPlaceList([]));
+  };
 
-    const setSortOrderHandler = sortOrder => {
-      dispatch(setSortOrder(sortOrder));
-    }
+  // Declare callbacks
+  const addPlandDetailsHandler = plan => {
+    dispatch(addPlanDetails(plan));
+  };
 
-    // Needed so that I can get places out of firebase in the same order
+  const updatePlanDetailsHandler = plan => {
+    dispatch(updatePlanDetails(plan));
+  };
+
+  const addPlaceHandler = (placeResults, input) => {
+    dispatch(addPlace(placeResults, input, places.length));
+  };
+
+  const deletePlaceHandler = placeId => {
+    dispatch(deletePlace(placeId));
+  };
+
+  const setSortOrderHandler = sortOrder => {
+    dispatch(setSortOrder(sortOrder));
+  };
+
+  // Needed so that I can get places out of firebase in the same order
   // They were in when I inserted them
   const addSortKey = places => {
     return places.map((place, index) => {
@@ -132,142 +130,140 @@ const PlanApp = props => {
     });
   };
 
-      // Google doesn't allow storage of Places API data for more than 30 days,
+  // Google doesn't allow storage of Places API data for more than 30 days,
   // with the sole exception being the the placeId attribute.
   // Based on their terms and conditions, the placeId can be stored indefinitely
   // https://developers.google.com/places/web-service/policies
   const storePlanInFirestore = async () => {
+    console.log("store Plan");
     if (places.length === 0) {
       console.log("Please choose at least one place.");
     } else {
       const plan = { ...currentPlan };
       plan.places = addSortKey(places);
       try {
-        await addPlan(currentUser.userId, plan);
+        await addPlan(props.currentUser.userId, plan);
       } catch (error) {
         console.log(`Error in saving plan information: ${error.message}`);
       }
-      props.history.push(`/users/${currentUser.displayName}`);
+      props.history.push(`/users/${props.currentUser.displayName}`);
     }
-  }
+  };
 
   const updatePlanInFirestore = async () => {
+    console.log("updatePlan");
     if (places.length === 0) {
       console.log("Please choose at least one place.");
     } else {
       const plan = { ...currentPlan };
       plan.places = addSortKey(places);
       try {
-        await updatePlan(currentUser.userId, plan);
+        await updatePlan(props.currentUser.userId, plan);
       } catch (error) {
         console.log(`Error in updating plan information: ${error.message}`);
       }
-      props.history.push(`/users/${currentUser.displayName}`);
+      props.history.push(`/users/${props.currentUser.displayName}`);
     }
-  }
+  };
 
-    const togglePlaceModalHandler = place => {
-      togglePlaceModal(!isPlaceModalVisiblesVisible);
-      setSelectedPlace(selectedPlace ? null : place);
+  const togglePlaceModalHandler = place => {
+    togglePlaceModal(!isPlaceModalVisible);
+    dispatch(setSelectedPlace(selectedPlace ? null : place));
+  };
+
+  const handleMarkerMouseover = placeId => {
+    setMousedOverPlaceId(placeId);
+  };
+
+  const handleMarkerMouseout = () => {
+    setMousedOverPlaceId("");
+  };
+
+  const toggleView = () => {
+    setDiscoverState({
+      ...discoverState,
+      isDiscoverView: !discoverState.isDiscoverView
+    });
+  };
+
+  const dragEndHandler = result => {
+    const { destination, source } = result;
+
+    // dropped outside of list
+    if (!destination) {
+      return;
     }
 
-    const handleMarkerMouseover = placeId => {
-      setMousedOverPlaceId(placeId);
-    }
-  
-    const handleMarkerMouseout = () => {
-      setMousedOverPlaceId("");
-    };
-
-    const toggleView = () => {
-      setDiscoverState({
-        ...discoverState,
-        isDiscoverView: !isDiscoverView
-      })
-    }
-
-    const dragEndHandler = result => {
-      const { destination, source } = result;
-  
-      // dropped outside of list
-      if (!destination) {
-        return;
-      }
-  
-      // reorder places array
-      const reorderedPlaces = reorderPlaces(
-        places,
-        source.index,
-        destination.index
-      );
-  
-      // set state
-      dispatch(setSortOrder(constants.SORT_BY_USER_INPUT))
-      dispatch(setPlaceList(reorderPlaces));
-    }
-    
-  
-    
-
-    const sortPlaces = places => {
-      return sortRunner(places, sortOrder);
-    };  
-
-    // Sort places
-    const sortedPlaces = sortPlaces(places);
-
-    return (
-      <DocumentTitle
-        title={`${discoverState.discoverMode[0].toUpperCase() +
-          discoverState.discoverMode.slice(1)} Plan | Nightlife`}
-      >
-        <>
-          <div className="discover-container">
-            <div className="google-map">
-              <Map
-                toggleModal={togglePlaceModalHandler}
-                places={sortedPlaces}
-                shouldRenderMarkers={
-                  discoverState.isDiscoverView ||
-                  discoverState.discoverMode === constants.DISCOVER_MODE.VIEW
-                }
-                handleMouseover={handleMarkerMouseover}
-                handleMouseout={handleMarkerMouseout}
-              />
-            </div>
-            <div className="user-actions">
-              <CreatePlan
-                addPlace={addPlaceHandler}
-                deletePlace={deletePlaceHandler}
-                setPlanDetails={
-                  discoverState.discoverMode === constants.DISCOVER_MODE.CREATE
-                    ? addPlandDetailsHandler
-                    : updatePlanDetailsHandler
-                }
-                updatePlan={updatePlanInFirestore}
-                storePlan={storePlanInFirestore}
-                toggleView={toggleView}
-                toggleModal={togglePlaceModalHandler}
-                places={sortedPlaces}
-                isDiscoverView={discoverState.isDiscoverView}
-                plan={currentPlan}
-                discoverMode={discoverState.discoverMode}
-                changeSortOrder={setSortOrderHandler}
-                dragEndHandler={dragEndHandler}
-                mousedOverPlaceId={mousedOverPlaceId}
-              />
-            </div>
-          </div>
-          {isPlaceModalVisible && (
-            <PlaceDetailsModal
-              place={selectedPlace}
-              toggleModal={togglePlaceModalHandler}
-            />
-          )}
-        </>
-      </DocumentTitle>
+    // reorder places array
+    const reorderedPlaces = reorderPlaces(
+      places,
+      source.index,
+      destination.index
     );
-  }
+
+    // set state
+    dispatch(setSortOrder(constants.SORT_BY_USER_INPUT));
+    dispatch(setPlaceList(reorderedPlaces));
+  };
+
+  const sortPlaces = places => {
+    return sortRunner(places, sortOrder);
+  };
+
+  // Sort places
+  const sortedPlaces = sortPlaces(places);
+  console.log(sortOrder);
+  return (
+    <DocumentTitle
+      title={`${discoverState.discoverMode[0].toUpperCase() +
+        discoverState.discoverMode.slice(1)} Plan | Nightlife`}
+    >
+      <>
+        <div className="discover-container">
+          <div className="google-map">
+            <Map
+              toggleModal={togglePlaceModalHandler}
+              places={sortedPlaces}
+              shouldRenderMarkers={
+                discoverState.isDiscoverView ||
+                discoverState.discoverMode === constants.DISCOVER_MODE.VIEW
+              }
+              handleMouseover={handleMarkerMouseover}
+              handleMouseout={handleMarkerMouseout}
+            />
+          </div>
+          <div className="user-actions">
+            <CreatePlan
+              addPlace={addPlaceHandler}
+              deletePlace={deletePlaceHandler}
+              setPlanDetails={
+                discoverState.discoverMode === constants.DISCOVER_MODE.CREATE
+                  ? addPlandDetailsHandler
+                  : updatePlanDetailsHandler
+              }
+              updatePlan={updatePlanInFirestore}
+              storePlan={storePlanInFirestore}
+              toggleView={toggleView}
+              toggleModal={togglePlaceModalHandler}
+              places={sortedPlaces}
+              isDiscoverView={discoverState.isDiscoverView}
+              plan={currentPlan}
+              discoverMode={discoverState.discoverMode}
+              changeSortOrder={setSortOrderHandler}
+              dragEndHandler={dragEndHandler}
+              mousedOverPlaceId={mousedOverPlaceId}
+            />
+          </div>
+        </div>
+        {isPlaceModalVisible && (
+          <PlaceDetailsModal
+            place={selectedPlace}
+            toggleModal={togglePlaceModalHandler}
+          />
+        )}
+      </>
+    </DocumentTitle>
+  );
 };
 
 PlanApp.propTypes = {
@@ -302,8 +298,6 @@ PlanApp.propTypes = {
 };
 
 export default PlanApp;
-
-
 
 // class PlanApp extends React.Component {
 //   constructor(props) {
@@ -694,4 +688,3 @@ export default PlanApp;
 //     );
 //   }
 // }
-
