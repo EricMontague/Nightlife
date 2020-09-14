@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import AlertProvider from "./providers/AlertProvider";
 import Navbar from "./components/navigation/Navbar";
 import AuthApp from "./components/authentication/AuthApp";
 import ProfileApp from "./components/profile/ProfileApp";
