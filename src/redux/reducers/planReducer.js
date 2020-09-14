@@ -21,11 +21,13 @@ const updatePlan = (currentPlan, newPlan) => {
 };
 
 const initialState = {
-  planId: "",
-  title: "",
-  description: "",
-  date: formatDate(new Date()),
-  time: new Date().toTimeString().slice(0, 5)
+  plan: {
+    planId: "",
+    title: "",
+    description: "",
+    date: formatDate(new Date()),
+    time: new Date().toTimeString().slice(0, 5)
+  }
 };
 
 const planReducer = (state = initialState, action) => {
@@ -36,7 +38,7 @@ const planReducer = (state = initialState, action) => {
       };
     case actionTypes.plan.GET_PLAN:
       return {
-        plan: action.plan
+        plan: { ...action.plan }
       };
     case actionTypes.plan.UPDATE_PLAN:
       return {
