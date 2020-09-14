@@ -22,7 +22,7 @@ const planListReducer = (state = initialState, action) => {
         plans: [...state.plans]
       };
 
-    case actionTypes.planList.DELETE_PLANS:
+    case actionTypes.planList.DELETE_PLAN:
       return {
         selectedPlan: state.selectedPlan,
         plans: deletePlan(state.plans, action.planId)
