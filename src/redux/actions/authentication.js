@@ -24,7 +24,6 @@ const fetchUser = async (userId, dispatch) => {
 
 export const authStateListener = () => dispatch => {
   const listener = auth.onAuthStateChanged(userAuth => {
-    console.log("listening");
     // user logging out
     if (!userAuth) {
       dispatch({
@@ -82,7 +81,6 @@ export const registerUser = user => async dispatch => {
 export const signInWithEmailAndPassword = (email, password) => dispatch => {
   try {
     auth.signInWithEmailAndPassword(email, password);
-    console.log("User login successful!");
     // this.props.history.push("/");
   } catch (error) {
     console.log(`Error on login: ${error.message}`);
