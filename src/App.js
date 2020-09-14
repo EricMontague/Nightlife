@@ -23,7 +23,6 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    // <AuthProvider>
     <Router>
       <Navbar isLoggedIn={isLoggedIn} currentUser={currentUser} />
       <Switch>
@@ -40,21 +39,18 @@ const App = () => {
           )}
         />
         <PrivateRoute exact path="/users/:displayName" component={ProfileApp} />
-        <Route
+        <PrivateRoute
           exact
           path={[
             "/plans/create",
             "/plans/:plan_id/view",
             "/plans/:plan_id/edit"
           ]}
-          render={({ match, history, location }) => (
-            <PlanApp match={match} history={history} location={location} />
-          )}
+          component={PlanApp}
         />
         <Route exact path="*" render={() => <NotFound />} />
       </Switch>
     </Router>
-    // </AuthProvider>
   );
 };
 
