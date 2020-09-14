@@ -1,5 +1,6 @@
 import actionTypes from "../actions/types";
 import { getPlan } from "../../firebase/plans";
+import constants from "../../utils/constants";
 
 const addPlaceToStore = (sortKey, dispatch) => {
   const handlePlaceResults = (placeResults, status) => {
@@ -46,6 +47,7 @@ const fetchPlaces = (plan, dispatch) => {
 };
 
 export const fetchPlanAndPlaces = (userId, planId) => async dispatch => {
+  console.log("fetchPlanAndPlaces");
   try {
     const plan = await getPlan(userId, planId);
     dispatch({
@@ -60,7 +62,7 @@ export const fetchPlanAndPlaces = (userId, planId) => async dispatch => {
   }
 };
 
-export const addPlace = (placeResults, input) => dispatch => {
+export const addPlace = (placeResults, input, sortKey) => dispatch => {
   // Clear input
   input.value = "";
   const newPlace = {
@@ -74,7 +76,7 @@ export const addPlace = (placeResults, input) => dispatch => {
     priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
     rating: placeResults.rating || constants.DEFAULT_RATING,
     website: placeResults.website || "",
-    sortKey: this.state.places.length
+    sortKey
   };
   dispatch({
     type: actionTypes.placeList.ADD_PLACE,
@@ -103,10 +105,9 @@ export const setSortOrder = sortOrder => {
   };
 };
 
-
 export const setPlaceList = places => {
-    return {
-        type: actionTypes.placeList.SET_PLACE_LIST:
-        places
-    }
-}
+  return {
+    type: actionTypes.placeList.SET_PLACE_LIST,
+    places
+  };
+};
