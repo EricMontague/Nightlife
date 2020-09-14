@@ -16,6 +16,7 @@ class Poller {
   }
 
   async callFunction(func, parameters) {
+    console.log(parameters);
     let wasSuccessful = true;
     try {
       await func(...parameters);
