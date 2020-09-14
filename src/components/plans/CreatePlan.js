@@ -44,7 +44,7 @@ CreatePlan.propTypes = {
   setPlanDetails: PropTypes.func.isRequired,
   updatePlan: PropTypes.func.isRequired,
   plan: PropTypes.shape({
-    planId: PropTypes.string.isRequired,
+    planId: PropTypes.string,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired,

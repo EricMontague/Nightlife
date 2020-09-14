@@ -215,7 +215,7 @@ PlanDetailsForm.propTypes = {
   toggleView: PropTypes.func.isRequired,
   handleFormSubmission: PropTypes.func.isRequired,
   plan: PropTypes.shape({
-    planId: PropTypes.string.isRequired,
+    planId: PropTypes.string,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired,
