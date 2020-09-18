@@ -16,6 +16,7 @@ import {
   setSortOrder,
   setPlaceList
 } from "../../redux/actions/placeList";
+import { addPlanToList } from "../../redux/actions/planList";
 import { addPlan, updatePlan } from "../../firebase/plans";
 import { formatDate } from "../../utils/dateTimeHelpers";
 import constants from "../../utils/constants";
@@ -30,7 +31,7 @@ import sortRunner from "../../algorithms/sorting";
 
 const PlanApp = props => {
   // Variable declarations
-  const splitPath = props.location.pathname.split("/");
+  let splitPath = props.location.pathname.split("/");
 
   // Declare hooks
   const dispatch = useDispatch();
@@ -52,10 +53,7 @@ const PlanApp = props => {
     console.log("PlanApp mount");
     // User is on the editting page
     const page = splitPath[splitPath.length - 1];
-    if (
-      page === constants.DISCOVER_MODE.EDIT ||
-      page === constants.DISCOVER_MODE.VIEW
-    ) {
+    if (isEdittingOrViewPage(page)) {
       const planId = splitPath[2];
       const poller = new Poller(3000, 3);
       dispatch(fetchPlanAndPlaces(props.currentUser.userId, planId));
@@ -63,7 +61,6 @@ const PlanApp = props => {
 
     // Cleanup scripts
     return () => {
-      console.log("PlanApp unmount");
       enableScrollY();
       const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
       if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
@@ -75,12 +72,20 @@ const PlanApp = props => {
   // componentDidUpdate
   useEffect(() => {
     console.log("PlanApp update");
+    splitPath = props.location.pathname.split("/");
     const mode = splitPath[splitPath.length - 1];
     if (discoverState.discoverMode !== mode) {
       console.log("reset");
       resetState();
     }
-  }, []);
+  });
+
+  const isEdittingOrViewPage = page => {
+    return (
+      page === constants.DISCOVER_MODE.EDIT ||
+      page === constants.DISCOVER_MODE.VIEW
+    );
+  };
 
   const resetState = () => {
     togglePlaceModal(false);
@@ -146,6 +151,8 @@ const PlanApp = props => {
       } catch (error) {
         console.log(`Error in saving plan information: ${error.message}`);
       }
+
+      dispatch(addPlanToList(currentPlan));
       props.history.push(`/users/${props.currentUser.displayName}`);
     }
   };
@@ -212,7 +219,7 @@ const PlanApp = props => {
 
   // Sort places
   const sortedPlaces = sortPlaces(places);
-  console.log(sortOrder);
+
   return (
     <DocumentTitle
       title={`${discoverState.discoverMode[0].toUpperCase() +
