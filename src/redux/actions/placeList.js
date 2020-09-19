@@ -47,7 +47,6 @@ const fetchPlaces = (plan, dispatch) => {
 };
 
 export const fetchPlanAndPlaces = (userId, planId) => async dispatch => {
-  console.log("fetchPlanAndPlaces");
   try {
     const plan = await getPlan(userId, planId);
     dispatch({
