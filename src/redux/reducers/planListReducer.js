@@ -1,5 +1,22 @@
 import actionTypes from "../actions/types";
 
+const addNewPlan = (currentPlans, newPlan) => {
+  let duplicateFound = false;
+  const newPlanList = currentPlans.filter(plan => {
+    if (plan.planId === newPlan.planId) {
+      duplicateFound = true;
+      return newPlan;
+    } else {
+      return plan;
+    }
+  });
+
+  if (!duplicateFound) {
+    newPlanList.push(newPlan);
+  }
+  return newPlanList;
+};
+
 const deletePlan = (plans, planId) => {
   return plans.filter(plan => {
     return plan.planId !== planId;
@@ -13,7 +30,7 @@ const planListReducer = (state = initialState, action) => {
     case actionTypes.planList.ADD_PLAN:
       return {
         selectedPlan: state.selectedPlan,
-        plans: [...state.plans, action.newPlan]
+        plans: addNewPlan(state.plans, action.newPlan)
       };
 
     case actionTypes.planList.SET_SELECTED_PLAN:
