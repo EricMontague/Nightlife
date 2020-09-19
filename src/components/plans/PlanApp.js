@@ -7,6 +7,7 @@ import Map from "./Map";
 import DocumentTitle from "../navigation/DocumentTitle";
 import useModalState from "../../hooks/useModalState";
 import useDiscoverState from "../../hooks/useDiscoverState";
+import usePlanState from "../../hooks/usePlanState";
 import { addPlanDetails, updatePlanDetails } from "../../redux/actions/plan";
 import {
   addPlace,
@@ -16,7 +17,6 @@ import {
   setSortOrder,
   setPlaceList
 } from "../../redux/actions/placeList";
-import { addPlanToList } from "../../redux/actions/planList";
 import { addPlan, updatePlan } from "../../firebase/plans";
 import { formatDate } from "../../utils/dateTimeHelpers";
 import constants from "../../utils/constants";
@@ -39,7 +39,13 @@ const PlanApp = props => {
   const selectedPlace = useSelector(
     state => state.placeListReducer.selectedPlace
   );
-  const currentPlan = useSelector(state => state.planReducer.plan);
+  const [currentPlan, addPlanDetails, updatePlanDetails] = usePlanState({
+    planId: "",
+    title: "",
+    description: "",
+    date: formatDate(new Date()),
+    time: new Date().toTimeString().slice(0, 5)
+  });
   const sortOrder = useSelector(state => state.placeListReducer.sortOrder);
   const [isPlaceModalVisible, togglePlaceModal] = useModalState(false);
   const [discoverState, setDiscoverState] = useDiscoverState({
@@ -48,7 +54,7 @@ const PlanApp = props => {
   });
   const [mousedOverPlaceId, setMousedOverPlaceId] = useState("");
 
-  // componentDidMount
+  // componentDidMount + componentWillUnmount
   useEffect(() => {
     console.log("PlanApp mount");
     // User is on the editting page
@@ -78,7 +84,7 @@ const PlanApp = props => {
       console.log("reset");
       resetState();
     }
-  });
+  }, [discoverState]);
 
   const isEdittingOrViewPage = page => {
     return (
@@ -107,14 +113,6 @@ const PlanApp = props => {
   };
 
   // Declare callbacks
-  const addPlandDetailsHandler = plan => {
-    dispatch(addPlanDetails(plan));
-  };
-
-  const updatePlanDetailsHandler = plan => {
-    dispatch(updatePlanDetails(plan));
-  };
-
   const addPlaceHandler = (placeResults, input) => {
     dispatch(addPlace(placeResults, input, places.length));
   };
@@ -152,7 +150,6 @@ const PlanApp = props => {
         console.log(`Error in saving plan information: ${error.message}`);
       }
 
-      dispatch(addPlanToList(currentPlan));
       props.history.push(`/users/${props.currentUser.displayName}`);
     }
   };
@@ -245,8 +242,8 @@ const PlanApp = props => {
               deletePlace={deletePlaceHandler}
               setPlanDetails={
                 discoverState.discoverMode === constants.DISCOVER_MODE.CREATE
-                  ? addPlandDetailsHandler
-                  : updatePlanDetailsHandler
+                  ? addPlanDetails
+                  : updatePlanDetails
               }
               updatePlan={updatePlanInFirestore}
               storePlan={storePlanInFirestore}
