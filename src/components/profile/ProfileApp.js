@@ -24,9 +24,7 @@ const ProfileApp = props => {
   // Declare hooks
   const dispatch = useDispatch();
   const selectedPlan = useSelector(state => state.planListReducer.selectedPlan);
-  const plans = useSelector(state => {
-    return state.planListReducer.plans;
-  });
+  const plans = useSelector(state => state.planListReducer.plans);
   const [isPlanDetailsModalVisible, togglePlanDetailsModal] = useModalState();
   const [isDeletePlanModalVisible, toggleDeletePlanModal] = useModalState();
 
@@ -41,7 +39,7 @@ const ProfileApp = props => {
       urlParameters.push("callback=fetchPlansAndPhotos");
       loadGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters);
     } else {
-      dispatch(fetchPlansAndPhotos());
+      dispatch(fetchPlansAndPhotos(props.currentUser.userId));
     }
 
     return () => enableScrollY();
