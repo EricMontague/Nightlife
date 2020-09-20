@@ -23,9 +23,8 @@ const actionTypes = Object.freeze({
     DELETE_PLAN: "DELETE_PLAN"
   },
   plan: {
-    CREATE_PLAN: "CREATE_PLAN",
     GET_PLAN: "GET_PLAN",
-    UPDATE_PLAN: "UPDATE_PLAN"
+    SET_PLAN: "SET_PLAN"
   }
 });
 
