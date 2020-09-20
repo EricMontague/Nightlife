@@ -47,9 +47,12 @@ const PlanDetailsModal = props => {
           </div>
           <div className="modal-footer">
             <div className="modal-footer-left">
-              <button type="button" className="btn btn-secondary">
-                Edit
-              </button>
+              <Link
+                to={`/plans/${props.plan.planId}/edit`}
+                className="btn btn-secondary"
+              >
+                Edit Plan
+              </Link>
               <button
                 type="button"
                 className="btn btn-light"
