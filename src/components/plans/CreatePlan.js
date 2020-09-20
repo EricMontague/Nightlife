@@ -18,6 +18,7 @@ const CreatePlan = props => {
         handleSelectListChange={props.changeSortOrder}
         handleUpdateClick={props.updatePlan}
         places={props.places}
+        plan={props.plan}
         discoverMode={props.discoverMode}
         dragEndHandler={props.dragEndHandler}
         toggleModal={props.toggleModal}
