@@ -91,7 +91,7 @@ export class CustomMarker extends React.Component {
       ...props
     };
     this.marker = new google.maps.Marker(pref);
-    console.log("After marker initialization");
+
     // Create bounds and extend to include the marker's position
     props.bounds.extend(this.marker.position);
 
