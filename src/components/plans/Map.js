@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+import CustomMarker from "./CustomMarker";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
 import constants from "../../utils/constants";
 import { calculateCenter } from "../../utils/googleMapsHelpers";
@@ -135,7 +136,7 @@ export class MapContainer extends React.Component {
           this.props.places.map(place => {
             const { placeId, name, location } = place;
             return (
-              <Marker
+              <CustomMarker
                 key={placeId}
                 title={name}
                 name={name}
