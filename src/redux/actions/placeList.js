@@ -53,6 +53,7 @@ export const fetchPlanAndPlaces = (userId, planId) => async dispatch => {
       type: actionTypes.plan.GET_PLAN,
       plan
     });
+    dispatch(setPlaceList([]));
     fetchPlaces(plan, dispatch);
   } catch (error) {
     throw new Error(
