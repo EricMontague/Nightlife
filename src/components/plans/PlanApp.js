@@ -39,13 +39,15 @@ const PlanApp = props => {
   const selectedPlace = useSelector(
     state => state.placeListReducer.selectedPlace
   );
-  const [currentPlan, addPlanDetails, updatePlanDetails] = usePlanState({
-    planId: "",
-    title: "",
-    description: "",
-    date: formatDate(new Date()),
-    time: new Date().toTimeString().slice(0, 5)
-  });
+  // const [currentPlan, addPlanDetails, updatePlanDetails] = usePlanState({
+  //   planId: "",
+  //   title: "",
+  //   description: "",
+  //   date: formatDate(new Date()),
+  //   time: new Date().toTimeString().slice(0, 5)
+  // });
+  const currentPlan = useSelector(state => state.planReducer);
+
   const sortOrder = useSelector(state => state.placeListReducer.sortOrder);
   const [isPlaceModalVisible, togglePlaceModal] = useModalState(false);
   const [discoverState, setDiscoverState] = useDiscoverState({
@@ -59,7 +61,9 @@ const PlanApp = props => {
     console.log("PlanApp mount");
     // User is on the editting page
     const page = splitPath[splitPath.length - 1];
-    if (isEdittingOrViewPage(page)) {
+    if (isCreatePage(page)) {
+      resetPlanAndPlaceList();
+    } else if (isEdittingOrViewPage(page)) {
       const planId = splitPath[2];
       const poller = new Poller(3000, 3);
       dispatch(fetchPlanAndPlaces(props.currentUser.userId, planId));
@@ -82,7 +86,12 @@ const PlanApp = props => {
     const mode = splitPath[splitPath.length - 1];
     if (discoverState.discoverMode !== mode) {
       console.log("reset");
-      resetState();
+      togglePlaceModal(false);
+      setDiscoverState({
+        isDiscoverView: false,
+        discoverMode: splitPath[splitPath.length - 1]
+      });
+      resetPlanAndPlaceList();
     }
   }, [discoverState]);
 
@@ -93,12 +102,11 @@ const PlanApp = props => {
     );
   };
 
-  const resetState = () => {
-    togglePlaceModal(false);
-    setDiscoverState({
-      isDiscoverView: false,
-      discoverMode: splitPath[splitPath.length - 1]
-    });
+  const isCreatePage = page => {
+    return page === constants.DISCOVER_MODE.CREATE;
+  };
+
+  const resetPlanAndPlaceList = () => {
     dispatch(setSelectedPlace(null));
     dispatch(setSortOrder(""));
     const defaultPlan = {
@@ -113,6 +121,15 @@ const PlanApp = props => {
   };
 
   // Declare callbacks
+  const addPlandDetailsHandler = plan => {
+    dispatch(addPlanDetails(plan));
+  };
+
+  const updatePlanDetailsHandler = plan => {
+    console.log("updatePlanDetailsHandler");
+    dispatch(updatePlanDetails({ ...plan, planId: currentPlan.planId }));
+  };
+
   const addPlaceHandler = (placeResults, input) => {
     dispatch(addPlace(placeResults, input, places.length));
   };
@@ -127,8 +144,8 @@ const PlanApp = props => {
 
   // Needed so that I can get places out of firebase in the same order
   // They were in when I inserted them
-  const addSortKey = places => {
-    return places.map((place, index) => {
+  const addSortKey = placesList => {
+    return placesList.map((place, index) => {
       return { placeId: place.placeId, sortKey: index };
     });
   };
@@ -161,6 +178,7 @@ const PlanApp = props => {
     } else {
       const plan = { ...currentPlan };
       plan.places = addSortKey(places);
+
       try {
         await updatePlan(props.currentUser.userId, plan);
       } catch (error) {
@@ -242,8 +260,8 @@ const PlanApp = props => {
               deletePlace={deletePlaceHandler}
               setPlanDetails={
                 discoverState.discoverMode === constants.DISCOVER_MODE.CREATE
-                  ? addPlanDetails
-                  : updatePlanDetails
+                  ? addPlandDetailsHandler
+                  : updatePlanDetailsHandler
               }
               updatePlan={updatePlanInFirestore}
               storePlan={storePlanInFirestore}
