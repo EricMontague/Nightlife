@@ -41,6 +41,8 @@ export const addPlan = async (userId, plan) => {
 };
 
 export const updatePlan = async (userId, updatedPlan) => {
+  console.log("updated Plan: ");
+  console.log(updatedPlan);
   let userDocument;
   try {
     userDocument = await getUserDocument(userId);
@@ -49,7 +51,13 @@ export const updatePlan = async (userId, updatedPlan) => {
   }
 
   userDocument.plans = userDocument.plans.map(plan => {
-    return plan.planId === updatedPlan.planId ? updatedPlan : plan;
+    console.log(plan);
+    if (plan.planId === updatedPlan.planId) {
+      console.log("Replaced");
+      return updatedPlan;
+    }
+    return plan;
+    // return plan.planId === updatedPlan.planId ? updatedPlan : plan;
   });
 
   try {

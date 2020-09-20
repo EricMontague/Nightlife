@@ -47,11 +47,11 @@ const ProfileApp = props => {
 
   // Declare callbacks
 
-  const togglePlanDetailsModalHandler = plan => {
+  const togglePlanDetailsModalHandler = selectedPlan => {
     togglePlanDetailsModal(!isPlanDetailsModalVisible);
     dispatch({
       type: actionTypes.planList.SET_SELECTED_PLAN,
-      selectedPlan: selectedPlan ? null : plan
+      selectedPlan
     });
   };
 
