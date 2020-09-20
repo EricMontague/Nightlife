@@ -35,8 +35,8 @@ class DiscoverView extends React.Component {
 
   render() {
     let title = "Discover Places";
-    if (this.props.discoverMode !== constants.DISCOVER_MODE.CREATE) {
-      title = "Your Places";
+    if (this.props.discoverMode === constants.DISCOVER_MODE.VIEW) {
+      title = this.props.plan.title;
     }
     let actionBtnText = "Finish";
     if (this.props.discoverMode === constants.DISCOVER_MODE.EDIT) {
@@ -166,7 +166,14 @@ DiscoverView.propTypes = {
       website: PropTypes.string
     })
   ),
-
+  plan: PropTypes.shape({
+    planId: PropTypes.string,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    time: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    placeIds: PropTypes.arrayOf(PropTypes.string)
+  }),
   discoverMode: PropTypes.string.isRequired,
   dragEndHandler: PropTypes.func.isRequired,
   mousedOverPlaceId: PropTypes.string.isRequired
