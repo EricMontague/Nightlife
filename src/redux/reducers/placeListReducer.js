@@ -56,7 +56,7 @@ const placeListReducer = (state = initialState, action) => {
       };
     case actionTypes.placeList.SET_SORT_ORDER:
       return {
-        places: state.places,
+        ...state,
         sortOrder: action.sortOrder
       };
     default:

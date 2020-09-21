@@ -16,7 +16,7 @@ const addPlaceToStore = (sortKey, dispatch) => {
         priceLevel: placeResults.price_level || constants.DEFAULT_PRICE_LEVEL,
         rating: placeResults.rating || constants.DEFAULT_RATING,
         website: placeResults.website || "",
-        sortKey: sortKey
+        sortKey
       };
 
       dispatch({
