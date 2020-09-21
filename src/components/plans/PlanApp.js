@@ -89,11 +89,11 @@ const PlanApp = props => {
       togglePlaceModal(false);
       setDiscoverState({
         isDiscoverView: false,
-        discoverMode: splitPath[splitPath.length - 1]
+        discoverMode: mode
       });
       resetPlanAndPlaceList();
     }
-  }, [discoverState]);
+  });
 
   const isEdittingOrViewPage = page => {
     return (
@@ -126,7 +126,6 @@ const PlanApp = props => {
   };
 
   const updatePlanDetailsHandler = plan => {
-    console.log("updatePlanDetailsHandler");
     dispatch(updatePlanDetails({ ...plan, planId: currentPlan.planId }));
   };
 
@@ -139,7 +138,9 @@ const PlanApp = props => {
   };
 
   const setSortOrderHandler = sortOrder => {
+    // need to remove this dispatch. Keeping the sortOrder in state is unecessary
     dispatch(setSortOrder(sortOrder));
+    dispatch(setPlaceList(correctSortKey(sortRunner(places, sortOrder))));
   };
 
   // Needed so that I can get places out of firebase in the same order
@@ -160,7 +161,7 @@ const PlanApp = props => {
       console.log("Please choose at least one place.");
     } else {
       const plan = { ...currentPlan };
-      plan.places = addSortKey(places);
+      plan.places = getPlaceIds(places);
       try {
         await addPlan(props.currentUser.userId, plan);
       } catch (error) {
@@ -177,7 +178,8 @@ const PlanApp = props => {
       console.log("Please choose at least one place.");
     } else {
       const plan = { ...currentPlan };
-      plan.places = addSortKey(places);
+
+      plan.places = getPlaceIds(places);
 
       try {
         await updatePlan(props.currentUser.userId, plan);
@@ -228,12 +230,14 @@ const PlanApp = props => {
     dispatch(setPlaceList(reorderedPlaces));
   };
 
-  const sortPlaces = places => {
-    return sortRunner(places, sortOrder);
+  const correctSortKey = placeList => {
+    return placeList.map((place, index) => {
+      place.sortKey = index;
+      return place;
+    });
   };
 
   // Sort places
-  const sortedPlaces = sortPlaces(places);
 
   return (
     <DocumentTitle
@@ -245,7 +249,7 @@ const PlanApp = props => {
           <div className="google-map">
             <Map
               toggleModal={togglePlaceModalHandler}
-              places={sortedPlaces}
+              places={places}
               shouldRenderMarkers={
                 discoverState.isDiscoverView ||
                 discoverState.discoverMode === constants.DISCOVER_MODE.VIEW
@@ -267,7 +271,7 @@ const PlanApp = props => {
               storePlan={storePlanInFirestore}
               toggleView={toggleView}
               toggleModal={togglePlaceModalHandler}
-              places={sortedPlaces}
+              places={places}
               isDiscoverView={discoverState.isDiscoverView}
               plan={currentPlan}
               discoverMode={discoverState.discoverMode}
