@@ -41,8 +41,6 @@ export const addPlan = async (userId, plan) => {
 };
 
 export const updatePlan = async (userId, updatedPlan) => {
-  console.log("updated Plan: ");
-  console.log(updatedPlan);
   let userDocument;
   try {
     userDocument = await getUserDocument(userId);
