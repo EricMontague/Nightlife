@@ -1,4 +1,5 @@
 import actionTypes from "../actions/types";
+import constants from "../../utils/constants";
 
 const deletePlace = (places, placeId) => {
   const newPlaces = [];
@@ -27,7 +28,11 @@ const addPlace = (places, newPlace) => {
   return places;
 };
 
-const initialState = { places: [], sortOrder: "", selectedPlace: null };
+const initialState = {
+  places: [],
+  sortOrder: constants.SORT_BY_KEY,
+  selectedPlace: null
+};
 
 const placeListReducer = (state = initialState, action) => {
   switch (action.type) {
