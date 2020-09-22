@@ -50,7 +50,7 @@ const sortByKey = places => {
   });
 };
 
-const sortRunner = (places, sortOrder) => {
+const sortPlaces = (places, sortOrder) => {
   let newPlaces;
   let reverse = false;
   switch (sortOrder) {
@@ -68,10 +68,13 @@ const sortRunner = (places, sortOrder) => {
       reverse = true;
       newPlaces = sortByPriceLevel(places, reverse);
       break;
-    default:
+    case constants.SORT_BY_USER_INPUT:
       newPlaces = sortByKey(places);
+      break;
+    default:
+      newPlaces = places;
   }
   return newPlaces;
 };
 
-export default sortRunner;
+export default sortPlaces;
