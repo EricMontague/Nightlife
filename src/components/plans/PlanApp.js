@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import CreatePlan from "./CreatePlan";
@@ -7,7 +7,6 @@ import Map from "./Map";
 import DocumentTitle from "../navigation/DocumentTitle";
 import useModalState from "../../hooks/useModalState";
 import useDiscoverState from "../../hooks/useDiscoverState";
-import usePlanState from "../../hooks/usePlanState";
 import { addPlanDetails, updatePlanDetails } from "../../redux/actions/plan";
 import {
   addPlace,
@@ -27,7 +26,7 @@ import {
 } from "../../utils/googleMapsHelpers";
 import Poller from "../../utils/polling";
 import { reorderPlaces } from "../../algorithms/reorder";
-import sortRunner from "../../algorithms/sorting";
+import sortPlaces from "../../algorithms/sorting";
 
 const PlanApp = props => {
   // Variable declarations
@@ -39,13 +38,6 @@ const PlanApp = props => {
   const selectedPlace = useSelector(
     state => state.placeListReducer.selectedPlace
   );
-  // const [currentPlan, addPlanDetails, updatePlanDetails] = usePlanState({
-  //   planId: "",
-  //   title: "",
-  //   description: "",
-  //   date: formatDate(new Date()),
-  //   time: new Date().toTimeString().slice(0, 5)
-  // });
   const currentPlan = useSelector(state => state.planReducer);
 
   const sortOrder = useSelector(state => state.placeListReducer.sortOrder);
@@ -71,6 +63,7 @@ const PlanApp = props => {
 
     // Cleanup scripts
     return () => {
+      console.log("PlanApp unmount");
       enableScrollY();
       const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
       if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
@@ -140,12 +133,9 @@ const PlanApp = props => {
   const setSortOrderHandler = sortOrder => {
     // need to remove this dispatch. Keeping the sortOrder in state is unecessary
     dispatch(setSortOrder(sortOrder));
-    dispatch(setPlaceList(correctSortKey(sortRunner(places, sortOrder))));
   };
 
-  // Needed so that I can get places out of firebase in the same order
-  // They were in when I inserted them
-  const addSortKey = placesList => {
+  const stripPlaces = placesList => {
     return placesList.map((place, index) => {
       return { placeId: place.placeId, sortKey: index };
     });
@@ -161,7 +151,7 @@ const PlanApp = props => {
       console.log("Please choose at least one place.");
     } else {
       const plan = { ...currentPlan };
-      plan.places = getPlaceIds(places);
+      plan.places = stripPlaces(places);
       try {
         await addPlan(props.currentUser.userId, plan);
       } catch (error) {
@@ -179,7 +169,7 @@ const PlanApp = props => {
     } else {
       const plan = { ...currentPlan };
 
-      plan.places = getPlaceIds(places);
+      plan.places = stripPlaces(places);
 
       try {
         await updatePlan(props.currentUser.userId, plan);
@@ -193,14 +183,6 @@ const PlanApp = props => {
   const togglePlaceModalHandler = place => {
     togglePlaceModal(!isPlaceModalVisible);
     dispatch(setSelectedPlace(selectedPlace ? null : place));
-  };
-
-  const handleMarkerMouseover = placeId => {
-    setMousedOverPlaceId(placeId);
-  };
-
-  const handleMarkerMouseout = () => {
-    setMousedOverPlaceId("");
   };
 
   const toggleView = () => {
@@ -226,16 +208,14 @@ const PlanApp = props => {
     );
 
     // set state
-    dispatch(setSortOrder(constants.SORT_BY_USER_INPUT));
+    // dispatch(setSortOrder(constants.SORT_BY_USER_INPUT));
     dispatch(setPlaceList(reorderedPlaces));
   };
 
-  const correctSortKey = placeList => {
-    return placeList.map((place, index) => {
-      place.sortKey = index;
-      return place;
-    });
-  };
+  const sortedPlaces = useMemo(() => {
+    console.log("sorting");
+    return sortPlaces(places, sortOrder);
+  }, [sortOrder, places]);
 
   // Sort places
 
@@ -249,13 +229,13 @@ const PlanApp = props => {
           <div className="google-map">
             <Map
               toggleModal={togglePlaceModalHandler}
-              places={places}
+              places={sortedPlaces}
               shouldRenderMarkers={
                 discoverState.isDiscoverView ||
                 discoverState.discoverMode === constants.DISCOVER_MODE.VIEW
               }
-              handleMouseover={handleMarkerMouseover}
-              handleMouseout={handleMarkerMouseout}
+              handleMouseover={setMousedOverPlaceId}
+              handleMouseout={() => setMousedOverPlaceId("")}
             />
           </div>
           <div className="user-actions">
@@ -271,7 +251,7 @@ const PlanApp = props => {
               storePlan={storePlanInFirestore}
               toggleView={toggleView}
               toggleModal={togglePlaceModalHandler}
-              places={places}
+              places={sortedPlaces}
               isDiscoverView={discoverState.isDiscoverView}
               plan={currentPlan}
               discoverMode={discoverState.discoverMode}
