@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import CustomMarker from "./CustomMarker";
+import CustomMap from "./CustomMap";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
 import constants from "../../utils/constants";
 import { calculateCenter } from "../../utils/googleMapsHelpers";
@@ -18,6 +19,7 @@ export class MapContainer extends React.Component {
       }
     };
     this.bounds = new this.props.google.maps.LatLngBounds();
+    this.mapRef = React.createRef();
     this.adjustCenter = this.adjustCenter.bind(this);
     this.onMouseoverMarker = this.onMouseoverMarker.bind(this);
     this.setSelectedPlace = this.setSelectedPlace.bind(this);
@@ -136,7 +138,7 @@ export class MapContainer extends React.Component {
           this.props.places.map(place => {
             const { placeId, name, location } = place;
             return (
-              <CustomMarker
+              <Marker
                 key={placeId}
                 title={name}
                 name={name}
@@ -147,9 +149,6 @@ export class MapContainer extends React.Component {
                 onMouseover={this.onMouseoverMarker(place)}
                 onMouseout={this.props.handleMouseout}
                 bounds={this.bounds}
-                map={this.props.map}
-                google={this.props.google}
-                mapCenter={this.props.mapCenter}
               />
             );
           })}
