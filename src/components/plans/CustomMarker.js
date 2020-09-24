@@ -72,7 +72,7 @@ export class CustomMarker extends React.Component {
       title,
       ...props
     } = this.props;
-    if (!google) {
+    if (!google || !map) {
       return null;
     }
 
