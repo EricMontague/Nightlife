@@ -4,11 +4,6 @@ const actionTypes = Object.freeze({
     SIGN_OUT: "SIGN_OUT",
     DELETE_ACCOUNT: "DELETE_ACCOUNT"
   },
-  googleMaps: {
-    SET_PLACE: "SET_PLACE",
-    SET_ACTIVE_MARKER: "SET_ACTIVE_MARKER",
-    SET_MAP_CENTER: "SET_MAP_CENTER"
-  },
   placeList: {
     ADD_PLACE: "ADD_PLACE",
     DELETE_PLACE: "DELETE_PLACE",
