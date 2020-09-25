@@ -3,14 +3,12 @@ import placeListReducer from "./placeListReducer";
 import planListReducer from "./planListReducer";
 import planReducer from "./planReducer";
 import authReducer from "./authReducer";
-import googleMapsReducer from "./googleMapsReducer";
 
 const rootReducer = combineReducers({
   placeListReducer,
   planListReducer,
   planReducer,
-  authReducer,
-  googleMapsReducer
+  authReducer
 });
 
 export default rootReducer;
