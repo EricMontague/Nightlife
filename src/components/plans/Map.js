@@ -1,62 +1,72 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import CustomMarker from "./CustomMarker";
-import CustomMap from "./CustomMap";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
+import usePrevious from "../../hooks/usePrevious";
 import constants from "../../utils/constants";
 import { calculateCenter } from "../../utils/googleMapsHelpers";
 
-export class MapContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedPlace: null,
-      activeMarker: null,
-      center: {
-        lat: constants.DEFAULT_GOOGLE_MAPS_LAT,
-        lng: constants.DEFAULT_GOOGLE_MAPS_LNG
-      }
-    };
-    this.bounds = new this.props.google.maps.LatLngBounds();
-    this.mapRef = React.createRef();
-    this.adjustCenter = this.adjustCenter.bind(this);
-    this.onMouseoverMarker = this.onMouseoverMarker.bind(this);
-    this.setSelectedPlace = this.setSelectedPlace.bind(this);
-    this.setActiveMarker = this.setActiveMarker.bind(this);
-    this.handleWindowOpen = this.handleWindowOpen.bind(this);
-    this.handleWindowClose = this.handleWindowClose.bind(this);
-    this.handleLinkClick = this.handleLinkClick.bind(this);
-  }
+const MapContainer = props => {
+  // Declare variables
+  const bounds = new props.google.maps.LatLngBounds();
+  let shouldComponentUpdate = true;
 
-  componentDidMount() {
-    this.adjustCenter();
-  }
+  // Declare hooks
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.places.length !== this.props.places.length) {
-      this.adjustCenter();
-    }
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  let infoWindowId = "";
+  if (selectedPlace !== null) {
+    infoWindowId = selectedPlace.placeId + selectedPlace.name;
   }
+  const [activeMarker, setActiveMarker] = useState(null);
+  const prevState = usePrevious({ selectedPlace, activeMarker });
+  const prevPlaces = usePrevious(props.places);
+  const [center, setMapCenter] = useState({
+    lat: constants.DEFAULT_GOOGLE_MAPS_LAT,
+    lng: constants.DEFAULT_GOOGLE_MAPS_LNG
+  });
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // Until an infowindow is opened, this component should update
+  // componentDidMount
+  useEffect(() => {
+    adjustCenter();
+  }, []);
+
+  //shouldComponentUpdate
+  useEffect(() => {
     if (
-      (this.state.selectedPlace == null && this.state.activeMarker === null) ||
-      this.props.places.length !== nextProps.places.length
+      prevPlaces.length === 0 ||
+      prevState.selectedPlace === selectedPlace ||
+      prevState.activeMarker == activeMarker
     ) {
-      return true;
+      shouldComponentUpdate = false;
     }
-    // The component should only update if a user moves their cursor over a different
-    // marker
-    return (
-      nextState.selectedPlace !== this.state.selectedPlace ||
-      nextState.activeMarker !== this.state.activeMarker
-    );
-  }
+  }, [selectedPlace, activeMarker]);
 
-  adjustCenter() {
-    const places = this.props.places;
+  // componentDidUpdate
+  useEffect(() => {
+    if (shouldComponentUpdate && prevPlaces.length !== props.places.length) {
+      adjustCenter();
+    }
+  }, [prevPlaces]);
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   // Until an infowindow is opened, this component should update
+  //   if (
+  //     (this.state.selectedPlace == null && this.state.activeMarker === null) ||
+  //     this.props.places.length !== nextProps.places.length
+  //   ) {
+  //     return true;
+  //   }
+  //   // The component should only update if a user moves their cursor over a different
+  //   // marker
+  //   return (
+  //     nextState.selectedPlace !== this.state.selectedPlace ||
+  //     nextState.activeMarker !== this.state.activeMarker
+  //   );
+  // }
+
+  const adjustCenter = () => {
+    const places = props.places;
     let center = {
       lat: constants.DEFAULT_GOOGLE_MAPS_LAT,
       lng: constants.DEFAULT_GOOGLE_MAPS_LNG
@@ -65,108 +75,89 @@ export class MapContainer extends React.Component {
     if (places.length > 0) {
       center = calculateCenter(places);
     }
-    this.setState({ center });
-  }
+    setMapCenter(center);
+  };
 
-  onMouseoverMarker(place) {
+  const handleMouseoverMarker = place => {
     const innerHandler = (props, marker, event) => {
-      this.props.handleMouseover(place.placeId);
-      this.setSelectedPlace(place);
-      this.setActiveMarker(marker);
+      console.log(props);
+      props.onMouseover(place.placeId);
+      setSelectedPlace(place);
+      setActiveMarker(marker);
     };
     return innerHandler;
-  }
+  };
 
-  setSelectedPlace(place) {
-    this.setState({
-      selectedPlace: place
-    });
-  }
-
-  setActiveMarker(marker) {
-    this.setState({
-      activeMarker: marker
-    });
-  }
-
-  handleWindowOpen(place, event) {
+  const handleWindowOpen = (place, event) => {
     const windowContent = (
-      <React.Fragment>
+      <>
         <h3 className="text-overflow-ellipsis mb-2">{place.name}</h3>
-        <span className="link" onClick={this.handleLinkClick(place)}>
+        <span className="link" onClick={handleLinkClick(place)}>
           View Details
         </span>
-      </React.Fragment>
+      </>
     );
     ReactDOM.render(
       React.Children.only(windowContent),
       document.getElementById(place.placeId + place.name)
     );
-  }
+  };
 
-  handleWindowClose() {
-    this.setSelectedPlace(null);
-    this.setActiveMarker(null);
-  }
+  const handleWindowClose = () => {
+    setSelectedPlace(null);
+    setActiveMarker(null);
+  };
 
-  handleLinkClick(place) {
+  const handleLinkClick = place => {
     const innerHandler = event => {
       event.preventDefault();
-      this.props.toggleModal(place);
+      props.toggleModal(place);
     };
     return innerHandler;
-  }
+  };
 
-  render() {
-    let infoWindowId = "";
-    if (this.state.selectedPlace !== null) {
-      infoWindowId =
-        this.state.selectedPlace.placeId + this.state.selectedPlace.name;
-    }
+  return (
+    <Map
+      google={props.google}
+      center={{
+        lat: center.lat,
+        lng: center.lng
+      }}
+      zoom={10}
+      bounds={bounds}
+    >
+      {props.shouldRenderMarkers &&
+        props.places.map(place => {
+          const { placeId, name, location } = place;
+          return (
+            <Marker
+              key={placeId}
+              title={name}
+              name={name}
+              position={{
+                lat: location.lat(),
+                lng: location.lng()
+              }}
+              onMouseover={handleMouseoverMarker(place)}
+              onMouseout={props.handleMouseout}
+              bounds={bounds}
+            />
+          );
+        })}
 
-    return (
-      <Map
-        google={this.props.google}
-        center={{
-          lat: this.state.center.lat,
-          lng: this.state.center.lng
+      <InfoWindow
+        visible={activeMarker === null ? false : true}
+        marker={activeMarker}
+        onOpen={event => {
+          handleWindowOpen(selectedPlace, event);
         }}
-        zoom={10}
-        bounds={this.bounds}
+        onClose={handleWindowClose}
       >
-        {this.props.shouldRenderMarkers &&
-          this.props.places.map(place => {
-            const { placeId, name, location } = place;
-            return (
-              <Marker
-                key={placeId}
-                title={name}
-                name={name}
-                position={{
-                  lat: location.lat(),
-                  lng: location.lng()
-                }}
-                onMouseover={this.onMouseoverMarker(place)}
-                onMouseout={this.props.handleMouseout}
-                bounds={this.bounds}
-              />
-            );
-          })}
-
-        <InfoWindow
-          visible={this.state.activeMarker === null ? false : true}
-          marker={this.state.activeMarker}
-          onOpen={event => {
-            this.handleWindowOpen(this.state.selectedPlace, event);
-          }}
-          onClose={this.handleWindowClose}
-        >
-          <div id={infoWindowId}></div>
-        </InfoWindow>
-      </Map>
-    );
-  }
-}
+        <div id={infoWindowId}></div>
+      </InfoWindow>
+    </Map>
+  );
+};
 
 MapContainer.propTypes = {
   toggleModal: PropTypes.func.isRequired,
