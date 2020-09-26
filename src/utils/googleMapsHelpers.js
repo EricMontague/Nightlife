@@ -37,7 +37,7 @@ export const loadGoogleScript = (sourceAttributeValue, urlParameters) => {
   document.body.appendChild(newScriptElement);
 };
 
-const MinMaxLatitudes = places => {
+const minMaxLatitudes = places => {
   const initialLatitude = places[0].location.lat();
   let minLatitude = initialLatitude;
   let maxLatitude = initialLatitude;
@@ -56,7 +56,7 @@ const MinMaxLatitudes = places => {
   };
 };
 
-const MinMaxLongitudes = places => {
+const minMaxLongitudes = places => {
   const initialLongitude = places[0].location.lng();
   let minLongitude = initialLongitude;
   let maxLongitude = initialLongitude;
@@ -76,8 +76,8 @@ const MinMaxLongitudes = places => {
 };
 
 export const calculateCenter = places => {
-  const { minLatitude, maxLatitude } = MinMaxLatitudes(places);
-  const { minLongitude, maxLongitude } = MinMaxLongitudes(places);
+  const { minLatitude, maxLatitude } = minMaxLatitudes(places);
+  const { minLongitude, maxLongitude } = minMaxLongitudes(places);
   return {
     lat: (maxLatitude + minLatitude) / 2.0,
     lng: (maxLongitude + minLongitude) / 2.0
