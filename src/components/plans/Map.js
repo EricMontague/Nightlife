@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
@@ -9,7 +9,7 @@ import { calculateCenter } from "../../utils/googleMapsHelpers";
 const MapContainer = props => {
   // Declare variables
   const bounds = new props.google.maps.LatLngBounds();
-  let shouldComponentUpdate = true;
+  const boundsRef = useRef(bounds);
 
   // Declare hooks
 
@@ -20,7 +20,7 @@ const MapContainer = props => {
   }
   const [activeMarker, setActiveMarker] = useState(null);
   const prevState = usePrevious({ selectedPlace, activeMarker });
-  const prevPlaces = usePrevious(props.places);
+  const prevPlaces = usePrevious(props.places.length === 0 ? [] : props.places);
   const [center, setMapCenter] = useState({
     lat: constants.DEFAULT_GOOGLE_MAPS_LAT,
     lng: constants.DEFAULT_GOOGLE_MAPS_LNG
@@ -31,39 +31,28 @@ const MapContainer = props => {
     adjustCenter();
   }, []);
 
-  //shouldComponentUpdate
-  useEffect(() => {
-    if (
-      prevPlaces.length === 0 ||
-      prevState.selectedPlace === selectedPlace ||
-      prevState.activeMarker == activeMarker
-    ) {
-      shouldComponentUpdate = false;
-    }
-  }, [selectedPlace, activeMarker]);
-
   // componentDidUpdate
   useEffect(() => {
-    if (shouldComponentUpdate && prevPlaces.length !== props.places.length) {
+    if (
+      hasSelectedPlaceChanged() ||
+      hasActiveMarkerChanged() ||
+      havePlacesChanged()
+    ) {
       adjustCenter();
     }
-  }, [prevPlaces]);
+  });
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   // Until an infowindow is opened, this component should update
-  //   if (
-  //     (this.state.selectedPlace == null && this.state.activeMarker === null) ||
-  //     this.props.places.length !== nextProps.places.length
-  //   ) {
-  //     return true;
-  //   }
-  //   // The component should only update if a user moves their cursor over a different
-  //   // marker
-  //   return (
-  //     nextState.selectedPlace !== this.state.selectedPlace ||
-  //     nextState.activeMarker !== this.state.activeMarker
-  //   );
-  // }
+  const hasSelectedPlaceChanged = () => {
+    return prevState.selectedPlace !== selectedPlace;
+  };
+
+  const hasActiveMarkerChanged = () => {
+    return prevState.activeMarker !== activeMarker;
+  };
+
+  const havePlacesChanged = () => {
+    return prevPlaces.length !== props.places.length;
+  };
 
   const adjustCenter = () => {
     const places = props.places;
@@ -75,13 +64,13 @@ const MapContainer = props => {
     if (places.length > 0) {
       center = calculateCenter(places);
     }
+
     setMapCenter(center);
   };
 
   const handleMouseoverMarker = place => {
-    const innerHandler = (props, marker, event) => {
-      console.log(props);
-      props.onMouseover(place.placeId);
+    const innerHandler = (markerProps, marker, event) => {
+      props.handleMouseover(place.placeId);
       setSelectedPlace(place);
       setActiveMarker(marker);
     };
@@ -124,7 +113,7 @@ const MapContainer = props => {
         lng: center.lng
       }}
       zoom={10}
-      bounds={bounds}
+      bounds={boundsRef.current}
     >
       {props.shouldRenderMarkers &&
         props.places.map(place => {
@@ -140,7 +129,7 @@ const MapContainer = props => {
               }}
               onMouseover={handleMouseoverMarker(place)}
               onMouseout={props.handleMouseout}
-              bounds={bounds}
+              bounds={boundsRef.current}
             />
           );
         })}
