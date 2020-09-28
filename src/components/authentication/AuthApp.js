@@ -15,8 +15,8 @@ import {
 const AuthApp = props => {
   const dispatch = useDispatch();
 
-  const loginUser = (email, password) => {
-    dispatch(signInWithEmailAndPassword(email, password));
+  const loginUser = auth => {
+    dispatch(signInWithEmailAndPassword(auth.email, auth.password));
   };
 
   const createUserWithEmailAndPasswordHandler = user => {
