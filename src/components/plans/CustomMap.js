@@ -163,7 +163,7 @@ export class Map extends React.Component {
       });
 
       this.map = new maps.Map(node, mapConfig);
-
+      console.log("loadMap called!");
       evtNames.forEach(e => {
         this.listeners[e] = this.map.addListener(e, this.handleEvent(e));
       });
@@ -219,6 +219,9 @@ export class Map extends React.Component {
     const { children } = this.props;
 
     if (!children) return;
+
+    console.log("Render children!");
+    console.log(children);
 
     return React.Children.map(children, c => {
       if (!c) return;
