@@ -7,6 +7,7 @@ import Map from "./Map";
 import DocumentTitle from "../navigation/DocumentTitle";
 import useModalState from "../../hooks/useModalState";
 import useDiscoverState from "../../hooks/useDiscoverState";
+import { useAlertContext } from "../../providers/AlertProvider";
 import { addPlanDetails, updatePlanDetails } from "../../redux/actions/plan";
 import {
   addPlace,
@@ -33,6 +34,7 @@ const PlanApp = props => {
 
   // Declare hooks
   const dispatch = useDispatch();
+  const { showAlert, setAlertState } = useAlertContext();
   const places = useSelector(state => state.placeListReducer.places);
   const selectedPlace = useSelector(
     state => state.placeListReducer.selectedPlace
@@ -46,6 +48,9 @@ const PlanApp = props => {
     discoverMode: splitPath[splitPath.length - 1]
   });
   const [mousedOverPlaceId, setMousedOverPlaceId] = useState("");
+
+  // show alert if a message is set
+  showAlert();
 
   // componentDidMount + componentWillUnmount
   useEffect(() => {
@@ -146,16 +151,21 @@ const PlanApp = props => {
   const storePlanInFirestore = async () => {
     console.log("store Plan");
     if (places.length === 0) {
-      console.log("Please choose at least one place.");
+      setAlertState({
+        message: "Please choose at least one place.",
+        alertClassName: "danger"
+      });
     } else {
       const plan = { ...currentPlan };
       plan.places = stripPlaces(places);
       try {
         await addPlan(props.currentUser.userId, plan);
       } catch (error) {
-        console.log(`Error in saving plan information: ${error.message}`);
+        setAlertState({
+          message: error.message,
+          alertClassName: "danger"
+        });
       }
-
       props.history.push(`/users/${props.currentUser.displayName}`);
     }
   };
@@ -163,7 +173,10 @@ const PlanApp = props => {
   const updatePlanInFirestore = async () => {
     console.log("updatePlan");
     if (places.length === 0) {
-      console.log("Please choose at least one place.");
+      setAlertState({
+        message: "Please choose at least one place.",
+        alertClassName: "danger"
+      });
     } else {
       const plan = { ...currentPlan };
 
@@ -172,7 +185,10 @@ const PlanApp = props => {
       try {
         await updatePlan(props.currentUser.userId, plan);
       } catch (error) {
-        console.log(`Error in updating plan information: ${error.message}`);
+        setAlertState({
+          message: error.message,
+          alertClassName: "danger"
+        });
       }
       props.history.push(`/users/${props.currentUser.displayName}`);
     }

@@ -1,30 +1,54 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 import Home from "./Home";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import DocumentTitle from "../navigation/DocumentTitle";
+import { useAlertContext } from "../../providers/AlertProvider";
 import {
   signInWithGoogle,
   signInWithEmailAndPassword,
   registerUser
-} from "../../redux/actions/authentication";
+} from "../../firebase/authentication";
 
 const AuthApp = props => {
-  const dispatch = useDispatch();
+  const { showAlert, setAlertState } = useAlertContext();
 
-  const loginUser = auth => {
-    dispatch(signInWithEmailAndPassword(auth.email, auth.password));
+  // Show alert if a message is set
+  showAlert();
+
+  const loginUser = async auth => {
+    try {
+      await signInWithEmailAndPassword(auth.email, auth.password);
+    } catch (error) {
+      setAlertState({
+        message: error.message,
+        alertClassName: "danger"
+      });
+    }
   };
 
-  const createUserWithEmailAndPasswordHandler = user => {
-    dispatch(registerUser(user));
+  const createUserWithEmailAndPasswordHandler = async user => {
+    try {
+      await registerUser(user);
+    } catch (error) {
+      setAlertState({
+        message: error.message,
+        alertClassName: "danger"
+      });
+    }
   };
 
-  const signInWithGoogleHandler = () => {
-    dispatch(signInWithGoogle());
+  const signInWithGoogleHandler = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      setAlertState({
+        message: error.message,
+        alertClassName: "danger"
+      });
+    }
   };
 
   if (props.isLoggedIn) {

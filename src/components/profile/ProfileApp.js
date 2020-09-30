@@ -7,6 +7,7 @@ import ProfileContent from "./ProfileContent";
 import PlanDetailsModal from "./PlanDetailsModal";
 import DeletePlanModal from "./DeletePlanModal";
 import useModalState from "../../hooks/useModalState";
+import { useAlertContext } from "../../providers/AlertProvider";
 import actionTypes from "../../redux/actions/types";
 import {
   fetchPlansAndPhotos,
@@ -23,14 +24,19 @@ import { sortByDatetime } from "../../algorithms/sorting";
 const ProfileApp = props => {
   // Declare hooks
   const dispatch = useDispatch();
+  const { showAlert, setAlertState } = useAlertContext();
   const selectedPlan = useSelector(state => state.planListReducer.selectedPlan);
   const plans = useSelector(state => state.planListReducer.plans);
   const [isPlanDetailsModalVisible, togglePlanDetailsModal] = useModalState();
   const [isDeletePlanModalVisible, toggleDeletePlanModal] = useModalState();
 
   // necessary to properly setup the callback for the places API
+  console.log(props.currentUser);
   window.fetchPlansAndPhotos = () =>
     dispatch(fetchPlansAndPhotos(props.currentUser.userId));
+
+  // Alert will only show if an alert message is currently set
+  showAlert();
 
   // set initial state
   useEffect(() => {
@@ -64,7 +70,12 @@ const ProfileApp = props => {
   };
 
   const deletePlanHandler = planId => {
-    dispatch(deleteUserPlan(props.currentUser.userId, planId));
+    dispatch(deleteUserPlan(props.currentUser.userId, planId)).then(() => {
+      setAlertState({
+        message: "Plan successfully deleted",
+        alertClassName: "success"
+      });
+    });
   };
 
   // Sort plans
