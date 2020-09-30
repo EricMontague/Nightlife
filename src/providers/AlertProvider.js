@@ -1,57 +1,53 @@
-import React from "react";
+import React, { useState, useRef, useContext } from "react";
 import PropTypes from "prop-types";
 
-export const AlertContext = React.createContext();
+const ALERT_DISPLAY_TIME = 5000;
 
-class AlertProvider extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      message: "Showing the first message",
-      alertClassName: "danger"
-    };
-    this.alertRef = React.createRef();
-    this.setMessage = this.setMessage.bind(this);
-    this.show = this.show.bind(this);
-    this.close = this.close.bind(this);
-  }
+const AlertContext = React.createContext();
 
-  setMessage(message, alertClassName) {
-    this.setState({
-      message,
-      alertClassName
-    });
-  }
+export const useAlertContext = () => {
+  return useContext(AlertContext);
+};
 
-  show() {
-    this.close();
-    this.alertRef.current.classList.add("show");
-    setTimeout(this.close, 3000);
-  }
+const AlertProvider = props => {
+  // Declare hooks
+  const alertRef = useRef();
+  const [alertState, setState] = useState({
+    message: "",
+    alertClassName: ""
+  });
 
-  close() {
-    this.alertRef.current.classList.remove("show");
-  }
+  const show = () => {
+    if (alertState.message) {
+      alertRef.current.classList.add("show");
+      setTimeout(close, ALERT_DISPLAY_TIME);
+    }
+  };
 
-  render() {
-    return (
-      <AlertContext.Provider
-        value={{ show: this.show, setMessage: this.setMessage }}
-      >
-        <div className="alert" ref={this.alertRef}>
-          <div className={"alert-content " + this.state.alertClassName}>
-            <p>{this.state.message}</p>
-            <button className="close-btn" onClick={this.close}>
-              &times;
-            </button>
-          </div>
+  const close = () => {
+    alertRef.current.classList.remove("show");
+    setState({ message: "", alertClassName: "" });
+  };
+
+  const setAlertState = newState => {
+    setState(newState);
+  };
+
+  return (
+    <AlertContext.Provider value={{ showAlert: show, setAlertState }}>
+      <div className="alert" ref={alertRef}>
+        <div className={"alert-content " + alertState.alertClassName}>
+          <p>{alertState.message}</p>
+          <button className="close-btn" onClick={close}>
+            &times;
+          </button>
         </div>
+      </div>
 
-        {this.props.children}
-      </AlertContext.Provider>
-    );
-  }
-}
+      {props.children}
+    </AlertContext.Provider>
+  );
+};
 
 AlertProvider.propTypes = {
   children: PropTypes.element.isRequired
