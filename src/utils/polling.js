@@ -12,11 +12,9 @@ class Poller {
       func,
       parameters
     );
-    console.log(this.intervalId);
   }
 
   async callFunction(func, parameters) {
-    console.log(parameters);
     let wasSuccessful = true;
     try {
       await func(...parameters);
