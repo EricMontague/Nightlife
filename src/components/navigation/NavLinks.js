@@ -1,14 +1,14 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useAlertContext } from "../../providers/AlertProvider";
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import UserInfo from "../users/UserInfo";
-import { signOut } from "../../redux/actions/authentication";
+import { signOut } from "../../firebase/authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const NavLinks = props => {
   const location = useLocation();
-  const dispatch = useDispatch();
+  const { setAlertState } = useAlertContext();
 
   const handleLinkClick = () => {
     if (props.isDropdownOpen) {
@@ -16,10 +16,17 @@ const NavLinks = props => {
     }
   };
 
-  const handleSignOutClick = event => {
+  const handleSignOutClick = async event => {
     event.preventDefault();
     handleLinkClick();
-    dispatch(signOut());
+    try {
+      await signOut();
+    } catch (error) {
+      setAlertState({
+        message: error.message,
+        alertClassName: "danger"
+      });
+    }
   };
 
   if (props.isLoggedIn) {
