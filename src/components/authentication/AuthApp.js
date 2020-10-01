@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import Home from "./Home";
@@ -9,11 +9,26 @@ import { useAlertContext } from "../../providers/AlertProvider";
 import {
   signInWithGoogle,
   signInWithEmailAndPassword,
-  registerUser
+  registerUser,
+  getRedirectResult
 } from "../../firebase/authentication";
 
 const AuthApp = props => {
   const { showAlert, setAlertState } = useAlertContext();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        await getRedirectResult();
+      } catch (error) {
+        setAlertState({
+          message: error.message,
+          alertClassName: "danger"
+        });
+      }
+    }
+    fetchData();
+  }, []);
 
   // Show alert if a message is set
   showAlert();
