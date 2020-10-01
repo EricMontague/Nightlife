@@ -26,18 +26,19 @@ export const signOut = async () => {
 };
 
 export const signInWithGoogle = async () => {
-  auth.signInWithRedirect(provider).then(() => {
-    auth.getRedirectResult().then(result => {
-      console.log(result);
-      if (result.user) {
-        storeUserDocument({
-          id: result.user.uid,
-          email: result.user.email,
-          displayName: result.user.displayName,
-          photoURL: result.user.photoURL,
-          plans: []
-        });
-      }
-    });
+  return auth.signInWithRedirect(provider);
+};
+
+export const getRedirectResult = async () => {
+  return auth.getRedirectResult().then(result => {
+    if (result.user) {
+      storeUserDocument({
+        id: result.user.uid,
+        email: result.user.email,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+        plans: []
+      });
+    }
   });
 };
