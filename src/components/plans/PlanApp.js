@@ -54,19 +54,11 @@ const PlanApp = props => {
 
   // componentDidMount + componentWillUnmount
   useEffect(() => {
-    console.log("PlanApp mount");
-    // User is on the editting page
     const page = splitPath[splitPath.length - 1];
-    if (isCreatePage(page)) {
-      resetPlanAndPlaceList();
-    } else if (isEdittingOrViewPage(page)) {
-      const planId = splitPath[2];
-      dispatch(fetchPlanAndPlaces(props.currentUser.userId, planId));
-    }
-
+    const planId = splitPath[2];
+    handlePageChange(page, planId);
     // Cleanup scripts
     return () => {
-      console.log("PlanApp unmount");
       enableScrollY();
       const urlParameters = ["libraries=" + constants.GOOGLE_LIBRARIES.places];
       if (hasGoogleScript(constants.GOOGLE_MAPS_SCRIPT_URL, urlParameters)) {
@@ -77,19 +69,26 @@ const PlanApp = props => {
 
   // componentDidUpdate
   useEffect(() => {
-    console.log("PlanApp update");
-    splitPath = props.location.pathname.split("/");
-    const mode = splitPath[splitPath.length - 1];
-    if (discoverState.discoverMode !== mode) {
-      console.log("reset");
+    const page = splitPath[splitPath.length - 1];
+    const planId = splitPath[2];
+    if (discoverState.discoverMode !== page) {
+      handlePageChange(page, planId);
       togglePlaceModal(false);
       setDiscoverState({
         isDiscoverView: false,
-        discoverMode: mode
+        discoverMode: page
       });
-      resetPlanAndPlaceList();
     }
   });
+
+  const handlePageChange = (page, planId) => {
+    if (isCreatePage(page)) {
+      resetPlanAndPlaceList();
+    } else if (isEdittingOrViewPage(page)) {
+      const planId = splitPath[2];
+      dispatch(fetchPlanAndPlaces(props.currentUser.userId, planId));
+    }
+  };
 
   const isEdittingOrViewPage = page => {
     return (
@@ -149,7 +148,6 @@ const PlanApp = props => {
   // Based on their terms and conditions, the placeId can be stored indefinitely
   // https://developers.google.com/places/web-service/policies
   const storePlanInFirestore = async () => {
-    console.log("store Plan");
     if (places.length === 0) {
       setAlertState({
         message: "Please choose at least one place.",
@@ -166,12 +164,15 @@ const PlanApp = props => {
           alertClassName: "danger"
         });
       }
+      setAlertState({
+        message: "Plan successfully created!",
+        alertClassName: "success"
+      });
       props.history.push(`/users/${props.currentUser.displayName}`);
     }
   };
 
   const updatePlanInFirestore = async () => {
-    console.log("updatePlan");
     if (places.length === 0) {
       setAlertState({
         message: "Please choose at least one place.",
@@ -190,6 +191,10 @@ const PlanApp = props => {
           alertClassName: "danger"
         });
       }
+      setAlertState({
+        message: "Plan successfully updated!",
+        alertClassName: "success"
+      });
       props.history.push(`/users/${props.currentUser.displayName}`);
     }
   };
