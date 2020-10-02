@@ -49,9 +49,7 @@ export const updatePlan = async (userId, updatedPlan) => {
   }
 
   userDocument.plans = userDocument.plans.map(plan => {
-    console.log(plan);
     if (plan.planId === updatedPlan.planId) {
-      console.log("Replaced");
       return updatedPlan;
     }
     return plan;

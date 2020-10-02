@@ -31,7 +31,7 @@ const ProfileApp = props => {
   const [isDeletePlanModalVisible, toggleDeletePlanModal] = useModalState();
 
   // necessary to properly setup the callback for the places API
-  console.log(props.currentUser);
+
   window.fetchPlansAndPhotos = () =>
     dispatch(fetchPlansAndPhotos(props.currentUser.userId));
 
