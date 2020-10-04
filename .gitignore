@@ -24,3 +24,4 @@ yarn-error.log*
 CustomMap.js
 CustomMarker.js
 .pytest_cache
+auto.js
