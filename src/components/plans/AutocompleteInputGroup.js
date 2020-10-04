@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Autocomplete from "./auto";
+import ReactGoogleAutocomplete from "react-google-autocomplete";
 
 const AutocompleteInputGroup = props => {
   return (
     <div className="input-group">
-      <Autocomplete
+      <ReactGoogleAutocomplete
         apiKey={process.env.REACT_APP_GCP_API_KEY}
         className={props.autocompleteClassName}
         onPlaceSelected={props.handlePlaceSelected}
