@@ -20,27 +20,10 @@ export const storeUserDocument = async user => {
     throw new Error("Please provide a user");
   }
 
-  let userDocument;
-  // See if user document exists already.
-  // The getUserDocument functino will throw an error
-  // If the user doesn't exist
   try {
-    userDocument = await getUserDocument(user.id);
+    await firestore.doc(`users/${user.id}`).set({ ...user });
   } catch (error) {
-    if (error.message === "User not found") {
-      // pass
-    } else {
-      throw new Error(error.message);
-    }
-  }
-
-  // Create new document
-  if (!userDocument) {
-    try {
-      await firestore.doc(`users/${user.id}`).set({ ...user });
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    throw new Error(error.message);
   }
 };
 
