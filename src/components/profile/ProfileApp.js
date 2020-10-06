@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import DocumentTitle from "../navigation/DocumentTitle";
@@ -7,12 +7,9 @@ import ProfileContent from "./ProfileContent";
 import PlanDetailsModal from "./PlanDetailsModal";
 import DeletePlanModal from "./DeletePlanModal";
 import useModalState from "../../hooks/useModalState";
-import { useAlertContext } from "../../providers/AlertProvider";
 import actionTypes from "../../redux/actions/types";
-import {
-  fetchPlansAndPhotos,
-  deleteUserPlan
-} from "../../redux/actions/planList";
+import { fetchPlansAndPhotos } from "../../redux/actions/planList";
+import { deleteUserPlan } from "../../redux/actions/planList";
 import {
   hasGoogleScript,
   loadGoogleScript
@@ -24,8 +21,7 @@ import { sortByDatetime } from "../../algorithms/sorting";
 const ProfileApp = props => {
   // Declare hooks
   const dispatch = useDispatch();
-  const { showAlert, setAlertState } = useAlertContext();
-  const selectedPlan = useSelector(state => state.planListReducer.selectedPlan);
+  const [selectedPlan, setSelectedPlanState] = useState(null);
   const plans = useSelector(state => state.planListReducer.plans);
   const [isPlanDetailsModalVisible, togglePlanDetailsModal] = useModalState();
   const [isDeletePlanModalVisible, toggleDeletePlanModal] = useModalState();
@@ -34,9 +30,6 @@ const ProfileApp = props => {
 
   window.fetchPlansAndPhotos = () =>
     dispatch(fetchPlansAndPhotos(props.currentUser.userId));
-
-  // Alert will only show if an alert message is currently set
-  showAlert();
 
   // set initial state
   useEffect(() => {
@@ -55,27 +48,16 @@ const ProfileApp = props => {
 
   const togglePlanDetailsModalHandler = selectedPlan => {
     togglePlanDetailsModal(!isPlanDetailsModalVisible);
-    dispatch({
-      type: actionTypes.planList.SET_SELECTED_PLAN,
-      selectedPlan
-    });
+    setSelectedPlanState(selectedPlan);
   };
 
   const toggleDeletePlanModalHandler = plan => {
     toggleDeletePlanModal(!isDeletePlanModalVisible);
-    dispatch({
-      type: actionTypes.planList.SET_SELECTED_PLAN,
-      selectedPlan: selectedPlan ? null : plan
-    });
+    setSelectedPlanState(selectedPlan ? null : plan);
   };
 
   const deletePlanHandler = planId => {
-    dispatch(deleteUserPlan(props.currentUser.userId, planId)).then(() => {
-      setAlertState({
-        message: "Plan successfully deleted",
-        alertClassName: "success"
-      });
-    });
+    dispatch(deleteUserPlan(props.currentUser.userId, planId));
   };
 
   // Sort plans
