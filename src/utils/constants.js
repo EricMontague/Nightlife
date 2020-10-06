@@ -28,7 +28,12 @@ const constants = Object.freeze({
   SORT_BY_PRICE_LEVEL_DESC: "Price: high to low",
   SORT_BY_KEY: "Sort by key",
   DEFAULT_PRICE_LEVEL: 0,
-  DEFAULT_RATING: Number.MIN_VALUE
+  DEFAULT_RATING: Number.MIN_VALUE,
+  ALERT_SUCCESS_CLASS_NAME: "success",
+  ALERT_ERROR_CLASS_NAME: "danger",
+  PLAN_CREATED_MESSAGE: "Your plan was successfully created!",
+  PLAN_UPDATED_MESSAGE: "Your plan was successfully updated!",
+  PLAN_DELETED_MESSAGE: "Your plan was successfully deleted!"
 });
 
 export default constants;
