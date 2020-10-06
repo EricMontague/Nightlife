@@ -1,4 +1,5 @@
 import actionTypes from "./types";
+import { DELETE_PLAN, SHOW_ERROR_ALERT, SHOW_SUCCESS_ALERT } from "./types";
 import { getPlans, deletePlan } from "../../firebase/plans";
 import constants from "../../utils/constants";
 import defaultPlacePhoto from "../../assets/default_place_image.png";
@@ -53,9 +54,7 @@ export const fetchPlansAndPhotos = userId => async dispatch => {
     const plans = await fetchPlans(userId);
     fetchAllPlansPhotos(plans, dispatch);
   } catch (error) {
-    console.log(
-      `An error occurred while retrieving plans and photos: ${error.message}`
-    );
+    throw new Error(error.message);
   }
 };
 
@@ -65,12 +64,19 @@ export const deleteUserPlan = (userId, planId) => async dispatch => {
     await deletePlan(userId, planId); // firebase function
     deleted = true;
   } catch (error) {
-    console.log(`Error in deleting the plan: ${error.message}`);
+    dispatch({
+      type: SHOW_ERROR_ALERT,
+      payload: error.message
+    });
   }
   if (deleted) {
     dispatch({
-      type: actionTypes.planList.DELETE_PLAN,
-      planId: planId
+      type: DELETE_PLAN,
+      payload: planId
+    });
+    dispatch({
+      type: SHOW_SUCCESS_ALERT,
+      payload: constants.PLAN_DELETED_MESSAGE
     });
   }
 };
