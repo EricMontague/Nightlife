@@ -1,12 +1,12 @@
 import { trimObjectFieldValues } from "../../utils/commonHelpers";
-import actionTypes from "../actions/types";
+import { CREATE_PLAN, UPDATE_PLAN } from "./types";
 import { v4 as uuidv4 } from "uuid";
 
 export const addPlanDetails = plan => {
   const trimmedPlan = trimObjectFieldValues(plan);
   return {
-    type: actionTypes.plan.SET_PLAN,
-    plan: {
+    type: CREATE_PLAN,
+    payload: {
       planId: uuidv4(),
       ...trimmedPlan
     }
@@ -16,7 +16,7 @@ export const addPlanDetails = plan => {
 export const updatePlanDetails = plan => {
   const trimmedPlan = trimObjectFieldValues(plan);
   return {
-    type: actionTypes.plan.SET_PLAN,
-    plan: trimmedPlan
+    type: UPDATE_PLAN,
+    payload: trimmedPlan
   };
 };
