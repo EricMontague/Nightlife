@@ -1,4 +1,9 @@
-import actionTypes from "../actions/types";
+import {
+  CREATE_PLAN,
+  UPDATE_PLAN,
+  FETCH_PLAN,
+  RESET_PLAN
+} from "../actions/types";
 import { formatDate } from "../../utils/dateTimeHelpers";
 
 const initialState = {
@@ -11,10 +16,12 @@ const initialState = {
 
 const planReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.plan.SET_PLAN:
-      return { ...action.plan };
-    case actionTypes.plan.GET_PLAN:
-      return { ...action.plan };
+    case CREATE_PLAN:
+    case UPDATE_PLAN:
+    case FETCH_PLAN:
+      return { ...action.payload };
+    case RESET_PLAN:
+      return { ...initialState };
     default:
       return state;
   }
