@@ -1,76 +1,42 @@
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import Home from "./Home";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import DocumentTitle from "../navigation/DocumentTitle";
-import { useAlertContext } from "../../providers/AlertProvider";
 import {
   signInWithGoogle,
   signInWithEmailAndPassword,
   registerUser,
   getRedirectResult
-} from "../../firebase/authentication";
+} from "../../redux/actions/authentication";
 
 const AuthApp = props => {
-  const { showAlert, setAlertState } = useAlertContext();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state => state.userReducer.isLoggedIn);
+  const currentUser = useSelector(state => state.userReducer.currentUser);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        await getRedirectResult();
-      } catch (error) {
-        setAlertState({
-          message: error.message,
-          alertClassName: "danger"
-        });
-      }
-    }
-    fetchData();
+    dispatch(getRedirectResult());
   }, []);
 
-  // Show alert if a message is set
-  showAlert();
-
-  const loginUser = async auth => {
-    try {
-      await signInWithEmailAndPassword(auth.email, auth.password);
-    } catch (error) {
-      setAlertState({
-        message: error.message,
-        alertClassName: "danger"
-      });
-    }
+  const loginUser = auth => {
+    dispatch(signInWithEmailAndPassword(auth.email, auth.password));
   };
 
-  const createUserWithEmailAndPasswordHandler = async user => {
-    try {
-      await registerUser(user);
-    } catch (error) {
-      setAlertState({
-        message: error.message,
-        alertClassName: "danger"
-      });
-    }
+  const createUserWithEmailAndPasswordHandler = user => {
+    dispatch(registerUser(user));
   };
 
-  const signInWithGoogleHandler = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      setAlertState({
-        message: error.message,
-        alertClassName: "danger"
-      });
-    }
+  const signInWithGoogleHandler = () => {
+    dispatch(signInWithGoogle());
   };
 
-  if (props.isLoggedIn) {
+  if (isLoggedIn) {
     return (
-      <Redirect
-        to={`/users/${props.currentUser.displayName.replace(" ", "")}`}
-      />
+      <Redirect to={`/users/${currentUser.displayName.replace(" ", "")}`} />
     );
   }
 
