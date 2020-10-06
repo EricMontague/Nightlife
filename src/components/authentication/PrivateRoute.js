@@ -6,8 +6,8 @@ const PrivateRoute = ({
   component: WrappedComponent,
   ...routeComponentProps
 }) => {
-  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
-  const currentUser = useSelector(state => state.authReducer.currentUser);
+  const isLoggedIn = useSelector(state => state.userReducer.isLoggedIn);
+  const currentUser = useSelector(state => state.userReducer.currentUser);
 
   return (
     <Route
