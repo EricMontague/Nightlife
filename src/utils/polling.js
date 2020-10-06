@@ -19,7 +19,6 @@ class Poller {
     try {
       await func(...parameters);
     } catch (error) {
-      console.log(`An error occurred while polling: ${error.message}`);
       wasSuccessful = false;
       this.retries -= 1;
     }
