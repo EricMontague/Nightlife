@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import NavLinks from "./NavLinks";
@@ -9,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Navbar = props => {
   const isDesktop = useDeviceState();
+  const isLoggedIn = useSelector(state => state.userReducer.isLoggedIn);
+  const currentUser = useSelector(state => state.userReducer.currentUser);
   const [isOpen, toggleMenu] = useMobileMenuState(false);
   return (
     <>
@@ -23,8 +26,8 @@ const Navbar = props => {
           {isDesktop && (
             <ul className="main-menu">
               <NavLinks
-                currentUser={props.currentUser}
-                isLoggedIn={props.isLoggedIn}
+                currentUser={currentUser}
+                isLoggedIn={isLoggedIn}
                 isDropdownOpen={isOpen}
               />
             </ul>
@@ -42,19 +45,14 @@ const Navbar = props => {
         </div>
       </nav>
       <MobileNavMenu
-        currentUser={props.currentUser}
-        isLoggedIn={props.isLoggedIn}
+        currentUser={currentUser}
+        isLoggedIn={isLoggedIn}
         isOpen={isOpen}
         isDesktop={isDesktop}
         toggleMenu={toggleMenu}
       />
     </>
   );
-};
-
-Navbar.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  currentUser: PropTypes.objectOf(PropTypes.string.isRequired)
 };
 
 export default Navbar;
