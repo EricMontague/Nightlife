@@ -12,8 +12,6 @@ import { authStateListener } from "./redux/actions/authentication";
 
 const App = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
-  const currentUser = useSelector(state => state.authReducer.currentUser);
 
   useEffect(() => {
     const listener = dispatch(authStateListener());
@@ -25,18 +23,13 @@ const App = () => {
   return (
     <AlertProvider>
       <Router>
-        <Navbar isLoggedIn={isLoggedIn} currentUser={currentUser} />
+        <Navbar />
         <Switch>
           <Route
             exact
             path={["/", "/signin", "/signup"]}
             render={({ match, history }) => (
-              <AuthApp
-                match={match}
-                history={history}
-                isLoggedIn={isLoggedIn}
-                currentUser={currentUser}
-              />
+              <AuthApp match={match} history={history} />
             )}
           />
           <PrivateRoute
