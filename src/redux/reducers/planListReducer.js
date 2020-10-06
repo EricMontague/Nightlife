@@ -1,4 +1,5 @@
 import actionTypes from "../actions/types";
+import { DELETE_PLAN } from "../actions/types";
 
 const addNewPlan = (currentPlans, newPlan) => {
   let duplicateFound = false;
@@ -23,26 +24,18 @@ const deletePlan = (plans, planId) => {
   });
 };
 
-const initialState = { selectedPlan: null, plans: [] };
+const initialState = { plans: [] };
 
 const planListReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.planList.ADD_PLAN:
       return {
-        selectedPlan: state.selectedPlan,
         plans: addNewPlan(state.plans, action.newPlan)
       };
 
-    case actionTypes.planList.SET_SELECTED_PLAN:
+    case DELETE_PLAN:
       return {
-        selectedPlan: action.selectedPlan,
-        plans: [...state.plans]
-      };
-
-    case actionTypes.planList.DELETE_PLAN:
-      return {
-        selectedPlan: state.selectedPlan,
-        plans: deletePlan(state.plans, action.planId)
+        plans: deletePlan(state.plans, action.payload)
       };
     default:
       return state;
