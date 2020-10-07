@@ -1,4 +1,9 @@
-import actionTypes from "../actions/types";
+import {
+  GET_PLACE_LIST,
+  RESET_PLACE_LIST,
+  ADD_PLACE_TO_LIST,
+  DELETE_PLACE_FROM_LIST
+} from "../actions/types";
 import constants from "../../utils/constants";
 
 const deletePlace = (places, placeId) => {
@@ -36,34 +41,29 @@ const initialState = {
 
 const placeListReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.placeList.ADD_PLACE:
+    case ADD_PLACE_TO_LIST:
       return {
-        places: addPlace(state.places, action.newPlace),
+        places: addPlace(state.places, action.payload),
         sortOrder: state.sortOrder
       };
 
-    case actionTypes.placeList.SET_SELECTED_PLACE:
+    case GET_PLACE_LIST:
       return {
         ...state,
-        selectedPlace: action.selectedPlace
+        places: [...action.payload]
       };
 
-    case actionTypes.placeList.SET_PLACE_LIST:
+    case DELETE_PLACE_FROM_LIST:
       return {
-        ...state,
-        places: [...action.places]
-      };
-
-    case actionTypes.placeList.DELETE_PLACE:
-      return {
-        places: deletePlace(state.places, action.placeId),
+        places: deletePlace(state.places, action.payload),
         sortOrder: state.sortOrder
       };
-    case actionTypes.placeList.SET_SORT_ORDER:
+    case RESET_PLACE_LIST:
       return {
         ...state,
-        sortOrder: action.sortOrder
+        places: []
       };
+
     default:
       return state;
   }
