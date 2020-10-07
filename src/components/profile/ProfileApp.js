@@ -7,7 +7,6 @@ import ProfileContent from "./ProfileContent";
 import PlanDetailsModal from "./PlanDetailsModal";
 import DeletePlanModal from "./DeletePlanModal";
 import useModalState from "../../hooks/useModalState";
-import actionTypes from "../../redux/actions/types";
 import { fetchPlansAndPhotos } from "../../redux/actions/planList";
 import { deleteUserPlan } from "../../redux/actions/planList";
 import {
