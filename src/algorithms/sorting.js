@@ -68,7 +68,7 @@ const sortPlaces = (places, sortOrder) => {
       reverse = true;
       newPlaces = sortByPriceLevel(places, reverse);
       break;
-    case constants.SORT_BY_USER_INPUT:
+    case constants.SORT_BY_KEY:
       newPlaces = sortByKey(places);
       break;
     default:
