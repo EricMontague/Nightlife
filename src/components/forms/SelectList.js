@@ -1,78 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-class SelectList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: this.props.defaultValue
-    };
+const SelectList = props => {
+  const [selectedValue, setSelectedValue] = useState(props.defaultValue);
 
-    this.getOptions = this.getOptions.bind(this);
-    this.setSelectedOption = this.setSelectedOption.bind(this);
-  }
-
-  getOptions() {
+  const getOptions = () => {
     const options = [];
-    if (this.props.defaultValue) {
+    if (props.defaultValue) {
       options.push(
-        <option value={this.props.defaultValue.value} key={0}>
-          {this.props.defaultValue.text}
+        <option value={props.defaultValue.value} key={0}>
+          {props.defaultValue.text}
         </option>
       );
     }
     // starts at 1 because the default option's key starts at 0
-    for (let index = 1; index < this.props.values.length + 1; index++) {
+    for (let index = 1; index < props.values.length + 1; index++) {
       options.push(
-        <option key={index} value={this.props.values[index - 1]}>
-          {this.props.values[index - 1]}
+        <option key={index} value={props.values[index - 1]}>
+          {props.values[index - 1]}
         </option>
       );
     }
     return options;
-  }
+  };
 
-  setSelectedOption(event) {
-    this.props.handleChange(event.target.value);
-    this.setState({ value: event.target.value });
-  }
+  const setSelectedOption = event => {
+    props.handleChange(event.target.value);
+    setSelectedValue(event.target.value);
+  };
 
-  render() {
-    const options = this.getOptions();
-    if (!this.props.isVertical) {
-      return (
-        <div className={"flex-row align-center " + this.props.extraClasses}>
-          <label htmlFor={this.props.inputName}>{this.props.labelName}</label>
-          <div className="pipe">|</div>
-          <select
-            name={this.props.inputName}
-            id={this.props.inputname}
-            onChange={this.setSelectedOption}
-            value={this.state.value}
-            className="select-list"
-          >
-            {options}
-          </select>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <label htmlFor={this.props.inputName}>{this.props.labelName}</label>
-          <select
-            name={this.props.inputName}
-            id={this.props.inputname}
-            onChange={this.handleChange}
-            value={this.state.value}
-            className="select-list"
-          >
-            {options}
-          </select>
-        </div>
-      );
-    }
+  const options = getOptions();
+  if (!props.isVertical) {
+    return (
+      <div className={"flex-row align-center " + props.extraClasses}>
+        <label htmlFor={props.inputName}>{props.labelName}</label>
+        <div className="pipe">|</div>
+        <select
+          name={props.inputName}
+          id={props.inputname}
+          onChange={setSelectedOption}
+          value={selectedValue}
+          className="select-list"
+        >
+          {options}
+        </select>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <label htmlFor={props.inputName}>{props.labelName}</label>
+        <select
+          name={props.inputName}
+          id={props.inputname}
+          onChange={setSelectedOption}
+          value={selectedValue}
+          className="select-list"
+        >
+          {options}
+        </select>
+      </div>
+    );
   }
-}
+};
 
 SelectList.propTypess = {
   labelName: PropTypes.string.isRequired,
