@@ -31,9 +31,10 @@ const constants = Object.freeze({
   DEFAULT_RATING: Number.MIN_VALUE,
   ALERT_SUCCESS_CLASS_NAME: "success",
   ALERT_ERROR_CLASS_NAME: "danger",
-  PLAN_CREATED_MESSAGE: "Your plan was successfully created!",
-  PLAN_UPDATED_MESSAGE: "Your plan was successfully updated!",
-  PLAN_DELETED_MESSAGE: "Your plan was successfully deleted!"
+  PLAN_CREATED_SUCCESS_MESSAGE: "Your plan was successfully created!",
+  PLAN_UPDATED_SUCCESS_MESSAGE: "Your plan was successfully updated!",
+  PLAN_DELETED_SUCCESS_MESSAGE: "Your plan was successfully deleted!",
+  NO_PLACES_SELECTED_ERROR_MESSAGE: "Please choose at least one place"
 });
 
 export default constants;
