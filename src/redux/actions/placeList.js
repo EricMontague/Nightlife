@@ -1,4 +1,11 @@
-import actionTypes from "../actions/types";
+import {
+  SHOW_ERROR_ALERT,
+  ADD_PLACE_TO_LIST,
+  FETCH_PLAN,
+  GET_PLACE_LIST,
+  RESET_PLACE_LIST,
+  DELETE_PLACE_FROM_LIST
+} from "../actions/types";
 import { getPlan } from "../../firebase/plans";
 import constants from "../../utils/constants";
 
@@ -20,11 +27,14 @@ const addPlaceToStore = (sortKey, dispatch) => {
       };
 
       dispatch({
-        type: actionTypes.placeList.ADD_PLACE,
-        newPlace
+        type: ADD_PLACE_TO_LIST,
+        payload: newPlace
       });
     } else {
-      console.log(`There was an error fetching place details data: ${status}`);
+      dispatch({
+        type: SHOW_ERROR_ALERT,
+        payload: `There was an error fetching place details data: ${status}`
+      });
     }
   };
   return handlePlaceResults;
@@ -50,15 +60,16 @@ export const fetchPlanAndPlaces = (userId, planId) => async dispatch => {
   try {
     const plan = await getPlan(userId, planId);
     dispatch({
-      type: actionTypes.plan.GET_PLAN,
-      plan
+      type: FETCH_PLAN,
+      payload: plan
     });
-    dispatch(setPlaceList([]));
+    dispatch(resetPlaceList());
     fetchPlaces(plan, dispatch);
   } catch (error) {
-    throw new Error(
-      `An error occurred when setting the initial State: ${error.message}`
-    );
+    dispatch({
+      type: SHOW_ERROR_ALERT,
+      payload: error.message
+    });
   }
 };
 
@@ -79,35 +90,27 @@ export const addPlace = (placeResults, input, sortKey) => dispatch => {
     sortKey
   };
   dispatch({
-    type: actionTypes.placeList.ADD_PLACE,
-    newPlace
+    type: ADD_PLACE_TO_LIST,
+    payload: newPlace
   });
 };
 
 export const deletePlace = placeId => {
   return {
-    type: actionTypes.placeList.DELETE_PLACE,
-    placeId
+    type: DELETE_PLACE_FROM_LIST,
+    payload: placeId
   };
 };
 
-export const setSelectedPlace = selectedPlace => {
+export const getPlaceList = places => {
   return {
-    type: actionTypes.placeList.SET_SELECTED_PLACE,
-    selectedPlace
+    type: GET_PLACE_LIST,
+    payload: places
   };
 };
 
-export const setSortOrder = sortOrder => {
+export const resetPlaceList = () => {
   return {
-    type: actionTypes.placeList.SET_SORT_ORDER,
-    sortOrder
-  };
-};
-
-export const setPlaceList = places => {
-  return {
-    type: actionTypes.placeList.SET_PLACE_LIST,
-    places
+    type: RESET_PLACE_LIST
   };
 };
