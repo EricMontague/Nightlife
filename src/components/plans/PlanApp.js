@@ -7,18 +7,20 @@ import Map from "./Map";
 import DocumentTitle from "../navigation/DocumentTitle";
 import useModalState from "../../hooks/useModalState";
 import useDiscoverState from "../../hooks/useDiscoverState";
-import { useAlertContext } from "../../providers/AlertProvider";
-import { addPlanDetails, updatePlanDetails } from "../../redux/actions/plan";
+import {
+  addPlanDetails,
+  updatePlanDetails,
+  resetPlanDetails,
+  storePlanInFirestore,
+  updatePlanInFirestore
+} from "../../redux/actions/plan";
 import {
   addPlace,
   deletePlace,
   fetchPlanAndPlaces,
-  setSelectedPlace,
-  setSortOrder,
-  setPlaceList
+  getPlaceList,
+  resetPlaceList
 } from "../../redux/actions/placeList";
-import { addPlan, updatePlan } from "../../firebase/plans";
-import { formatDate } from "../../utils/dateTimeHelpers";
 import constants from "../../utils/constants";
 import { enableScrollY } from "../../utils/commonHelpers";
 import {
@@ -34,23 +36,18 @@ const PlanApp = props => {
 
   // Declare hooks
   const dispatch = useDispatch();
-  const { showAlert, setAlertState } = useAlertContext();
   const places = useSelector(state => state.placeListReducer.places);
-  const selectedPlace = useSelector(
-    state => state.placeListReducer.selectedPlace
-  );
   const currentPlan = useSelector(state => state.planReducer);
 
-  const sortOrder = useSelector(state => state.placeListReducer.sortOrder);
+  const [selectedPlace, setSelectedPlaceState] = useState(null);
+  const [sortOrder, setSortOrder] = useState(constants.SORT_BY_KEY);
+
   const [isPlaceModalVisible, togglePlaceModal] = useModalState(false);
   const [discoverState, setDiscoverState] = useDiscoverState({
     isDiscoverView: false,
     discoverMode: splitPath[splitPath.length - 1]
   });
   const [mousedOverPlaceId, setMousedOverPlaceId] = useState("");
-
-  // show alert if a message is set
-  showAlert();
 
   // componentDidMount + componentWillUnmount
   useEffect(() => {
@@ -83,9 +80,8 @@ const PlanApp = props => {
 
   const handlePageChange = (page, planId) => {
     if (isCreatePage(page)) {
-      resetPlanAndPlaceList();
+      resetStoreAndComponentState();
     } else if (isEdittingOrViewPage(page)) {
-      const planId = splitPath[2];
       dispatch(fetchPlanAndPlaces(props.currentUser.userId, planId));
     }
   };
@@ -101,18 +97,11 @@ const PlanApp = props => {
     return page === constants.DISCOVER_MODE.CREATE;
   };
 
-  const resetPlanAndPlaceList = () => {
-    dispatch(setSelectedPlace(null));
-    dispatch(setSortOrder(""));
-    const defaultPlan = {
-      planId: "",
-      title: "",
-      description: "",
-      date: formatDate(new Date()),
-      time: new Date().toTimeString().slice(0, 5)
-    };
-    dispatch(addPlanDetails(defaultPlan));
-    dispatch(setPlaceList([]));
+  const resetStoreAndComponentState = () => {
+    setSelectedPlaceState(null);
+    setSortOrder("");
+    dispatch(resetPlanDetails());
+    dispatch(resetPlaceList());
   };
 
   // Declare callbacks
@@ -132,76 +121,33 @@ const PlanApp = props => {
     dispatch(deletePlace(placeId));
   };
 
-  const setSortOrderHandler = sortOrder => {
-    // need to remove this dispatch. Keeping the sortOrder in state is unecessary
-    dispatch(setSortOrder(sortOrder));
-  };
-
-  const stripPlaces = placesList => {
-    return placesList.map((place, index) => {
-      return { placeId: place.placeId, sortKey: index };
+  const storePlanInFirestoreHandler = () => {
+    dispatch(
+      storePlanInFirestore(props.currentUser.userId, [...places], {
+        ...currentPlan
+      })
+    ).then(successful => {
+      if (successful) {
+        props.history.push(`/users/${props.currentUser.displayName}`);
+      }
     });
   };
 
-  // Google doesn't allow storage of Places API data for more than 30 days,
-  // with the sole exception being the the placeId attribute.
-  // Based on their terms and conditions, the placeId can be stored indefinitely
-  // https://developers.google.com/places/web-service/policies
-  const storePlanInFirestore = async () => {
-    if (places.length === 0) {
-      setAlertState({
-        message: "Please choose at least one place.",
-        alertClassName: "danger"
-      });
-    } else {
-      const plan = { ...currentPlan };
-      plan.places = stripPlaces(places);
-      try {
-        await addPlan(props.currentUser.userId, plan);
-      } catch (error) {
-        setAlertState({
-          message: error.message,
-          alertClassName: "danger"
-        });
+  const updatePlanInFirestoreHandler = () => {
+    dispatch(
+      updatePlanInFirestore(props.currentUser.userId, [...places], {
+        ...currentPlan
+      })
+    ).then(successful => {
+      if (successful) {
+        props.history.push(`/users/${props.currentUser.displayName}`);
       }
-      setAlertState({
-        message: "Plan successfully created!",
-        alertClassName: "success"
-      });
-      props.history.push(`/users/${props.currentUser.displayName}`);
-    }
-  };
-
-  const updatePlanInFirestore = async () => {
-    if (places.length === 0) {
-      setAlertState({
-        message: "Please choose at least one place.",
-        alertClassName: "danger"
-      });
-    } else {
-      const plan = { ...currentPlan };
-
-      plan.places = stripPlaces(places);
-
-      try {
-        await updatePlan(props.currentUser.userId, plan);
-      } catch (error) {
-        setAlertState({
-          message: error.message,
-          alertClassName: "danger"
-        });
-      }
-      setAlertState({
-        message: "Plan successfully updated!",
-        alertClassName: "success"
-      });
-      props.history.push(`/users/${props.currentUser.displayName}`);
-    }
+    });
   };
 
   const togglePlaceModalHandler = place => {
     togglePlaceModal(!isPlaceModalVisible);
-    dispatch(setSelectedPlace(selectedPlace ? null : place));
+    setSelectedPlaceState(selectedPlace ? null : place);
   };
 
   const toggleView = () => {
@@ -227,8 +173,7 @@ const PlanApp = props => {
     );
 
     // set state
-    // dispatch(setSortOrder(constants.SORT_BY_USER_INPUT));
-    dispatch(setPlaceList(reorderedPlaces));
+    dispatch(getPlaceList(reorderedPlaces));
   };
 
   const sortedPlaces = useMemo(() => {
@@ -265,15 +210,15 @@ const PlanApp = props => {
                   ? addPlandDetailsHandler
                   : updatePlanDetailsHandler
               }
-              updatePlan={updatePlanInFirestore}
-              storePlan={storePlanInFirestore}
+              updatePlan={updatePlanInFirestoreHandler}
+              storePlan={storePlanInFirestoreHandler}
               toggleView={toggleView}
               toggleModal={togglePlaceModalHandler}
               places={sortedPlaces}
               isDiscoverView={discoverState.isDiscoverView}
               plan={currentPlan}
               discoverMode={discoverState.discoverMode}
-              changeSortOrder={setSortOrderHandler}
+              changeSortOrder={setSortOrder}
               dragEndHandler={dragEndHandler}
               mousedOverPlaceId={mousedOverPlaceId}
             />
