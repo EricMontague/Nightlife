@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import InputGroup from "../forms/InputGroup";
-import TextAreaGroup from "../forms/TextAreaGroup";
-import DatePicker from "../forms/DatePicker";
-import TimePicker from "../forms/TimePicker";
+import InputGroup from "../form_inputs/InputGroup";
+import TextAreaGroup from "../form_inputs/TextAreaGroup";
+import DatePicker from "../form_inputs/DatePicker";
+import TimePicker from "../form_inputs/TimePicker";
 import useFormState from "../../hooks/useFormState";
 import usePrevious from "../../hooks/usePrevious";
 import {

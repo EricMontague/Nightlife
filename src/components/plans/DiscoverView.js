@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import SelectList from "../forms/SelectList";
+import SelectList from "../form_inputs/SelectList";
 import PlaceList from "./PlaceList";
 import AutocompleteInputGroup from "./AutocompleteInputGroup";
 import constants from "../../utils/constants";

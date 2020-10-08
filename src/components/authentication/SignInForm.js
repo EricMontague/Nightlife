@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import InputGroup from "../forms/InputGroup";
+import InputGroup from "../form_inputs/InputGroup";
 import useFormState from "../../hooks/useFormState";
 import {
   required,
