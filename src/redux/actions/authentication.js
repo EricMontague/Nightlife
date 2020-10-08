@@ -1,4 +1,9 @@
-import { USER_SIGN_IN, USER_SIGN_OUT, SHOW_ERROR_ALERT } from "./types";
+import {
+  USER_SIGN_IN_SUCCESS,
+  USER_SIGN_IN_REQUEST,
+  USER_SIGN_OUT_SUCCESS,
+  SHOW_ERROR_ALERT
+} from "./types";
 import {
   disablePointerEvents,
   enablePointerEvents
@@ -7,12 +12,14 @@ import Poller from "../../utils/polling";
 import { auth, provider } from "../../firebase/firebaseApp";
 import { getUserDocument, storeUserDocument } from "../../firebase/users";
 
+const SIGNED_IN_WITH_GOOGLE = "SIGNED_IN_WITH_GOOGLE";
+
 // Get user from firestore
 const fetchUser = async (userId, dispatch) => {
   const currentUser = await getUserDocument(userId);
   enablePointerEvents();
   dispatch({
-    type: USER_SIGN_IN,
+    type: USER_SIGN_IN_SUCCESS,
     payload: {
       displayName: currentUser.displayName,
       email: currentUser.email,
@@ -27,14 +34,14 @@ export const authStateListener = () => dispatch => {
     // user logging out
     if (!userAuth) {
       dispatch({
-        type: USER_SIGN_OUT
+        type: USER_SIGN_OUT_SUCCESS
       });
     } else {
       if (userAuth.displayName) {
         disablePointerEvents();
         // user signs in with google
         dispatch({
-          type: USER_SIGN_IN,
+          type: USER_SIGN_IN_SUCCESS,
           payload: {
             displayName: userAuth.displayName,
             email: userAuth.email,
@@ -84,7 +91,7 @@ export const signInWithEmailAndPassword = (
   password
 ) => async dispatch => {
   try {
-    return await auth.signInWithEmailAndPassword(email, password);
+    await auth.signInWithEmailAndPassword(email, password);
   } catch (error) {
     dispatch({
       type: SHOW_ERROR_ALERT,
@@ -105,8 +112,9 @@ export const signOut = () => async dispatch => {
 };
 
 export const signInWithGoogle = () => async dispatch => {
+  sessionStorage.setItem(SIGNED_IN_WITH_GOOGLE, "1");
   try {
-    return await auth.signInWithRedirect(provider);
+    await auth.signInWithRedirect(provider);
   } catch (error) {
     dispatch({
       type: SHOW_ERROR_ALERT,
@@ -116,6 +124,13 @@ export const signInWithGoogle = () => async dispatch => {
 };
 
 export const getRedirectResult = () => async dispatch => {
+  const signedInWithGoogle = sessionStorage.getItem(SIGNED_IN_WITH_GOOGLE);
+  if (signedInWithGoogle === "1") {
+    dispatch({
+      type: USER_SIGN_IN_REQUEST
+    });
+  }
+
   let result;
   try {
     result = await auth.getRedirectResult();
@@ -124,6 +139,8 @@ export const getRedirectResult = () => async dispatch => {
       type: SHOW_ERROR_ALERT,
       payload: error.message
     });
+  } finally {
+    sessionStorage.removeItem(SIGNED_IN_WITH_GOOGLE);
   }
 
   if (result.user) {
