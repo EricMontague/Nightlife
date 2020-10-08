@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const TextAreaGroup = props => {
   const textareaRef = React.createRef();
-  
+
   // Workaround to deal with issue of the label not staying up after a form is submitted
   // And this field has an error
   // Also addresses the issue of having the label be moved up when the input is prefilled
@@ -27,14 +27,14 @@ const TextAreaGroup = props => {
         onChange={props.handleChange}
         onBlur={props.handleBlur}
         onFocus={props.handleFocus}
-        className={props.error ? "input-with-error" : ""}
+        className={props.error ? "input-with-error animation-shake" : ""}
         row={props.rows}
         cols={props.cols}
         value={props.value}
       />
       <label
         htmlFor={props.name}
-        className={props.error ? "label-with-error" : ""}
+        className={props.error ? "label-with-error animation-shake" : ""}
       >
         {props.labelName}
       </label>

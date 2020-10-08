@@ -25,11 +25,11 @@ const InputGroup = props => {
         onBlur={props.handleBlur}
         onFocus={props.handleFocus}
         value={props.value}
-        className={props.error ? "input-with-error" : ""}
+        className={props.error ? "input-with-error animation-shake" : ""}
       />
       <label
         htmlFor={props.inputName}
-        className={props.error ? "label-with-error" : ""}
+        className={props.error ? "label-with-error animation-shake" : ""}
       >
         {props.labelName}
       </label>

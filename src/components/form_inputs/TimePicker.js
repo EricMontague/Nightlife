@@ -12,14 +12,14 @@ const TimePicker = props => {
         onChange={props.handleChange}
         onFocus={props.handleFocus}
         onBlur={props.handleBlur}
-        className={props.error ? "input-with-error" : ""}
+        className={props.error ? "input-with-error animation-shake" : ""}
         aria-label={props.name}
       />
       <label
         htmlFor={props.inputName}
         className={
           "label-selected no-transition" +
-          (props.error ? " label-with-error" : "")
+          (props.error ? " label-with-error animation-shake" : "")
         }
       >
         {props.labelName}
