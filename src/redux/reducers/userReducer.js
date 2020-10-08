@@ -1,17 +1,28 @@
-import { USER_SIGN_IN, USER_SIGN_OUT } from "../actions/types";
+import {
+  USER_SIGN_IN_SUCCESS,
+  USER_SIGN_OUT_SUCCESS,
+  USER_SIGN_IN_REQUEST
+} from "../actions/types";
 
-const initialState = { isLoggedIn: false, currentUser: null };
+const initialState = { isLoggedIn: false, currentUser: null, loading: false };
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case USER_SIGN_IN:
+    case USER_SIGN_IN_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case USER_SIGN_IN_SUCCESS:
       return {
         isLoggedIn: true,
-        currentUser: { ...action.payload }
+        currentUser: { ...action.payload },
+        loading: false
       };
-    case USER_SIGN_OUT:
+    case USER_SIGN_OUT_SUCCESS:
       return {
         isLoggedIn: false,
-        currentUser: null
+        currentUser: null,
+        loading: false
       };
     default:
       return state;
