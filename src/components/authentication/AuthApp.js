@@ -12,11 +12,13 @@ import {
   registerUser,
   getRedirectResult
 } from "../../redux/actions/authentication";
+import Loader from "react-loader-spinner";
 
 const AuthApp = props => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector(state => state.userReducer.isLoggedIn);
-  const currentUser = useSelector(state => state.userReducer.currentUser);
+  const { isLoggedIn, currentUser, loading } = useSelector(
+    state => state.userReducer
+  );
 
   useEffect(() => {
     dispatch(getRedirectResult());
@@ -39,38 +41,48 @@ const AuthApp = props => {
       <Redirect to={`/users/${currentUser.displayName.replace(" ", "")}`} />
     );
   }
-
+  console.log(loading);
   return (
     <div className="centered-page-layout text-center p-all-3">
-      <div className="card card-medium">
-        <div className="card-body">
-          <Switch>
-            <Route exact path="/">
-              <DocumentTitle title="Home | Nightlife">
-                <Home signInWithGoogle={signInWithGoogleHandler} />
-              </DocumentTitle>
-            </Route>
-            <Route exact path="/signin">
-              <DocumentTitle title="Sign In | Nightlife">
-                <SignInForm
-                  signInWithGoogle={signInWithGoogleHandler}
-                  signInWithEmailAndPassword={loginUser}
-                />
-              </DocumentTitle>
-            </Route>
-            <Route exact path="/signup">
-              <DocumentTitle title="Sign Up | Nightlife">
-                <SignUpForm
-                  signInWithGoogle={signInWithGoogleHandler}
-                  createUserWithEmailAndPasswordHandler={
-                    createUserWithEmailAndPasswordHandler
-                  }
-                />
-              </DocumentTitle>
-            </Route>
-          </Switch>
+      {loading ? (
+        <Loader
+          type="TailSpin"
+          width={80}
+          height={80}
+          visible={loading}
+          timeout={0}
+        />
+      ) : (
+        <div className="card card-medium">
+          <div className="card-body">
+            <Switch>
+              <Route exact path="/">
+                <DocumentTitle title="Home | Nightlife">
+                  <Home signInWithGoogle={signInWithGoogleHandler} />
+                </DocumentTitle>
+              </Route>
+              <Route exact path="/signin">
+                <DocumentTitle title="Sign In | Nightlife">
+                  <SignInForm
+                    signInWithGoogle={signInWithGoogleHandler}
+                    signInWithEmailAndPassword={loginUser}
+                  />
+                </DocumentTitle>
+              </Route>
+              <Route exact path="/signup">
+                <DocumentTitle title="Sign Up | Nightlife">
+                  <SignUpForm
+                    signInWithGoogle={signInWithGoogleHandler}
+                    createUserWithEmailAndPasswordHandler={
+                      createUserWithEmailAndPasswordHandler
+                    }
+                  />
+                </DocumentTitle>
+              </Route>
+            </Switch>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
