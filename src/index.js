@@ -6,6 +6,7 @@ import App from "./App";
 import "./utils/fontawesome";
 import "./styles/index.scss";
 import * as serviceWorker from "./serviceWorker";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 ReactDOM.render(
   <Provider store={store}>
