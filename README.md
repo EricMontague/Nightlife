@@ -1,4 +1,4 @@
-Hosted on Google Firebase at https://nightlife-5dd44.web.app/
+Hosted on Google Firebase at [https://nightlife-5dd44.web.app/](https://nightlife-5dd44.web.app/)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
