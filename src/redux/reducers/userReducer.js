@@ -1,5 +1,6 @@
 import {
   USER_SIGN_IN_SUCCESS,
+  USER_SIGN_IN_FAIL,
   USER_SIGN_OUT_SUCCESS,
   USER_SIGN_IN_REQUEST
 } from "../actions/types";
@@ -16,6 +17,11 @@ const userReducer = (state = initialState, action) => {
       return {
         isLoggedIn: true,
         currentUser: { ...action.payload },
+        loading: false
+      };
+    case USER_SIGN_IN_FAIL:
+      return {
+        ...state,
         loading: false
       };
     case USER_SIGN_OUT_SUCCESS:
