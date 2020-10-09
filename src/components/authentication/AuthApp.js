@@ -41,7 +41,7 @@ const AuthApp = props => {
       <Redirect to={`/users/${currentUser.displayName.replace(" ", "")}`} />
     );
   }
-  console.log(loading);
+ 
   return (
     <div className="centered-page-layout text-center p-all-3">
       {loading ? (
