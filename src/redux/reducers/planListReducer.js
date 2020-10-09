@@ -1,4 +1,8 @@
-import { ADD_PLAN_TO_LIST, DELETE_PLAN_FROM_LIST } from "../actions/types";
+import {
+  ADD_PLAN_TO_LIST,
+  DELETE_PLAN_FROM_LIST,
+  PLAN_LIST_REQUEST
+} from "../actions/types";
 
 const addNewPlan = (currentPlans, newPlan) => {
   let duplicateFound = false;
