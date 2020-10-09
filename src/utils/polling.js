@@ -5,16 +5,18 @@ class Poller {
     this.intervalId = null;
   }
 
-  start(func, parameters) {
-    this.intervalId = setInterval(
-      this.callFunction.bind(this),
-      this.timeDelay,
-      func,
-      parameters
-    );
+  start(func, errorCallback, parameters) {
+    this.intervalId = setInterval(async () => {
+      try {
+        await this.execute.call(this, func, parameters);
+      } catch (error) {
+        this.stop();
+        errorCallback(error.message);
+      }
+    }, this.timeDelay);
   }
 
-  async callFunction(func, parameters) {
+  async execute(func, parameters) {
     let wasSuccessful = true;
     try {
       await func(...parameters);
