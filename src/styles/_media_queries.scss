@@ -47,7 +47,7 @@
 // phones
 @media screen and (max-width: 500px) {
   .section-header {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
   .dropdown-menu {
@@ -67,7 +67,7 @@
 
   .font-size {
     &-md {
-      font-size: 1.7rem !important;
+      font-size: 1.5rem !important;
     }
   }
 
@@ -85,7 +85,7 @@
     max-height: 18.75rem;
 
     .card {
-      overflow-y: scroll;
+      height: 62.5rem;
     }
   }
 
@@ -133,7 +133,7 @@
 @media screen and (max-height: 900px) {
   .font-size {
     &-md {
-      font-size: 1.7rem !important;
+      font-size: 1.5rem !important;
     }
   }
 }
