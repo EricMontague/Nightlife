@@ -1,25 +1,30 @@
 import { useState, useEffect } from "react";
 
 const useDeviceState = () => {
-  const [isDesktop, toggleState] = useState(() => {
-    return window.innerWidth > 768 ? true : false;
+  const [device, setDeviceState] = useState(() => {
+    return {
+      isMobile: window.innerWidth <= 500,
+      isTablet: window.innerWidth > 500 && window.innerWidth <= 1024,
+      isDesktop: window.innerWidth > 1024
+    };
   });
 
   useEffect(() => {
     const resizeListener = event => {
-      if (window.innerWidth > 768) {
-        toggleState(true);
-      } else {
-        toggleState(false);
-      }
+      const newState = {
+        isMobile: window.innerWidth <= 500,
+        isTablet: window.innerWidth > 500 && window.innerWidth <= 1024,
+        isDesktop: window.innerWidth >= 1024
+      };
+      setDeviceState(newState);
     };
     window.addEventListener("resize", resizeListener);
 
     return () => {
       window.removeEventListener("resize", resizeListener);
     };
-  }, [isDesktop, toggleState]);
-  return isDesktop;
+  }, [device, setDeviceState]);
+  return device;
 };
 
 export default useDeviceState;
