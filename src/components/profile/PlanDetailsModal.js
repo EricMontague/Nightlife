@@ -31,7 +31,7 @@ const PlanDetailsModal = props => {
             <div className="flex-row align-items space-between">
               <p className="text-medium font-size-sm">
                 {convertDatetimeToString(
-                  new Date(props.plan.date + " " + props.plan.time)
+                  new Date(props.plan.date + "T" + props.plan.time + ":00")
                 )}
               </p>
             </div>
