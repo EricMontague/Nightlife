@@ -6,6 +6,7 @@ import DatePicker from "../form_inputs/DatePicker";
 import TimePicker from "../form_inputs/TimePicker";
 import useFormState from "../../hooks/useFormState";
 import usePrevious from "../../hooks/usePrevious";
+import useDeviceState from "../../hooks/useDeviceState";
 import {
   required,
   validateLength,
@@ -53,6 +54,7 @@ const PlanDetailsForm = props => {
   });
 
   const prevPlan = usePrevious(props.plan);
+  const device = useDeviceState();
 
   // componentDidUpdate
   useEffect(() => {
@@ -79,7 +81,7 @@ const PlanDetailsForm = props => {
           inputName="date"
           labelName="Date"
           placeholder="mm/dd/yyyy"
-          autoFocus={true}
+          autoFocus={device.isDesktop}
           value={fields["date"]}
           error={errors["date"]}
           handleChange={handleChange}

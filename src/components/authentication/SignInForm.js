@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import InputGroup from "../form_inputs/InputGroup";
 import useFormState from "../../hooks/useFormState";
+import useDeviceState from "../../hooks/useDeviceState";
 import {
   required,
   validateLength,
@@ -32,6 +33,8 @@ const SignInForm = props => {
     fieldValidators
   });
 
+  const device = useDeviceState();
+
   return (
     <>
       <div className="card-header">
@@ -42,7 +45,7 @@ const SignInForm = props => {
           type="text"
           inputName="email"
           labelName="Email Address"
-          autoFocus={true}
+          autoFocus={device.isDesktop}
           handleChange={handleChange}
           handleBlur={handleBlur}
           handleFocus={handleFocus}

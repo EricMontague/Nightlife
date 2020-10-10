@@ -9,7 +9,7 @@ import useMobileMenuState from "../../hooks/useMobileMenuState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Navbar = props => {
-  const isDesktop = useDeviceState();
+  const device = useDeviceState();
   const isLoggedIn = useSelector(state => state.userReducer.isLoggedIn);
   const currentUser = useSelector(state => state.userReducer.currentUser);
   const [isOpen, toggleMenu] = useMobileMenuState(false);
@@ -23,7 +23,7 @@ const Navbar = props => {
               <span>Nightlife</span>
             </Link>{" "}
           </div>
-          {isDesktop && (
+          {device.isDesktop && (
             <ul className="main-menu">
               <NavLinks
                 currentUser={currentUser}
@@ -32,7 +32,7 @@ const Navbar = props => {
               />
             </ul>
           )}
-          {!isDesktop && (
+          {!device.isDesktop && (
             <FontAwesomeIcon
               icon={["fas", "bars"]}
               size="lg"
@@ -48,7 +48,7 @@ const Navbar = props => {
         currentUser={currentUser}
         isLoggedIn={isLoggedIn}
         isOpen={isOpen}
-        isDesktop={isDesktop}
+        isDesktop={device.isDesktop}
         toggleMenu={toggleMenu}
       />
     </>
