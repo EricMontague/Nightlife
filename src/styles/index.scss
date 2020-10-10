@@ -64,7 +64,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  // height: 100vh;
 }
 
 // Sizes
@@ -295,6 +295,14 @@
     padding-top: 2rem !important;
     padding-bottom: 2rem !important;
   }
+  &-5 {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+  &-6 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
 }
 
 .my {
@@ -504,10 +512,6 @@
   &-name {
     margin-left: 0.5rem;
   }
-
-  // img {
-  //   border: 2px solid #ddd;
-  // }
 }
 
 // Images
@@ -658,6 +662,7 @@
     padding: 1rem;
     background: #fff;
     font-family: "Open Sans", Arial, Helvetica, sans-serif;
+    font-size: 1rem;
   }
 
   .error-message {
@@ -1020,7 +1025,7 @@
   left: 0;
   outline: 0;
   overflow: auto;
-  padding: 2rem 3rem;
+  padding: 2rem 2.5rem;
   background: rgba(36, 41, 46, 0.1);
   z-index: 9995;
 
@@ -1032,7 +1037,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem 1rem;
+    padding: 2rem 0;
   }
 
   &-content {
