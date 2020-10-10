@@ -77,7 +77,7 @@ export const deleteUserPlan = (userId, planId) => async dispatch => {
     });
     dispatch({
       type: SHOW_SUCCESS_ALERT,
-      payload: constants.PLAN_DELETED_MESSAGE
+      payload: constants.PLAN_DELETED_SUCCESS_MESSAGE
     });
   }
 };
