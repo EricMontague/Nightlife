@@ -48,7 +48,7 @@ const AuthApp = props => {
         <Loader
           type="TailSpin"
           width={80}
-          height={80}
+          height={window.innerHeight / 2}
           visible={loading}
           timeout={0}
         />
