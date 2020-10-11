@@ -1,7 +1,7 @@
 import {
   ADD_PLAN_TO_LIST,
   DELETE_PLAN_FROM_LIST,
-  PLAN_LIST_REQUEST
+  UPDATE_PLAN_IN_LIST
 } from "../actions/types";
 
 const addNewPlan = (currentPlans, newPlan) => {
@@ -21,6 +21,12 @@ const addNewPlan = (currentPlans, newPlan) => {
   return newPlanList;
 };
 
+const updatePlan = (plans, updatedPlan) => {
+  return plans.map(plan =>
+    plan.planId !== updatedPlan.planId ? plan : updatedPlan
+  );
+};
+
 const deletePlan = (plans, planId) => {
   return plans.filter(plan => {
     return plan.planId !== planId;
@@ -34,6 +40,11 @@ const planListReducer = (state = initialState, action) => {
     case ADD_PLAN_TO_LIST:
       return {
         plans: addNewPlan(state.plans, action.payload)
+      };
+
+    case UPDATE_PLAN_IN_LIST:
+      return {
+        plans: updatePlan(state.plans, action.payload)
       };
 
     case DELETE_PLAN_FROM_LIST:
