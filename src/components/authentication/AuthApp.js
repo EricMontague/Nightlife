@@ -11,7 +11,7 @@ import {
   signInWithEmailAndPassword,
   registerUser,
   getRedirectResult
-} from "../../redux/actions/authentication";
+} from "../../redux/actions/user";
 import Loader from "react-loader-spinner";
 
 const AuthApp = props => {

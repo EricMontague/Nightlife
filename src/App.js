@@ -8,7 +8,7 @@ import PlanApp from "./components/plans/PlanApp";
 import AlertProvider from "./providers/AlertProvider";
 import NotFound from "./components/errors/NotFound";
 import PrivateRoute from "./components/authentication/PrivateRoute";
-import { authStateListener } from "./redux/actions/authentication";
+import { authStateListener } from "./redux/actions/user";
 
 const App = () => {
   const dispatch = useDispatch();

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import UserInfo from "../users/UserInfo";
-import { signOut } from "../../redux/actions/authentication";
+import { signOut } from "../../redux/actions/user";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const NavLinks = props => {

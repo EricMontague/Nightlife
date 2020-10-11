@@ -94,7 +94,7 @@ export const authStateListener = () => dispatch => {
 export const registerUser = user => async dispatch => {
   // Create user account through firebase
   sessionStorage.setItem(USER_SIGN_IN_REQUEST, "1");
-  makeAuthRequest(dispatch);
+
   let results;
   try {
     results = await auth.createUserWithEmailAndPassword(
@@ -109,6 +109,7 @@ export const registerUser = user => async dispatch => {
       photoURL: "",
       plans: []
     });
+    makeAuthRequest(dispatch);
   } catch (error) {
     authRequestErrorHandler(error.message, dispatch);
   }
@@ -119,9 +120,10 @@ export const signInWithEmailAndPassword = (
   password
 ) => async dispatch => {
   sessionStorage.setItem(USER_SIGN_IN_REQUEST, "1");
-  makeAuthRequest(dispatch);
+
   try {
     await auth.signInWithEmailAndPassword(email, password);
+    makeAuthRequest(dispatch);
   } catch (error) {
     authRequestErrorHandler(error.message, dispatch);
   }
@@ -145,11 +147,10 @@ export const signInWithGoogle = () => async dispatch => {
 };
 
 export const getRedirectResult = () => async dispatch => {
-  makeAuthRequest(dispatch);
-
   let result;
   try {
     result = await auth.getRedirectResult();
+    makeAuthRequest(dispatch);
   } catch (error) {
     authRequestErrorHandler(error.message, dispatch);
   } finally {
