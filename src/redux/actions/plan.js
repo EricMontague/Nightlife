@@ -4,7 +4,8 @@ import {
   UPDATE_PLAN,
   RESET_PLAN,
   SHOW_SUCCESS_ALERT,
-  SHOW_ERROR_ALERT
+  SHOW_ERROR_ALERT,
+  UPDATE_PLAN_IN_LIST
 } from "./types";
 import { addPlan, updatePlan } from "../../firebase/plans";
 import { v4 as uuidv4 } from "uuid";
@@ -89,10 +90,24 @@ export const updatePlanInFirestore = (
     });
     successful = false;
   } else {
+    const updatedPlan = { ...plan };
+    const photoOptions = {
+      maxHeight: constants.GOOGLE_IMAGE_HEIGHT,
+      maxWidth: constants.GOOGLE_IMAGE_WIDTH
+    };
     plan.places = stripPlaces(places);
 
     try {
       await updatePlan(userId, plan);
+      updatedPlan.image = places[0].photos[0].getUrl(photoOptions);
+      dispatch({
+        type: UPDATE_PLAN_IN_LIST,
+        payload: updatedPlan
+      });
+      dispatch({
+        type: SHOW_SUCCESS_ALERT,
+        payload: constants.PLAN_UPDATED_SUCCESS_MESSAGE
+      });
     } catch (error) {
       dispatch({
         type: SHOW_ERROR_ALERT,
@@ -100,10 +115,6 @@ export const updatePlanInFirestore = (
       });
       successful = false;
     }
-    dispatch({
-      type: SHOW_SUCCESS_ALERT,
-      payload: constants.PLAN_UPDATED_SUCCESS_MESSAGE
-    });
     return successful;
   }
 };
