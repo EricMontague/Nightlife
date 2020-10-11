@@ -6,6 +6,7 @@ export const RESET_PLAN = "RESET_PLAN";
 
 // Plan list
 export const ADD_PLAN_TO_LIST = "ADD_PLAN_TO_LIST";
+export const UPDATE_PLAN_IN_LIST = "UPDATE_PLAN_IN_LIST";
 export const DELETE_PLAN_FROM_LIST = "DELETE_PLAN_FROM_LIST";
 
 // Places List
