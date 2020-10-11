@@ -45,8 +45,8 @@ export const validateDateRange = (min, max) => {
   const validate = dateInput => {
     let message = "";
     const date = new Date(dateInput + "T00:00:00");
-    const minDate = new Date(min);
-    const maxDate = new Date(max);
+    const minDate = new Date(min + "T00:00:00");
+    const maxDate = new Date(max + "T00:00:00");
     if (min && max) {
       if (date < minDate || date > maxDate) {
         message = `Date must be between ${min} and ${max}`;
