@@ -19,7 +19,9 @@ const Plan = props => {
             )}
           </p>
         </div>
-        <p className="py-1">{props.plan.description}</p>
+        <div className="flex-col">
+          <p className="py-1">{props.plan.description}</p>
+        </div>
         <div className="icons">
           <Link to={`/plans/${props.plan.planId}/edit`}>
             <FontAwesomeIcon icon={["fa", "edit"]} />
