@@ -2,6 +2,15 @@ Hosted on Google Firebase at [https://nightlife-5dd44.web.app/](https://nightlif
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+- The development server will be running at http://localhost:3000
+
+```sh
+➜ git clone https://github.com/EricMontague/Nightlife.git
+➜ cd Nightlife
+➜ npm install
+➜ npm start
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
