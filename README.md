@@ -1,6 +1,6 @@
 # Nightlife
 
-> Nightlife is a React application backed by Google Firestore, that allows users to plan their night out
+> Nightlife is a fully-responsive React application backed by Google Firestore, that allows users to plan their night out
 
 <br>
 
@@ -8,7 +8,7 @@
 After spending some time learning server side development, I wanted to try something new and learn more about frontend development. I decided to learn React because of its simple yet powerful model for building UI components. Also, since React is not a framework that comes with "batteries included" it forced me to implement features such as client side routing and form validation by myself, which was a great learning experience.
 
 
-[Nightlife](https://nightlife-5dd44.web.app/) is a simple way for you to discover and manage the places that you plan to visit on a night out with friends. Core features include creating lists of places you would like to visit on a particular night and exploring potential places to visit using the Google Maps API. User data is stored in Google Firestore and the application is deployed on Google Firebase.
+[Nightlife](https://nightlife-5dd44.web.app/) is a simple way for you to discover and manage the places that you plan to visit on a night out with friends. Core features include creating lists of places you would like to visit on a particular night and exploring potential places to visit using the Google Maps API. Application state is stored in Redux, user data is stored in Google Firestore, and the application is deployed on Google Firebase.
 
 
 ## Development
@@ -43,3 +43,11 @@ REACT_APP_GCP_API_KEY=
 ➜ npm start
 ```
 
+
+## Technologies
+- React
+- Redux
+- Google Maps API
+- Google Places API
+- Google Firestore
+- Google Firebase
