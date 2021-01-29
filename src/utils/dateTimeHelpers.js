@@ -18,12 +18,18 @@ const months = [
 const formatTime = (hours, minutes) => {
   const period = hours < 12 ? "AM" : "PM";
   let formattedHours = hours;
+  let formattedMinutes = minutes;
   if (hours === 0) {
     formattedHours = 12;
   } else if (hours > 12) {
     formattedHours = hours - 12;
   }
-  return formattedHours.toString() + ":" + minutes.toString() + " " + period;
+  if (minutes == 0) {
+    formattedMinutes = "00";
+  }
+  return (
+    formattedHours.toString() + ":" + formattedMinutes.toString() + " " + period
+  );
 };
 
 // returns datetime in the format of Tue, July 28, 2020, expects a date object
