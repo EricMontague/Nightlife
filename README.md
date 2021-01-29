@@ -4,6 +4,9 @@
 
 <br>
 
+![Image of Discover page](https://github.com/EricMontague/Nightlife/blob/master/Nightlife_Screenshot.png)
+
+<br>
 
 After spending some time learning server side development, I wanted to try something new and learn more about frontend development. After learning the fundamentals of Javascript and CSS, I decided to learn React because of its simple yet powerful model for building UI components. Also, since React is not a framework that comes with "batteries included" it forced me to implement features such as client side routing and form validation by myself, which was a great learning experience.
 
