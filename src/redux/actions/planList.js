@@ -55,7 +55,6 @@ export const fetchPlansAndPhotos = userId => async dispatch => {
       type: SHOW_ERROR_ALERT,
       payload: error.message
     });
-    throw new Error(error.message);
   }
 };
 
