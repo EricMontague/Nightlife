@@ -1,79 +1,45 @@
-Hosted on Google Firebase at [https://nightlife-5dd44.web.app/](https://nightlife-5dd44.web.app/)
+# Nightlife
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Nightlife is a React application backed by Google Firestore, that allows users to plan their night out
 
-- The development server will be running at http://localhost:3000
+<br>
 
+
+After spending some time learning server side development, I wanted to try something new and learn more about frontend development. I decided to learn React because of its simple yet powerful model for building UI components. Also, since React is not a framework that comes with "batteries included" it forced me to implement features such as client side routing and form validation by myself, which was a great learning experience.
+
+
+[Nightlife](https://nightlife-5dd44.web.app/) is a simple way for you to discover and manage the places that you plan to visit on a night out with friends. Core features include creating lists of places you would like to visit on a particular night and exploring potential places to visit using the Google Maps API. User data is stored in Google Firestore and the application is deployed on Google Firebase.
+
+
+## Development
+- First [install npm](https://www.npmjs.com/get-npm), if you don't already have it on your machine
+- Next [sign up](https://console.firebase.google.com/) for Firebase and also register you application on [Google Cloud Platform](https://console.cloud.google.com/home)
+- Then, in the root project directory, create a file named .env.development.local and add all of your environment variables to this file (see below)
+- Then, install all dependencies and start the development server
+- Note: the development server will be running at http://localhost:3000
+- See this [stackoverflow post](https://stackoverflow.com/questions/52500573/where-can-i-find-my-firebase-apikey-and-authdomain) for where to find the Firebase environment variables and [Google's documentation](https://developers.google.com/places/web-service/get-api-key) for finding your GCP API key
+
+
+`.env.development.local`
+
+```sh
+REACT_APP_FIREBASE_API_KEY=
+REACT_APP_FIREBASE_AUTH_DOMAIN=
+REACT_APP_FIREBASE_DB_URL=
+REACT_APP_FIREBASE_PROJECT_ID=
+REACT_APP_FIREBASE_STORAGE_BUCKET=
+REACT_APP_FIREBASE_MESSAGE_SENDER_ID=
+REACT_APP_FIREBASE_APP_ID=
+REACT_APP_GCP_API_KEY=
+
+```
+
+### Running with npm
 ```sh
 ➜ git clone https://github.com/EricMontague/Nightlife.git
 ➜ cd Nightlife
+➜ touch .env.development.local (add environment variables here)
 ➜ npm install
 ➜ npm start
 ```
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
